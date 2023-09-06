@@ -1,0 +1,20 @@
+# Copyright (c) 2023 Blacknon. All rights reserved.
+# Use of this source code is governed by an MIT license
+# that can be found in the LICENSE file.
+# =======================================================
+
+# common settings
+common:
+  server: whois.iana.org
+  template: common.ttp
+
+# gTLD
+com:
+  server:
+  template:
+
+# ccTLD
+# 国別のTLDは企業ドメイン等で扱うテンプレートファイルが変わるパターンが多いため、別ファイルに書き出しとする
+jp:
+  server: whois.jprs.jp
+  template: jp.ttp
