@@ -45,20 +45,21 @@ class Whois:
 
     def get(self):
         """
+
         """
+
         server = self.data.get('server')
         template_path = os.path.join(TEMPLATE_DIR, self.data.get('template'))
+
+        # TODO: whois_serverが含まれる場合、serverと一致しない場合は再度whoisを実行させる処理を追加する(comドメインとか向け？)
         with open(template_path, 'r') as file:
             template = file.read().rstrip()
-
-            res = whois_request(self.target, server)
-
-            parser = ttp.ttp(res, template, log_level="ERROR")
-            parser.parse()
-            result = parser.result()
-
             file.close()
 
-        # TODO: 全Valueにstrip/不要spaceの圧縮処理を追加
+        res = whois_request(self.target, server)
+        # parser = ttp.ttp(res, template, log_level="ERROR")
+        parser = ttp.ttp(res, template, log_level="ERROR")
+        parser.parse()
+        result = parser.result()
 
         return result

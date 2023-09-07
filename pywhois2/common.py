@@ -44,6 +44,9 @@ def load_data_yaml(yaml_path: str, target_key: str):
             joined_key = "{0}.{1}".format(key_elements[i], joined_key)
         key_candidate.append(joined_key)
 
+    # tld候補のリストを逆順にする
+    key_candidate.reverse()
+
     with open(yaml_path) as file:
         # load data
         obj = yaml.safe_load(file)
@@ -55,6 +58,7 @@ def load_data_yaml(yaml_path: str, target_key: str):
         for k in key_candidate:
             if k in obj:
                 result = obj.get(k)
+                break
 
         if len(result) == 0:
             result = common_data

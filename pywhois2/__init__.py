@@ -27,21 +27,19 @@ def main():
         formatter_class=RawTextHelpFormatter,
     )
 
+    # TODO: 複数取得可能にする
     parser.add_argument(
         "target", action="store", type=str, help=""
     )
+    # TODO: 出力フォーマットを指定可能にする
 
     # args
     args = parser.parse_args()
 
-    wh = Whois(args.target)
-    result = wh.get()
+    whois = Whois(args.target)
+    result = whois.get()
 
     print(json.dumps(result))
-
-    # whoisを取得してパース処理した結果を出力する
-    # hoge = whois_request(args.target, "whois.jprs.jp")
-    # print(hoge)
 
 
 if __name__ == '__main__':
