@@ -57,7 +57,6 @@ class Whois:
             file.close()
 
         res = whois_request(self.target, server)
-        # parser = ttp.ttp(res, template, log_level="ERROR")
         parser = ttp.ttp(res, template, log_level="ERROR")
         parser.parse()
         result = parser.result()
