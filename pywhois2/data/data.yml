@@ -1064,6 +1064,8 @@ za:
 ## zm
 zm:
   server: whois.zicta.zm
+  template:
+    - common.ttp
 
 ## zw
 zw:

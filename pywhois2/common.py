@@ -65,6 +65,5 @@ def load_data_yaml(yaml_path: str, target_key: str):
 
         # server, templateがないdataについてはcommonの内容に上書きさせる
         result = dict(common_data, **res)
-        print(result)
 
         return result
