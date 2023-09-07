@@ -7,12 +7,25 @@
 common:
   server: whois.iana.org
   template:
+    - common_iana.ttp
     - common_relay.ttp
     - common.ttp
 
 # gTLD
 com:
   server: whois.verisign-grs.com
+  template:
+    - common_relay.ttp
+    - common.ttp
+
+net:
+  server: whois.verisign-grs.com
+  template:
+    - common_relay.ttp
+    - common.ttp
+
+org:
+  server: whois.publicinterestregistry.org
   template:
     - common_relay.ttp
     - common.ttp
@@ -69,3 +82,10 @@ or.jp:
   server: whois.jprs.jp
   template:
     - xx.jp.ttp
+
+## kr
+
+
+
+
+## cn

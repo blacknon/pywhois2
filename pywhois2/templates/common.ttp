@@ -19,23 +19,27 @@ Domain Status: {{ domain_status | _line_ | strip('\n') | strip('\r') | joinmatch
 Registry Registrant ID: {{ registrant_id | _line_ | strip('\n') | strip('\r') }}
 Registrant Name: {{ registrant_name | _line_ | strip('\n') | strip('\r') }}
 Registrant Organization: {{ registrant_organization | _line_ | strip('\n') | strip('\r') }}
-Registrant Street: PO Box 786
-Registrant City: Hayes
-Registrant State/Province: Middlesex
+<group name="registrant_address">
+Registrant Street: {{ registrant_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+Registrant City: {{ registrant_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+Registrant State/Province: {{ registrant_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+</group>
 Registrant Postal Code: {{ registrant_zip_code | _line_ | strip('\n') | strip('\r') }}
 Registrant Country: {{ registrant_country | _line_ | strip('\n') | strip('\r') }}
 Registrant Phone: {{ registrant_phone | _line_ | strip('\n') | strip('\r') }}
-Registrant Phone Ext:
+Registrant Phone Ext: {{ registrant_phone_ext | _line_ | strip('\n') | strip('\r') }}
 Registrant Fax: {{ registrant_fax | _line_ | strip('\n') | strip('\r') }}
-Registrant Fax Ext:
+Registrant Fax Ext: {{ registrant_fax_ext | _line_ | strip('\n') | strip('\r') }}
 Registrant Email: {{ registrant_email | _line_ | strip('\n') | strip('\r') }}
 
 Registry Admin ID: {{ admin_id | _line_ | strip('\n') | strip('\r') }}
 Admin Name: {{ admin_name | _line_ | strip('\n') | strip('\r') }}
 Admin Organization: {{ admin_organization | _line_ | strip('\n') | strip('\r') }}
-Admin Street: PO Box 786
-Admin City: Hayes
-Admin State/Province: Middlesex
+<group name="admin_address">
+Admin Street: {{ admin_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+Admin City: {{ admin_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+Admin State/Province: {{ admin_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+</group>
 Admin Postal Code: {{ admin_zip_code | _line_ | strip('\n') | strip('\r') }}
 Admin Country: {{ admin_country | _line_ | strip('\n') | strip('\r') }}
 Admin Phone: {{ admin_phone | _line_ | strip('\n') | strip('\r') }}
@@ -47,9 +51,11 @@ Admin Email: {{ admin_email | _line_ | strip('\n') | strip('\r') }}
 Registry Tech ID: {{ tech_id | _line_ | strip('\n') | strip('\r') }}
 Tech Name: {{ tech_name | _line_ | strip('\n') | strip('\r') }}
 Tech Organization: {{ tech_organization | _line_ | strip('\n') | strip('\r') }}
-Tech Street: PO Box 786
-Tech City: Hayes
-Tech State/Province: Middlesex
+<group name="tech_address">
+Tech Street: {{ tech_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+Tech City: {{ tech_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+Tech State/Province: {{ tech_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+</group>
 Tech Postal Code: {{ tech_zip_code | _line_ | strip('\n') | strip('\r') }}
 Tech Country: {{ tech_country | _line_ | strip('\n') | strip('\r') }}
 Tech Phone: {{ tech_phone | _line_ | strip('\n') | strip('\r') }}
