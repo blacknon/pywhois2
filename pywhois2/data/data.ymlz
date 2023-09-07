@@ -70,6 +70,9 @@ an:
 ## an
 an:
 
+## an
+an:
+
 ## ao
 ao:
 
@@ -112,12 +115,14 @@ bb:
 ## bd
 bd:
 
+
 ## be
 be:
   server: whois.dns.be
 
 ## bf
 bf:
+
 
 ## bg
 bg:
@@ -126,15 +131,22 @@ bg:
 ## bh
 bh:
 
+
 ## bi
 bi:
   server: whois1.nic.bi
 
+## bj
+bj:
+  server: whois.nic.bj
+
 ## bl
 bl:
 
+
 ## bm
 bm:
+
 
 ## bn
 bn:
@@ -147,6 +159,15 @@ bo:
 ## bq
 bq:
 
+
+## bq
+bq:
+
+
+## bq
+bq:
+
+
 ## br
 br:
   server: whois.registro.br
@@ -154,11 +175,14 @@ br:
 ## bs
 bs:
 
+
 ## bt
 bt:
 
+
 ## bv
 bv:
+
 
 ## bw
 bw:
@@ -170,6 +194,7 @@ by:
 
 ## bz
 bz:
+
 
 ## ca
 ca:
@@ -186,12 +211,14 @@ cc:
 ## cd
 cd:
 
+
 ## cf
 cf:
   server: whois.dot.cf
 
 ## cg
 cg:
+
 
 ## ch
 ch:
@@ -204,12 +231,14 @@ ci:
 ## ck
 ck:
 
+
 ## cl
 cl:
   server: whois.nic.cl
 
 ## cm
 cm:
+
 
 ## cn
 cn:
@@ -226,11 +255,14 @@ cr:
 ## cu
 cu:
 
+
 ## cv
 cv:
 
+
 ## cw
 cw:
+
 
 ## cx
 cx:
@@ -238,6 +270,7 @@ cx:
 
 ## cy
 cy:
+
 
 ## cz
 cz:
@@ -249,6 +282,7 @@ de:
 
 ## dj
 dj:
+
 
 ## dk
 dk:
@@ -277,11 +311,14 @@ ee:
 ## eg
 eg:
 
+
 ## eh
 eh:
 
+
 ## er
 er:
+
 
 ## es
 es:
@@ -289,6 +326,7 @@ es:
 
 ## et
 et:
+
 
 ## eu
 eu:
@@ -308,6 +346,7 @@ fj:
 
 ## fk
 fk:
+
 
 ## fm
 fm:
@@ -332,6 +371,7 @@ fr:
 ## ga
 ga:
 
+
 ## gal
 gal:
   server: whois.nic.gal
@@ -355,6 +395,7 @@ gg:
 ## gh
 gh:
 
+
 ## gi
 gi:
   server: whois2.afilias-grs.net
@@ -366,8 +407,10 @@ gl:
 ## gm
 gm:
 
+
 ## gn
 gn:
+
 
 ## gp
 gp:
@@ -395,11 +438,14 @@ gs:
 ## gt
 gt:
 
+
 ## gu
 gu:
 
+
 ## gw
 gw:
+
 
 ## gy
 gy:
@@ -476,8 +522,10 @@ je:
 ## jm
 jm:
 
+
 ## jo
 jo:
+
 
 ## jp
 jp:
@@ -541,12 +589,14 @@ kg:
 ## kh
 kh:
 
+
 ## ki
 ki:
   server: whois.nic.ki
 
 ## km
 km:
+
 
 ## kn
 kn:
@@ -555,12 +605,14 @@ kn:
 ## kp
 kp:
 
+
 ## kr
 kr:
   server: whois.kr
 
 ## kw
 kw:
+
 
 ## ky
 ky:
@@ -581,6 +633,7 @@ lb:
 ## lc
 lc:
 
+
 ## li
 li:
   server: whois.nic.li
@@ -588,8 +641,10 @@ li:
 ## lk
 lk:
 
+
 ## lr
 lr:
+
 
 ## ls
 ls:
@@ -622,6 +677,7 @@ ma:
 ## mc
 mc:
 
+
 ## md
 md:
   server: whois.nic.md
@@ -633,12 +689,14 @@ me:
 ## mf
 mf:
 
+
 ## mg
 mg:
   server: whois.nic.mg
 
 ## mh
 mh:
+
 
 ## mk
 mk:
@@ -667,6 +725,7 @@ mo:
 ## mp
 mp:
 
+
 ## mq
 mq:
   server: whois.mediaserv.net
@@ -682,12 +741,14 @@ ms:
 ## mt
 mt:
 
+
 ## mu
 mu:
   server: whois.nic.mu
 
 ## mv
 mv:
+
 
 ## mw
 mw:
@@ -713,8 +774,13 @@ na:
 nc:
   server: whois.nc
 
+## nc
+nc:
+  server: whois.nc
+
 ## ne
 ne:
+
 
 ## nf
 nf:
@@ -726,6 +792,7 @@ ng:
 
 ## ni
 ni:
+
 
 ## nl
 nl:
@@ -746,8 +813,10 @@ no:
 ## np
 np:
 
+
 ## nr
 nr:
+
 
 ## nu
 nu:
@@ -764,6 +833,7 @@ om:
 ## pa
 pa:
 
+
 ## pe
 pe:
   server: kero.yachay.pe
@@ -775,8 +845,10 @@ pf:
 ## pg
 pg:
 
+
 ## ph
 ph:
+
 
 ## pk
 pk:
@@ -793,6 +865,7 @@ pm:
 ## pn
 pn:
 
+
 ## pr
 pr:
   server: whois.afilias-srs.net
@@ -800,8 +873,10 @@ pr:
 ## ps
 ps:
 
+
 ## ps
 ps:
+
 
 ## pt
 pt:
@@ -813,6 +888,7 @@ pw:
 
 ## py
 py:
+
 
 ## qa
 qa:
@@ -853,6 +929,7 @@ sc:
 ## sd
 sd:
 
+
 ## se
 se:
   server: whois.iis.se
@@ -872,12 +949,14 @@ si:
 ## sj
 sj:
 
+
 ## sk
 sk:
   server: whois.sk-nic.sk
 
 ## sl
 sl:
+
 
 ## sm
 sm:
@@ -897,6 +976,7 @@ so:
 
 ## sr
 sr:
+
 
 ## ss
 ss:
@@ -969,6 +1049,7 @@ to:
 ## tp
 tp:
 
+
 ## tr
 tr:
   server: whois.trabis.gov.tr
@@ -1020,6 +1101,7 @@ uz:
 ## va
 va:
 
+
 ## vc
 vc:
   server: whois2.afilias-grs.net
@@ -1035,8 +1117,10 @@ vg:
 ## vi
 vi:
 
+
 ## vn
 vn:
+
 
 ## vu
 vu:
@@ -1060,6 +1144,7 @@ yt:
 
 ## za
 za:
+
 
 ## zm
 zm:

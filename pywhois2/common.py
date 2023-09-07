@@ -57,12 +57,14 @@ def load_data_yaml(yaml_path: str, target_key: str):
         # get key loops
         for k in key_candidate:
             if k in obj:
-                result = obj.get(k)
+                res = obj.get(k)
                 break
 
-        if len(result) == 0:
-            result = common_data
+        if len(res) == 0:
+            res = common_data
 
-        # TODO: server, templateが書いてないdataについてはcommonの内容に上書きさせる
+        # server, templateがないdataについてはcommonの内容に上書きさせる
+        result = dict(common_data, **res)
+        print(result)
 
         return result
