@@ -23,6 +23,7 @@ TEMPLATE_DIR = "{0}/templates".format(Path(__file__).resolve().parent)
 class Whois:
     target = ""  # whoisでの調査対象文字列
     data = {}  # whoisへのrequest, parseに必要となる情報の取得
+    is_debug = False
 
     def __init__(self, target: str):
         """
@@ -43,22 +44,71 @@ class Whois:
 
         self.target = target
 
+    def set_debug(self, is_debug: bool):
+        """_summary_
+
+        Args:
+            is_debug (bool): _description_
+        """
+        self.is_debug = is_debug
+
     def get(self):
         """
 
         """
+        result = {}
 
+        # tldごとのデータを取得
         server = self.data.get('server')
-        template_path = os.path.join(TEMPLATE_DIR, self.data.get('template'))
+        templates = self.data.get('template')
 
-        # TODO: whois_serverが含まれる場合、serverと一致しない場合は再度whoisを実行させる処理を追加する(comドメインとか向け？)
-        with open(template_path, 'r') as file:
-            template = file.read().rstrip()
-            file.close()
+        while True:
+            res = self.__get_data(server, templates)
 
+            if 'registrar_whois_server' in res:
+                if res['registrar_whois_server'] == server:
+                    result = res
+                    break
+
+                server = res['registrar_whois_server']
+                continue
+
+            else:
+                result = res
+                break
+
+        return result
+
+    def __get_data(self, server: str, templates: list):
+        """
+
+        Args:
+            server (str): _description_
+            templates (list): _description_
+
+        Returns:
+            _type_: _description_
+        """
+
+        result = {}
+
+        # whois requestを実行、結果の取得
         res = whois_request(self.target, server)
-        parser = ttp.ttp(res, template, log_level="ERROR")
-        parser.parse()
-        result = parser.result()
+
+        for template in templates:
+            template_path = os.path.join(TEMPLATE_DIR, template)
+
+            # TODO: whois_serverが含まれる場合、serverと一致しない場合は再度whoisを実行させる処理を追加する(comドメインとか向け？)
+            with open(template_path, 'r') as file:
+                template = file.read().rstrip()
+                file.close()
+
+            parser = ttp.ttp(res, template, log_level="ERROR")
+            # parser = ttp.ttp(res, template, log_level="DEBUG")
+            parser.parse()
+            result = parser.result(structure='flat_list')[0]
+
+            if len(result) > 0:
+                break
 
         return result

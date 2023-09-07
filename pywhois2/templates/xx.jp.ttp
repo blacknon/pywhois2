@@ -5,7 +5,7 @@
 
 <group>
 Domain Information: [ドメイン情報]
-a. [ドメイン名]                   {{ domain_name | lower | _line_ | strip('\n') | strip('\r') }}
+a. [ドメイン名]                   {{ domain_name | lower }}
 b. [ねっとわーくさーびすめい]         {{ registrant_organization_local2 | _line_ | strip('\n') | strip('\r') }}
 c. [ネットワークサービス名]          {{ registrant_organization_local | _line_ | strip('\n') | strip('\r') }}
 d. [Network Service Name]       {{ registrant_organization | _line_ | strip('\n') | strip('\r') }}
@@ -51,6 +51,6 @@ Contact Information: [公開連絡窓口]
 [Postal Address]                {{ contact_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
                                 {{ contact_address | strip(' ') | _line_ | strip('\n') | strip('\r')  | joinmatches(" ") }}
 </group>
-[電話番号]                        {{ contact_tel | _line_ | strip('\n') | strip('\r') }}
+[電話番号]                        {{ contact_phone | _line_ | strip('\n') | strip('\r') }}
 [FAX番号]                        {{ contact_fax | _line_ | strip('\n') | strip('\r') }}
 </group>
