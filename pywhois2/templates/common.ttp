@@ -14,6 +14,16 @@ Registrar IANA ID: {{ registrar_id }}
 Registrar Abuse Contact Email: {{ registrar_email }}
 Registrar Abuse Contact Phone: {{ registrar_phone }}
 
+Reseller: {{ reseller_name | _line_ | strip('\n') | strip('\r') }}
+<group name="reseller_address">
+Reseller Street Address: {{ reseller_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+Reseller Other Address Info: {{ reseller_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+</group>
+Reseller Country: {{ reseller_company | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+Reseller Phone: {{ reseller_phone | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+Reseller Fax: {{ reseller_fax | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+Reseller Customer Service Email: {{ reseller_email | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+
 Domain Status: {{ domain_status | _line_ | strip('\n') | strip('\r') | joinmatches("\n") }}
 
 Registry Registrant ID: {{ registrant_id | _line_ | strip('\n') | strip('\r') }}
@@ -63,6 +73,18 @@ Tech Phone Ext:
 Tech Fax: {{ tech_fax | _line_ | strip('\n') | strip('\r') }}
 Tech Fax Ext:
 Tech Email: {{ tech_email | _line_ | strip('\n') | strip('\r') }}
+
+Registry Billing ID: {{ billing_id | _line_ | strip('\n') | strip('\r') }}
+Billing Name: {{ billing_name | _line_ | strip('\n') | strip('\r') }}
+Billing Organization: {{ billing_organization | _line_ | strip('\n') | strip('\r') }}
+<group name="billing_address">
+Billing Street: {{ billing_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+Billing City: {{ billing_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+</group>
+Billing Postal Code: {{ billing_zip_code | _line_ | strip('\n') | strip('\r') }}
+Billing Country: {{ billing_country | _line_ | strip('\n') | strip('\r') }}
+Billing Phone: {{ billing_phone | _line_ | strip('\n') | strip('\r') }}
+Billing Email:  {{ billing_email | _line_ | strip('\n') | strip('\r') }}
 
 Name Server: {{ name_servers | _line_ | strip('\n') | strip('\r') | to_list | joinmatches }}
 DNSSEC: {{ dnssec | _line_ | strip('\n') | strip('\r') }}

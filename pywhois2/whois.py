@@ -70,7 +70,7 @@ class Whois:
                     result = res
                     break
 
-                server = res['registrar_whois_server']
+                server = res['registrar_whois_server'].rstrip("/")
                 continue
 
             else:
