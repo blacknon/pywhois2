@@ -934,6 +934,7 @@ nl:
     - nl.tpl
 
 ## no
+# NOTE: Record maintained by: SIDN BV
 no:
   server: whois.norid.no
   template:
@@ -946,6 +947,7 @@ np:
 nr:
 
 ## nu
+# NOTE: The Swedish Internet Foundation.
 nu:
   server: whois.iis.nu
   template:
