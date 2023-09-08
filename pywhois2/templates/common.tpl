@@ -99,9 +99,9 @@ Admin State/Province: {{ admin_address | _line_ | strip('\n') | strip('\r') | jo
 Admin Postal Code: {{ admin_zip_code | _line_ | strip('\n') | strip('\r') }}
 Admin Country: {{ admin_country | _line_ | strip('\n') | strip('\r') }}
 Admin Phone: {{ admin_phone | _line_ | strip('\n') | strip('\r') }}
-Admin Phone Ext:
+Admin Phone Ext: {{ admin_phone_ext | _line_ | strip('\n') | strip('\r') }}
 Admin Fax: {{ admin_fax | _line_ | strip('\n') | strip('\r') }}
-Admin Fax Ext:
+Admin Fax Ext: {{ admin_fax_ext | _line_ | strip('\n') | strip('\r') }}
 Admin Email: {{ admin_email | _line_ | strip('\n') | strip('\r') }}
 
 Registry Tech ID: {{ tech_id | _line_ | strip('\n') | strip('\r') }}
@@ -115,9 +115,9 @@ Tech State/Province: {{ tech_address | _line_ | strip('\n') | strip('\r') | join
 Tech Postal Code: {{ tech_zip_code | _line_ | strip('\n') | strip('\r') }}
 Tech Country: {{ tech_country | _line_ | strip('\n') | strip('\r') }}
 Tech Phone: {{ tech_phone | _line_ | strip('\n') | strip('\r') }}
-Tech Phone Ext:
+Tech Phone Ext: {{ tech_phone_ext | _line_ | strip('\n') | strip('\r') }}
 Tech Fax: {{ tech_fax | _line_ | strip('\n') | strip('\r') }}
-Tech Fax Ext:
+Tech Fax Ext: {{ tech_fax_ext | _line_ | strip('\n') | strip('\r') }}
 Tech Email: {{ tech_email | _line_ | strip('\n') | strip('\r') }}
 
 Registry Billing ID: {{ billing_id | _line_ | strip('\n') | strip('\r') }}
@@ -126,6 +126,7 @@ Billing Organization: {{ billing_organization | _line_ | strip('\n') | strip('\r
 <group name="billing_address">
 Billing Street: {{ billing_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
 Billing City: {{ billing_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+Billing State/Province: {{ billing_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
 </group>
 Billing Postal Code: {{ billing_zip_code | _line_ | strip('\n') | strip('\r') }}
 Billing Country: {{ billing_country | _line_ | strip('\n') | strip('\r') }}
