@@ -7,35 +7,35 @@
 common:
   server: whois.iana.org
   template:
-    - common_iana.ttp
-    - common_relay.ttp
-    - common.ttp
+    - common_iana.tpl
+    - common_relay.tpl
+    - common.tpl
 
 # gTLD
 com:
   server: whois.verisign-grs.com
   template:
-    - common_relay.ttp
-    - common.ttp
+    - common_relay.tpl
+    - common.tpl
 
 net:
   server: whois.verisign-grs.com
   template:
-    - common_relay.ttp
-    - common.ttp
+    - common_relay.tpl
+    - common.tpl
 
 org:
   server: whois.publicinterestregistry.org
   template:
-    - common_relay.ttp
-    - common.ttp
+    - common_relay.tpl
+    - common.tpl
 
 # ccTLD
 ## ac
 ac:
   server: whois.nic.ac
   template:
-    - common.ttp
+    - common.tpl
 
 ## ad
 ad:
@@ -44,25 +44,25 @@ ad:
 ae:
   server: whois.aeda.net.ae
   template:
-    - ae.ttp
+    - ae.tpl
 
 ## af
 af:
   server: whois.nic.af
   template:
-    - common.ttp
+    - common.tpl
 
 ## ag
 ag:
   server: whois.nic.ag
   template:
-    - common.ttp
+    - common.tpl
 
 ## ai
 ai:
   server: whois.nic.ai
   template:
-    - ai.ttp
+    - ai.tpl
 
 ## al
 al:
@@ -71,7 +71,7 @@ al:
 am:
   server: whois.amnic.net
   template:
-    - am.ttp
+    - am.tpl
 
 ## an
 an:
@@ -86,37 +86,37 @@ aq:
 ar:
   server: whois.nic.ar
   template:
-    - ar.ttp
+    - ar.tpl
 
 ## as
 as:
   server: whois.nic.as
   template:
-    - as.ttp
+    - as.tpl
 
 ## at
 at:
   server: whois.nic.at
   template:
-    - at.ttp
+    - at.tpl
 
 ## au
 au:
   server: whois.auda.org.au
   template:
-    - au.ttp
+    - au.tpl
 
 ## aw
 aw:
   server: whois.nic.aw
   template:
-    - aw.ttp
+    - aw.tpl
 
 ## ax
 ax:
   server: whois.ax
   template:
-    - ax.ttp
+    - ax.tpl
 
 ## az
 az:
@@ -134,7 +134,7 @@ bd:
 be:
   server: whois.dns.be
   template:
-    - be.ttp
+    - be.tpl
 
 ## bf
 bf:
@@ -143,7 +143,7 @@ bf:
 bg:
   server: whois.register.bg
   template:
-    - bg.ttp
+    - bg.tpl
 
 ## bh
 bh:
@@ -152,7 +152,7 @@ bh:
 bi:
   server: whois1.nic.bi
   template:
-    - common.ttp
+    - common.tpl
 
 ## bl
 bl:
@@ -164,14 +164,14 @@ bm:
 bn:
   server: whois.bnnic.bn
   template:
-    - bn.ttp
+    - bn.tpl
 
 
 ## bo
 bo:
   server: whois.nic.bo
   template:
-    - bo.ttp
+    - bo.tpl
 
 ## bq
 bq:
@@ -180,7 +180,7 @@ bq:
 br:
   server: whois.registro.br
   template:
-    - br.ttp
+    - br.tpl
 
 ## bs
 bs:
@@ -195,13 +195,13 @@ bv:
 bw:
   server: whois.nic.net.bw
   template:
-    - bw.ttp
+    - bw.tpl
 
 ## by
 by:
   server: whois.cctld.by
   template:
-    - by.ttp
+    - by.tpl
 
 ## bz
 bz:
@@ -210,19 +210,19 @@ bz:
 ca:
   server: whois.cira.ca
   template:
-    - common.ttp
+    - common.tpl
 
 ## cat
 cat:
   server: whois.nic.cat
   template:
-    - common.ttp
+    - common.tpl
 
 ## cc
 cc:
   server: ccwhois.verisign-grs.com
   template:
-    - common.ttp
+    - common.tpl
 
 ## cd
 cd:
@@ -231,7 +231,7 @@ cd:
 cf:
   server: whois.dot.cf
   template:
-    - cf.ttp
+    - cf.tpl
 
 ## cg
 cg:
@@ -240,14 +240,14 @@ cg:
 ch:
   server: whois.nic.ch
   template:
-    - ch.ttp
+    - ch.tpl
 
 
 ## ci
 ci:
   server: whois.nic.ci
   template:
-    - common.ttp
+    - common.tpl
 
 ## ck
 ck:
@@ -256,7 +256,7 @@ ck:
 cl:
   server: whois.nic.cl
   template:
-    - cl.ttp
+    - cl.tpl
 
 ## cm
 cm:
@@ -265,20 +265,20 @@ cm:
 cn:
   server: whois.cnnic.cn
   template:
-    - cn.ttp
+    - cn.tpl
 
 ## co
 # TODO: うまく取れてないかも？あとでチェック
 co:
   server: whois.nic.co
   template:
-    - common.ttp
+    - common.tpl
 
 ## cr
 cr:
   server: whois.nic.cr
   template:
-    - cr.ttp
+    - cr.tpl
 
 ## cu
 cu:
@@ -293,7 +293,7 @@ cw:
 cx:
   server: whois.nic.cx
   template:
-    - common.ttp
+    - common.tpl
 
 ## cy
 cy:
@@ -302,13 +302,13 @@ cy:
 cz:
   server: whois.nic.cz
   template:
-    - cz.ttp
+    - cz.tpl
 
 ## de
 de:
   server: whois.denic.de
   template:
-    - de.ttp
+    - de.tpl
 
 ## dj
 dj:
@@ -317,37 +317,37 @@ dj:
 dk:
   server: whois.punktum.dk
   template:
-    - dk.ttp
+    - dk.tpl
 
 ## dm
 dm:
   server: whois.dmdomains.dm
   template:
-    - common.ttp
+    - common.tpl
 
 ## do
 do:
   server: whois.nic.do
   template:
-    - common.ttp
+    - common.tpl
 
 ## dz
 dz:
   server: whois.nic.dz
   template:
-    - dz.ttp
+    - dz.tpl
 
 ## ec
 ec:
   server: whois.nic.ec
   template:
-    - ec.ttp
+    - ec.tpl
 
 ## ee
 ee:
   server: whois.tld.ee
   template:
-    - ee.ttp
+    - ee.tpl
 
 ## eg
 eg:
@@ -370,25 +370,25 @@ et:
 eu:
   server: whois.eu
   template:
-    - eu.ttp
+    - eu.tpl
 
 ## eus
 eus:
   server: whois.nic.eus
   template:
-    - common.ttp
+    - common.tpl
 
 ## fi
 fi:
   server: whois.fi
   template:
-    - fi.ttp
+    - fi.tpl
 
 ## fj
 fj:
   server: www.whois.fj
   template:
-    - common.ttp
+    - common.tpl
 
 ## fk
 fk:
@@ -397,19 +397,19 @@ fk:
 fm:
   server: whois.nic.fm
   template:
-    - common.ttp
+    - common.tpl
 
 ## fo
 fo:
   server: whois.nic.fo
   template:
-    - common.ttp
+    - common.tpl
 
 ## fr
 fr:
   server: whois.nic.fr
   template:
-    - fr.ttp
+    - fr.tpl
 
 ## ga
 ga:
@@ -418,31 +418,31 @@ ga:
 gal:
   server: whois.nic.gal
   template:
-    - common.ttp
+    - common.tpl
 
 ## gd
 gd:
   server: whois.nic.gd
   template:
-    - common.ttp
+    - common.tpl
 
 ## ge
 ge:
   server: whois.nic.ge
   template:
-    - ge.ttp
+    - ge.tpl
 
 ## gf
 gf:
   server: whois.mediaserv.net
   template:
-    - gf.ttp
+    - gf.tpl
 
 ## gg
 gg:
   server: whois.gg
   template:
-    - gg.ttp
+    - gg.tpl
 
 ## gh
 gh:
@@ -451,13 +451,13 @@ gh:
 gi:
   server: whois2.afilias-grs.net
   template:
-    - common.ttp
+    - common.tpl
 
 ## gl
 gl:
   server: whois.nic.gl
   template:
-    - common.ttp
+    - common.tpl
 
 ## gm
 gm:
@@ -490,7 +490,7 @@ gr:
 gs:
   server: whois.nic.gs
   template:
-    - common.ttp
+    - common.tpl
 
 ## gt
 gt:
@@ -510,7 +510,7 @@ gy:
 hk:
   server: whois.hkirc.hk
   template:
-    - hk.ttp
+    - hk.tpl
 
 ## hm
 # NOTE: not working from japan.
@@ -521,61 +521,61 @@ hm:
 hn:
   server: whois.nic.hn
   template:
-    - common.ttp
+    - common.tpl
 
 ## hr
 hr:
   server: whois.dns.hr
   template:
-    - common.ttp
+    - common.tpl
 
 ## ht
 ht:
   server: whois.nic.ht
   template:
-    - common.ttp
+    - common.tpl
 
 ## hu
 hu:
   server: whois.nic.hu
   template:
-    - hu.ttp
+    - hu.tpl
 
 ## id
 id:
   server: whois.id
   template:
-    - id.ttp
+    - id.tpl
 
 ## ie
 ie:
   server: whois.weare.ie
   template:
-    - common.ttp
+    - common.tpl
 
 ## il
 il:
   server: whois.isoc.org.il
   template:
-    - il.ttp
+    - il.tpl
 
 ## im
 im:
   server: whois.nic.im
   template:
-    - im.ttp
+    - im.tpl
 
 ## in
 in:
   server: whois.registry.in
   template:
-    - common.ttp
+    - common.tpl
 
 ## io
 io:
   server: whois.nic.io
   template:
-    - common.ttp
+    - common.tpl
 
 ## iq
 # NOTE: not working from japan.
@@ -586,25 +586,25 @@ iq:
 ir:
   server: whois.nic.ir
   template:
-    - ir.ttp
+    - ir.tpl
 
 ## is
 is:
   server: whois.isnic.is
   template:
-    - is.ttp
+    - is.tpl
 
 ## it
 it:
   server: whois.nic.it
   template:
-    - it.ttp
+    - it.tpl
 
 ## je
 je:
   server: whois.je
   template:
-    - je.ttp
+    - je.tpl
 
 ## jm
 jm:
@@ -616,65 +616,70 @@ jo:
 jp:
   server: whois.jprs.jp
   template:
-    - jp.ttp
+    - jp.tpl
 
 ac.jp:
   server: whois.jprs.jp
   template:
-    - xx.jp.ttp
+    - xx.jp.tpl
 
 ad.jp:
   server: whois.jprs.jp
   template:
-    - xx.jp.ttp
+    - xx.jp.tpl
 
 co.jp:
   server: whois.jprs.jp
   template:
-    - xx.jp.ttp
+    - xx.jp.tpl
 
 ed.jp:
   server: whois.jprs.jp
   template:
-    - xx.jp.ttp
+    - xx.jp.tpl
 
 go.jp:
   server: whois.jprs.jp
   template:
-    - xx.jp.ttp
+    - xx.jp.tpl
 
 gr.jp:
   server: whois.jprs.jp
   template:
-    - xx.jp.ttp
+    - xx.jp.tpl
 
 lg.jp:
   server: whois.jprs.jp
   template:
-    - xx.jp.ttp
+    - xx.jp.tpl
 
 ne.jp:
   server: whois.jprs.jp
   template:
-    - xx.jp.ttp
+    - xx.jp.tpl
 
 or.jp:
   server: whois.jprs.jp
   template:
-    - xx.jp.ttp
+    - xx.jp.tpl
 
 ## ke
 ke:
   server: whois.kenic.or.ke
+  template:
+    - common.tpl
 
 ## kg
 kg:
   server: whois.kg
+  template:
+    - kg.tpl
 
 ## kh
 kh:
 
 ## ki
+# NOTE: not working from japan.
 ki:
   server: whois.nic.ki
 
@@ -684,6 +689,8 @@ km:
 ## kn
 kn:
   server: whois.nic.kn
+  template:
+    - common.tpl
 
 ## kp
 kp:
@@ -1198,7 +1205,7 @@ za:
 zm:
   server: whois.zicta.zm
   template:
-    - common.ttp
+    - common.tpl
 
 ## zw
 zw:
