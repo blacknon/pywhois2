@@ -412,7 +412,7 @@ fo:
 fr:
   server: whois.nic.fr
   template:
-    - fr.tpl
+    - afnic.tpl
 
 ## ga
 ga:

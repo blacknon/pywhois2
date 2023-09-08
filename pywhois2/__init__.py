@@ -14,6 +14,7 @@ from pkg_resources import get_distribution
 
 # from .whois_request import whois_request
 from .whois import Whois
+from .common import json_serial
 
 # version (setup.pyから取得してくる)
 __version__ = get_distribution('pydork').version
@@ -39,7 +40,7 @@ def main():
     whois = Whois(args.target)
     result = whois.get()
 
-    print(json.dumps(result))
+    print(json.dumps(result, default=json_serial))
 
 
 if __name__ == '__main__':

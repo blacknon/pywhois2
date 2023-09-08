@@ -15,6 +15,36 @@ def contact_address2parent(data):
             for k in d.keys():
                 data[k] = d[k]
     return data
+
+def str2datetime(data):
+    import datetime
+
+    # 登録年月日
+    if 'creation' in data:
+        if type(data['creation']) == str:
+            data['creation'] = datetime.datetime.strptime(
+                "{0} {1}".format(data['creation'], "+0900"),
+                '%Y/%m/%d %z'
+            )
+
+    # 有効期限
+    if 'expiration' in data:
+        if type(data['expiration']) == str:
+            data['expiration'] = datetime.datetime.strptime(
+                "{0} {1}".format(data['expiration'], "+0900"),
+                '%Y/%m/%d %z'
+            )
+
+    # 最終更新
+    if 'updated' in data:
+        if type(data['updated']) == str:
+            data['updated'] = datetime.datetime.strptime(
+                data['updated'].replace("JST", "+0900"),
+                '%Y/%m/%d %H:%M:%S (%z)'
+            )
+
+    return data
+
 </macro>
 
 
@@ -26,7 +56,7 @@ def contact_address2parent(data):
 [ use 'whois -h whois.jprs.jp help'. To suppress Japanese output, add'/e'     ]
 [ at the end of command, e.g. 'whois -h whois.jprs.jp xxx/e'.                 ]
 
-<group macro="contact_address2parent">
+<group macro="contact_address2parent, str2datetime">
 Domain Information: [ドメイン情報]
 [Domain Name]                   {{ domain_name | lower }}
 [Name Server]                   {{ name_servers | _line_ | strip('\n') | strip('\r') | to_list | joinmatches }}

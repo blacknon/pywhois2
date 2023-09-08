@@ -5,6 +5,12 @@
 # that can be found in the LICENSE file.
 # =======================================================
 
+# TODO: 日付をtimestamp形式で扱うよう各テンプレートで対応(macro？)
+# TODO: Statusを共通の内容で処理できるよう各テンプレートで対応(macro?).
+#       実装前に、最終的なdict内で扱うstatusの整理をしたほうが良いかも？なので、リリース後に調べて対応する
+#       参考:
+#       - https://faq.interlink.or.jp/faq2/View/wcDisplayContent.aspx?sso_step=1&id=1004
+
 import os
 import ttp
 

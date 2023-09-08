@@ -9,6 +9,7 @@ import ipaddress
 import yaml
 
 from urllib.parse import urlparse
+from datetime import date, datetime
 
 
 def is_ipaddress(host: str):
@@ -90,3 +91,12 @@ def extract_domain(text: str):
         result.rstrip("/")
 
     return result
+
+
+def json_serial(obj):
+    # 日付型の場合には、文字列に変換します
+    if isinstance(obj, (datetime, date)):
+        return obj.strftime("%Y/%m/%d %H:%M:%S %z")
+        # return obj.isoformat()
+    # 上記以外はサポート対象外.
+    raise TypeError("Type %s not serializable" % type(obj))
