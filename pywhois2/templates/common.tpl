@@ -2,9 +2,49 @@
 ## Use of this source code is governed by an MIT license
 ## that can be found in the LICENSE file.
 ## =======================================================
-## TODO: group化したほうがいいかも？？
 
-<group>
+## Macro
+## =======================================================
+
+<macro>
+def reseller_address2parent(data):
+    if 'reseller_address' in data:
+        extract_data = data['reseller_address']
+        if type(extract_data) == dict:
+            del data['reseller_address']
+            data['reseller_address'] = extract_data.get('reseller_address')
+    return data
+
+def registrant_address2parent(data):
+    if 'registrant_address' in data:
+        extract_data = data['registrant_address']
+        if type(extract_data) == dict:
+            del data['registrant_address']
+            data['registrant_address'] = extract_data.get('registrant_address')
+    return data
+
+def admin_address2parent(data):
+    if 'admin_address' in data:
+        extract_data = data['admin_address']
+        if type(extract_data) == dict:
+            del data['admin_address']
+            data['admin_address'] = extract_data.get('admin_address')
+    return data
+
+def tech_address2parent(data):
+    if 'tech_address' in data:
+        extract_data = data['tech_address']
+        if type(extract_data) == dict:
+            del data['tech_address']
+            data['tech_address'] = extract_data.get('tech_address')
+    return data
+</macro>
+
+
+## Template
+## =======================================================
+
+<group macro="reseller_address2parent, registrant_address2parent, admin_address2parent, tech_address2parent">
 Domain Name: {{ domain_name | lower | _line_ | strip('\n') | strip('\r') }}
 
 Registry Domain ID: {{ registry_domain_id | lower }}
