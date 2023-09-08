@@ -24,6 +24,35 @@ def registrant_address2parent(data):
             for k in d.keys():
                 data[k] = d[k]
     return data
+
+def str2datetime(data):
+    import datetime
+
+    # 登録年月日
+    if 'creation' in data:
+        if type(data['creation']) == str:
+            data['creation'] = datetime.datetime.strptime(
+                "{0} {1}".format(data['creation'], "+0900"),
+                '%Y/%m/%d %z'
+            )
+
+    # 有効期限
+    if 'expiration' in data:
+        if type(data['expiration']) == str:
+            data['expiration'] = datetime.datetime.strptime(
+                "{0} {1}".format(data['expiration'], "+0900"),
+                '%Y/%m/%d %z'
+            )
+
+    # 最終更新
+    if 'updated' in data:
+        if type(data['updated']) == str:
+            data['updated'] = datetime.datetime.strptime(
+                data['updated'].replace("JST", "+0900"),
+                '%Y/%m/%d %H:%M:%S (%z)'
+            )
+
+    return data
 </macro>
 
 
@@ -35,7 +64,7 @@ def registrant_address2parent(data):
 [ use 'whois -h whois.jprs.jp help'. To suppress Japanese output, add'/e'     ]
 [ at the end of command, e.g. 'whois -h whois.jprs.jp xxx/e'.                 ]
 
-<group macro="contact_address2parent, registrant_address2parent">
+<group macro="contact_address2parent, registrant_address2parent, str2datetime">
 Domain Information: [ドメイン情報]
 a. [ドメイン名]                   {{ domain_name | lower }}
 b. [ねっとわーくさーびすめい]         {{ registrant_organization_local2 | _line_ | strip('\n') | strip('\r') }}
@@ -64,10 +93,10 @@ w. [代表者名]                     {{ registrant_representative | _line_ | st
 u. [副代表法人名]                  {{ registrant_deputy_representative_corporation | _line_ | strip('\n') | strip('\r') }}
 x. [副代表者名]                    {{ registrant_deputy_representative | _line_ | strip('\n') | strip('\r') }}
 y. [通知アドレス]                  {{ registrant_email }}
-[登録年月日]                      {{ creation_date | _line_ | strip('\n') | strip('\r') }}
-[有効期限]                        {{ expiration_date | _line_ | strip('\n') | strip('\r') }}
+[登録年月日]                      {{ creation | _line_ | strip('\n') | strip('\r') }}
+[有効期限]                        {{ expiration | _line_ | strip('\n') | strip('\r') }}
 [状態]                           {{ status | _line_ | strip('\n') | strip('\r') }}
-[最終更新]                        {{ last_updated | _line_ | strip('\n') | strip('\r') }}
+[最終更新]                        {{ updated | _line_ | strip('\n') | strip('\r') }}
 
 Contact Information: [公開連絡窓口]
 [名前]                           {{ contact_name_local | _line_ | strip('\n') | strip('\r') }}
