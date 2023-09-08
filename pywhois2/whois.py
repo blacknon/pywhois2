@@ -107,7 +107,7 @@ class Whois:
             parser = ttp.ttp(res, template, log_level="ERROR")
             # parser = ttp.ttp(res, template, log_level="DEBUG")
             parser.parse()
-            result = parser.result(structure='flat_list')[0]
+            result = parser.result(structure='flat_list')
 
             if len(result) > 0:
                 break
