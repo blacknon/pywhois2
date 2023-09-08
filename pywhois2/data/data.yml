@@ -698,6 +698,8 @@ kp:
 ## kr
 kr:
   server: whois.kr
+  template:
+    - kr.tpl
 
 ## kw
 kw:
@@ -705,23 +707,32 @@ kw:
 ## ky
 ky:
   server: whois.kyregistry.ky
+  template:
+    - ky.tpl
 
 ## kz
 kz:
   server: whois.nic.kz
+  template:
+    - kz.tpl
 
 ## la
 la:
   server: whois.nic.la
+  template:
+    - common.tpl
 
 ## lb
 lb:
   server: whois.lbdr.org.lb
+  template:
+    - common.tpl
 
 ## lc
 lc:
 
 ## li
+# NOTE: not working from japan.
 li:
   server: whois.nic.li
 
@@ -734,30 +745,38 @@ lr:
 ## ls
 ls:
   server: whois.nic.ls
+  template:
+    - ls.tpl
 
 ## lt
 lt:
   server: whois.domreg.lt
+  template:
+    - lt.tpl
 
 ## lu
 lu:
   server: whois.dns.lu
+  template:
+    - lu.tpl
 
 ## lv
 lv:
   server: whois.nic.lv
+  template:
+    - lv.tpl
 
 ## ly
 ly:
   server: whois.nic.ly
+  template:
+    - common.tpl
 
 ## ma
 ma:
   server: whois.registre.ma
-
-## ma
-ma:
-  server: whois.registre.ma
+  template:
+    - common.tpl
 
 ## mc
 mc:
@@ -765,10 +784,14 @@ mc:
 ## md
 md:
   server: whois.nic.md
+  template:
+    - md.tpl
 
 ## me
 me:
   server: whois.nic.me
+  template:
+    - common.tpl
 
 ## mf
 mf:
@@ -776,6 +799,8 @@ mf:
 ## mg
 mg:
   server: whois.nic.mg
+  template:
+    - common.tpl
 
 ## mh
 mh:
@@ -783,41 +808,54 @@ mh:
 ## mk
 mk:
   server: whois.marnet.mk
+  template:
+    - mk.tpl
 
 ## ml
+# NOTE: not working from japan.
 ml:
   server: whois.nic.ml
 
 ## mm
 mm:
   server: whois.registry.gov.mm
-
-## mm
-mm:
-  server: whois.registry.gov.mm
+  template:
+    - common.tpl
 
 ## mn
+# NOTE: not working from japan.
 mn:
   server: whois.nic.mn
+  template:
+    - common.tpl
 
 ## mo
 mo:
   server: whois.monic.mo
+  template:
+    - mo.tpl
 
 ## mp
 mp:
 
 ## mq
 mq:
+# NOTE: Java Whois Server
   server: whois.mediaserv.net
+  template:
+    - mq.tpl
 
 ## mr
 mr:
   server: whois.nic.mr
+  template:
+    - common.tpl
 
 ## ms
+# NOTE: not working from japan.
 ms:
   server: whois.nic.ms
+
 
 ## mt
 mt:
@@ -825,33 +863,48 @@ mt:
 ## mu
 mu:
   server: whois.nic.mu
+  template:
+    - common.tpl
 
 ## mv
 mv:
 
 ## mw
+# NOTE: Whoisd Server
 mw:
   server: whois.nic.mw
+  template:
+    - mw.tpl
 
 ## mx
 mx:
   server: whois.mx
+  template:
+    - mx.tpl
 
 ## my
+# NOTE: not working from japan.
 my:
   server: whois.mynic.my
 
 ## mz
 mz:
   server: whois.nic.mz
+  template:
+    - common.tpl
 
 ## na
 na:
   server: whois.na-nic.com.na
+  template:
+    - common.tpl
 
 ## nc
+# NOTE: OPT Whois
 nc:
   server: whois.nc
+  template:
+    - nc.tpl
 
 ## ne
 ne:
@@ -859,10 +912,14 @@ ne:
 ## nf
 nf:
   server: whois.nic.nf
+  template:
+    - common.tpl
 
 ## ng
 ng:
   server: whois.nic.net.ng
+  template:
+    - common.tpl
 
 ## ni
 ni:
@@ -870,18 +927,14 @@ ni:
 ## nl
 nl:
   server: whois.domain-registry.nl
-
-## nl
-nl:
-  server: whois.domain-registry.nl
-
-## nl
-nl:
-  server: whois.domain-registry.nl
+  template:
+    - nl.tpl
 
 ## no
 no:
   server: whois.norid.no
+  template:
+    - no.tpl
 
 ## np
 np:
@@ -892,14 +945,20 @@ nr:
 ## nu
 nu:
   server: whois.iis.nu
+  template:
+    - nu.tpl
 
 ## nz
 nz:
   server: whois.irs.net.nz
+  template:
+    - common.tpl
 
 ## om
 om:
   server: whois.registry.om
+  template:
+    - om.tpl
 
 ## pa
 pa:
@@ -907,10 +966,14 @@ pa:
 ## pe
 pe:
   server: kero.yachay.pe
+  template:
+    - common.tpl
 
 ## pf
 pf:
   server: whois.registry.pf
+  template:
+    - pf.tpl
 
 ## pg
 pg:
@@ -921,14 +984,21 @@ ph:
 ## pk
 pk:
   server: whois.pknic.net.pk
+  template:
+    - pk.tpl
 
 ## pl
 pl:
   server: whois.dns.pl
+  template:
+    - pl.tpl
 
 ## pm
+# NOTE: AFNIC Whois server
 pm:
   server: whois.nic.pm
+  template:
+    - pm.tpl
 
 ## pn
 pn:
@@ -936,20 +1006,22 @@ pn:
 ## pr
 pr:
   server: whois.afilias-srs.net
-
-## ps
-ps:
+  template:
+    - common.tpl
 
 ## ps
 ps:
 
 ## pt
+# NOTE: not working from japan.
 pt:
   server: whois.dns.pt
 
 ## pw
 pw:
   server: whois.nic.pw
+  template:
+    - common.tpl
 
 ## py
 py:
@@ -957,49 +1029,75 @@ py:
 ## qa
 qa:
   server: whois.registry.qa
+  template:
+    - qa.tpl
 
 ## re
+# NOTE: AFNIC Whois server
 re:
   server: whois.nic.re
+  template:
+    - re.tpl
 
 ## ro
 ro:
   server: whois.rotld.ro
+  template:
+    - ro.tpl
 
 ## rs
 rs:
   server: whois.rnids.rs
+  template:
+    - rs.tpl
 
 ## ru
+# NOTE: TCI Whois Service
 ru:
   server: whois.tcinet.ru
+  template:
+    - ru.tpl
 
 ## rw
 rw:
   server: whois.ricta.org.rw
+  template:
+    - common.tpl
 
 ## sa
+# NOTE: SaudiNIC Whois server
 sa:
   server: whois.nic.net.sa
+  template:
+    - sa.tpl
 
 ## sb
 sb:
   server: whois.nic.net.sb
+  template:
+    - common.tpl
 
 ## sc
 sc:
   server: whois2.afilias-grs.net
+  template:
+    - common.tpl
 
 ## sd
 sd:
 
 ## se
+# NOTE: The Swedish Internet Foundation
 se:
   server: whois.iis.se
+  template:
+    - se.tpl
 
 ## sg
 sg:
   server: whois.sgnic.sg
+  template:
+    - sg.tpl
 
 ## sh
 sh:

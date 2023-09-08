@@ -8,6 +8,8 @@
 import ipaddress
 import yaml
 
+from urllib.parse import urlparse
+
 
 def is_ipaddress(host: str):
     """_summary_
@@ -67,3 +69,23 @@ def load_data_yaml(yaml_path: str, target_key: str):
         result = dict(common_data, **res)
 
         return result
+
+
+def extract_domain(text: str):
+    result = ""
+    is_url = False
+
+    try:
+        r = urlparse(text)
+        is_url = all([r.scheme, r.netloc])
+    except Exception:
+        is_url = False
+
+    if is_url:
+        parsed_url = urlparse(text)
+        result = parsed_url.netloc
+    else:
+        result = text
+        result.rstrip("/")
+
+    return result

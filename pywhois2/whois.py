@@ -12,7 +12,7 @@ from pathlib import Path
 from tld import get_tld
 
 from .whois_request import whois_request
-from .common import is_ipaddress, load_data_yaml
+from .common import is_ipaddress, load_data_yaml, extract_domain
 
 
 # CONST
@@ -70,7 +70,8 @@ class Whois:
                     result = res
                     break
 
-                server = res['registrar_whois_server'].rstrip("/")
+                server = res['registrar_whois_server']
+                server = extract_domain(server)
                 continue
 
             else:
