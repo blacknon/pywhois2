@@ -1,9 +1,32 @@
+## Copyright (c) 2023 Blacknon. All rights reserved.
+## Use of this source code is governed by an MIT license
+## that can be found in the LICENSE file.
+## =======================================================
+
+## Macro
+## =======================================================
+
+<macro>
+def contact_address2parent(data):
+    if 'contact_address' in data:
+        extract_data = data['contact_address']
+        del data['contact_address']
+        for d in extract_data:
+            for k in d.keys():
+                data[k] = d[k]
+    return data
+</macro>
+
+
+## Template
+## =======================================================
+
 [ JPRS database provides information on network administration. Its use is    ]
 [ restricted to network administration purposes. For further information,     ]
 [ use 'whois -h whois.jprs.jp help'. To suppress Japanese output, add'/e'     ]
 [ at the end of command, e.g. 'whois -h whois.jprs.jp xxx/e'.                 ]
 
-<group>
+<group macro="contact_address2parent">
 Domain Information: [ドメイン情報]
 [Domain Name]                   {{ domain_name | lower }}
 [Name Server]                   {{ name_servers | _line_ | strip('\n') | strip('\r') | to_list | joinmatches }}
@@ -26,8 +49,8 @@ Contact Information: [公開連絡窓口]
                                 {{ contact_address_local | strip(' ') | _line_ | strip('\n') | strip('\r')  | joinmatches(" ") }}
 </group>
 <group name="contact_address">
-[Postal Address]                {{ contact_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
-                                {{ contact_address | strip(' ') | _line_ | strip('\n') | strip('\r')  | joinmatches(" ") }}
+[Postal Address]                {{ contact_address | _line_ | strip('\n') | strip('\r') | joinmatches(", ") }}
+                                {{ contact_address | strip(' ') | _line_ | strip('\n') | strip('\r')  | joinmatches(", ") }}
 </group>
 [電話番号]                        {{ contact_phone | _line_ | strip('\n') | strip('\r') }}
 [FAX番号]                        {{ contact_fax | _line_ | strip('\n') | strip('\r') }}
