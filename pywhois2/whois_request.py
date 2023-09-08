@@ -7,7 +7,7 @@
 
 import socket
 import socks
-import sys
+# import sys
 
 
 # NOTE: classでやる意味なくね？？？と思ったのでfunctionにしちゃう
@@ -22,7 +22,7 @@ def whois_request(query: str, whois_host: str):
     """
     response = b''
 
-    print(whois_host, file=sys.stderr)  # debug
+    # print(whois_host, file=sys.stderr)  # debug
     s = socks.socksocket(socket.AF_INET)
     s.connect((whois_host, 43))
 

@@ -57,6 +57,7 @@ def load_data_yaml(yaml_path: str, target_key: str):
         common_data = obj.get('common')
 
         # get key loops
+        res = {}
         for k in key_candidate:
             if k in obj:
                 res = obj.get(k)

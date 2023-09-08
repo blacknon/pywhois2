@@ -53,8 +53,8 @@ Registrar URL: {{ registrar_whois_url | lower }}
 
 Updated Date: {{ updated | _line_ | strip('\n') | strip('\r') }}
 Creation Date: {{ creation | _line_ | strip('\n') | strip('\r') }}
-
 Registrar Registration Expiration Date: {{ expiration | _line_ | strip('\n') | strip('\r') }}
+
 Registrar: {{ registrar_name | _line_ | strip('\n') | strip('\r') }}
 Registrar IANA ID: {{ registrar_id }}
 Registrar Abuse Contact Email: {{ registrar_email }}
