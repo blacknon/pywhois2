@@ -23,10 +23,10 @@
 %%
 
 <group>
-domain:                        {{ domain_name | lower | _line_ | strip('\n') | strip('\r') }}
-status:                        {{ domain_status | lower | _line_ | strip('\n') | strip('\r') }}
-eppstatus:                     {{ domain_epp_status | lower | _line_ | strip('\n') | strip('\r') }}
-hold:                          {{ domain_hold_status | lower | _line_ | strip('\n') | strip('\r') }}
+domain:                        {{ domain_name | lower | ORPHRASE }}
+status:                        {{ domain_status | lower | ORPHRASE }}
+eppstatus:                     {{ domain_epp_status | lower | ORPHRASE }}
+hold:                          {{ domain_hold_status | lower | ORPHRASE }}
 holder-c:                      AES329-FRNIC
 admin-c:                       GMS163-FRNIC
 tech-c:                        I10396-FRNIC
@@ -36,7 +36,7 @@ created:                       1999-04-22T22:00:00Z
 last-update:                   2022-12-27T10:06:40.87561Z
 source:                        FRNIC
 
-nserver:                       {{ name_servers | _line_ | strip('\n') | strip('\r') | to_list | joinmatches }}
+nserver:                       {{ name_servers | ORPHRASE | to_list | joinmatches }}
 source:                        FRNIC
 
 registrar:                     ASCIO TECHNOLOGIES Inc.

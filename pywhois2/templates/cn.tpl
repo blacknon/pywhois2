@@ -7,14 +7,14 @@
 ## =======================================================
 
 <group>
-Domain Name: {{ domain_name | lower | _line_ | strip('\n') | strip('\r') }}
-ROID: {{ domain_roid | _line_ | strip('\n') | strip('\r') }}
-Domain Status: {{ domain_status | _line_ | strip('\n') | strip('\r') | joinmatches("\n") }}
-Registrant: {{ registrant_name | _line_ | strip('\n') | strip('\r') }}
-Registrant Contact Email: {{ registrant_email | _line_ | strip('\n') | strip('\r') }}
-Sponsoring Registrar: {{ registrar_name | _line_ | strip('\n') | strip('\r') }}
-Name Server: {{ name_servers | _line_ | strip('\n') | strip('\r') | to_list | joinmatches }}
-Registration Time: {{ creation | _line_ | strip('\n') | strip('\r') }}
-Expiration Time: {{ expiration | _line_ | strip('\n') | strip('\r') }}
-DNSSEC: {{ dnssec | _line_ | strip('\n') | strip('\r') }}
+Domain Name: {{ domain_name | lower | ORPHRASE }}
+ROID: {{ domain_roid | ORPHRASE }}
+Domain Status: {{ domain_status | ORPHRASE | joinmatches("\n") }}
+Registrant: {{ registrant_name | ORPHRASE }}
+Registrant Contact Email: {{ registrant_email | ORPHRASE }}
+Sponsoring Registrar: {{ registrar_name | ORPHRASE }}
+Name Server: {{ name_servers | ORPHRASE | to_list | joinmatches }}
+Registration Time: {{ creation | ORPHRASE }}
+Expiration Time: {{ expiration | ORPHRASE }}
+DNSSEC: {{ dnssec | ORPHRASE }}
 </group>
