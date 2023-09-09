@@ -8,19 +8,19 @@
 
 <group>
 Domain Name:                     {{ domain_name }}
-Registrar ID:                    {{ registrar_id | _line_ | strip('\n') | strip('\r') }}
-Registrar Name:                  {{ registrar_name | _line_ | strip('\n') | strip('\r') }}
-Status:                          {{ domain_status | _line_ | strip('\n') | strip('\r') | joinmatches("\n") }}
+Registrar ID:                    {{ registrar_id | ORPHRASE }}
+Registrar Name:                  {{ registrar_name | ORPHRASE }}
+Status:                          {{ domain_status | ORPHRASE | joinmatches("\n") }}
 
-Registrant Contact ID:           {{ registrant_id | _line_ | strip('\n') | strip('\r') }}
-Registrant Contact Name:         {{ registrant_name | _line_ | strip('\n') | strip('\r') }}
-Registrant Contact Email:        {{ registrant_email | _line_ | strip('\n') | strip('\r') }}
-Registrant Contact Organisation: {{ registrant_organization | _line_ | strip('\n') | strip('\r') }}
+Registrant Contact ID:           {{ registrant_id | ORPHRASE }}
+Registrant Contact Name:         {{ registrant_name | ORPHRASE }}
+Registrant Contact Email:        {{ registrant_email | ORPHRASE }}
+Registrant Contact Organisation: {{ registrant_organization | ORPHRASE }}
 
-Tech Contact ID:                 {{ tech_id | _line_ | strip('\n') | strip('\r') }}
-Tech Contact Name:               {{ tech_name | _line_ | strip('\n') | strip('\r') }}
-Tech Contact Email:              {{ tech_email | _line_ | strip('\n') | strip('\r') }}
-Tech Contact Organisation:       {{ tech_organization | _line_ | strip('\n') | strip('\r') }}
+Tech Contact ID:                 {{ tech_id | ORPHRASE }}
+Tech Contact Name:               {{ tech_name | ORPHRASE }}
+Tech Contact Email:              {{ tech_email | ORPHRASE }}
+Tech Contact Organisation:       {{ tech_organization | ORPHRASE }}
 
-Name Server:                     {{ name_servers | _line_ | strip('\n') | strip('\r') | to_list | joinmatches }}
+Name Server:                     {{ name_servers | ORPHRASE | to_list | joinmatches }}
 </group>

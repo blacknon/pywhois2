@@ -45,72 +45,72 @@ def tech_address2parent(data):
 ## =======================================================
 
 <group>
-Domain Name: {{ domain_name | lower | _line_ | strip('\n') | strip('\r') }}
+Domain Name: {{ domain_name | lower | ORPHRASE }}
 
 Registry Domain ID: {{ registry_domain_id | lower }}
 Registry WHOIS Server: {{ registrar_whois_server | lower }}
-Creation Date: {{ creation | _line_ | strip('\n') | strip('\r') }}
-Registrar: {{ registrar_name | _line_ | strip('\n') | strip('\r') }}
+Creation Date: {{ creation | ORPHRASE }}
+Registrar: {{ registrar_name | ORPHRASE }}
 Registrar Abuse Contact Email: {{ registrar_email }}
 Registrar Abuse Contact Phone: {{ registrar_phone }}
 
-Registry RegistrantID: {{ registrant_id | _line_ | strip('\n') | strip('\r') }}
-RegistrantName: {{ registrant_name | _line_ | strip('\n') | strip('\r') }}
-RegistrantOrganization: {{ registrant_organization | _line_ | strip('\n') | strip('\r') }}
+Registry RegistrantID: {{ registrant_id | ORPHRASE }}
+RegistrantName: {{ registrant_name | ORPHRASE }}
+RegistrantOrganization: {{ registrant_organization | ORPHRASE }}
 <group name="registrant_address">
-RegistrantStreet: {{ registrant_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
-RegistrantCity: {{ registrant_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
-RegistrantState/Province: {{ registrant_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+RegistrantStreet: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
+RegistrantCity: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
+RegistrantState/Province: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
 </group>
-RegistrantPostal Code: {{ registrant_zip_code | _line_ | strip('\n') | strip('\r') }}
-RegistrantCountry: {{ registrant_country | _line_ | strip('\n') | strip('\r') }}
-RegistrantPhone: {{ registrant_phone | _line_ | strip('\n') | strip('\r') }}
-RegistrantFax: {{ registrant_fax | _line_ | strip('\n') | strip('\r') }}
-RegistrantEmail: {{ registrant_email | _line_ | strip('\n') | strip('\r') }}
+RegistrantPostal Code: {{ registrant_zip_code | ORPHRASE }}
+RegistrantCountry: {{ registrant_country | ORPHRASE }}
+RegistrantPhone: {{ registrant_phone | ORPHRASE }}
+RegistrantFax: {{ registrant_fax | ORPHRASE }}
+RegistrantEmail: {{ registrant_email | ORPHRASE }}
 
-Registry AdminID: {{ admin_id | _line_ | strip('\n') | strip('\r') }}
-AdminName: {{ admin_name | _line_ | strip('\n') | strip('\r') }}
-AdminOrganization: {{ admin_organization | _line_ | strip('\n') | strip('\r') }}
+Registry AdminID: {{ admin_id | ORPHRASE }}
+AdminName: {{ admin_name | ORPHRASE }}
+AdminOrganization: {{ admin_organization | ORPHRASE }}
 <group name="admin_address">
-AdminStreet: {{ admin_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
-AdminCity: {{ admin_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
-AdminState/Province: {{ admin_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+AdminStreet: {{ admin_address | ORPHRASE | joinmatches(" ") }}
+AdminCity: {{ admin_address | ORPHRASE | joinmatches(" ") }}
+AdminState/Province: {{ admin_address | ORPHRASE | joinmatches(" ") }}
 </group>
-AdminPostal Code: {{ admin_zip_code | _line_ | strip('\n') | strip('\r') }}
-AdminCountry: {{ admin_country | _line_ | strip('\n') | strip('\r') }}
-AdminPhone: {{ admin_phone | _line_ | strip('\n') | strip('\r') }}
-AdminFax: {{ admin_fax | _line_ | strip('\n') | strip('\r') }}
-AdminEmail: {{ admin_email | _line_ | strip('\n') | strip('\r') }}
+AdminPostal Code: {{ admin_zip_code | ORPHRASE }}
+AdminCountry: {{ admin_country | ORPHRASE }}
+AdminPhone: {{ admin_phone | ORPHRASE }}
+AdminFax: {{ admin_fax | ORPHRASE }}
+AdminEmail: {{ admin_email | ORPHRASE }}
 
-Registry TechID: {{ tech_id | _line_ | strip('\n') | strip('\r') }}
-TechName: {{ tech_name | _line_ | strip('\n') | strip('\r') }}
-TechOrganization: {{ tech_organization | _line_ | strip('\n') | strip('\r') }}
+Registry TechID: {{ tech_id | ORPHRASE }}
+TechName: {{ tech_name | ORPHRASE }}
+TechOrganization: {{ tech_organization | ORPHRASE }}
 <group name="tech_address">
-TechStreet: {{ tech_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
-TechCity: {{ tech_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
-TechState/Province: {{ tech_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+TechStreet: {{ tech_address | ORPHRASE | joinmatches(" ") }}
+TechCity: {{ tech_address | ORPHRASE | joinmatches(" ") }}
+TechState/Province: {{ tech_address | ORPHRASE | joinmatches(" ") }}
 </group>
-TechPostal Code: {{ tech_zip_code | _line_ | strip('\n') | strip('\r') }}
-TechCountry: {{ tech_country | _line_ | strip('\n') | strip('\r') }}
-TechPhone: {{ tech_phone | _line_ | strip('\n') | strip('\r') }}
-TechFax: {{ tech_fax | _line_ | strip('\n') | strip('\r') }}
-TechEmail: {{ tech_email | _line_ | strip('\n') | strip('\r') }}
+TechPostal Code: {{ tech_zip_code | ORPHRASE }}
+TechCountry: {{ tech_country | ORPHRASE }}
+TechPhone: {{ tech_phone | ORPHRASE }}
+TechFax: {{ tech_fax | ORPHRASE }}
+TechEmail: {{ tech_email | ORPHRASE }}
 
-Registry BillingID: {{ billing_id | _line_ | strip('\n') | strip('\r') }}
-BillingName: {{ billing_name | _line_ | strip('\n') | strip('\r') }}
-BillingOrganization: {{ billing_organization | _line_ | strip('\n') | strip('\r') }}
+Registry BillingID: {{ billing_id | ORPHRASE }}
+BillingName: {{ billing_name | ORPHRASE }}
+BillingOrganization: {{ billing_organization | ORPHRASE }}
 <group name="billing_address">
-BillingStreet: {{ billing_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
-BillingCity: {{ billing_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
-BillingState/Province: {{ billing_address | _line_ | strip('\n') | strip('\r') | joinmatches(" ") }}
+BillingStreet: {{ billing_address | ORPHRASE | joinmatches(" ") }}
+BillingCity: {{ billing_address | ORPHRASE | joinmatches(" ") }}
+BillingState/Province: {{ billing_address | ORPHRASE | joinmatches(" ") }}
 </group>
-BillingPostal Code: {{ billing_zip_code | _line_ | strip('\n') | strip('\r') }}
-BillingCountry: {{ billing_country | _line_ | strip('\n') | strip('\r') }}
-BillingPhone: {{ billing_phone | _line_ | strip('\n') | strip('\r') }}
-BillingFax: {{ billing_fax | _line_ | strip('\n') | strip('\r') }}
-BillingEmail: {{ billing_email | _line_ | strip('\n') | strip('\r') }}
+BillingPostal Code: {{ billing_zip_code | ORPHRASE }}
+BillingCountry: {{ billing_country | ORPHRASE }}
+BillingPhone: {{ billing_phone | ORPHRASE }}
+BillingFax: {{ billing_fax | ORPHRASE }}
+BillingEmail: {{ billing_email | ORPHRASE }}
 
-Name Server: {{ name_servers | _line_ | strip('\n') | strip('\r') | to_list | joinmatches }}
+Name Server: {{ name_servers | ORPHRASE | to_list | joinmatches }}
 
-DNSSEC: {{ dnssec | _line_ | strip('\n') | strip('\r') }}
+DNSSEC: {{ dnssec | ORPHRASE }}
 </group>
