@@ -19,6 +19,4 @@
    Name Server: {{ name_servers | _line_ | strip('\n') | strip('\r') | to_list | joinmatches }}
 
    DNSSEC: {{ dnssec | _line_ | strip('\n') | strip('\r') }}
-
-   URL of the ICANN Whois Inaccuracy Complaint Form: https://www.icann.org/wicf/
 </group>

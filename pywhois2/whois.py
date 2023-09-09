@@ -102,20 +102,24 @@ class Whois:
         # whois requestを実行、結果の取得
         res = whois_request(self.target, server)
 
-        for template in templates:
-            template_path = os.path.join(TEMPLATE_DIR, template)
+        for t in templates:
+            template_path = os.path.join(TEMPLATE_DIR, t)
 
             # TODO: whois_serverが含まれる場合、serverと一致しない場合は再度whoisを実行させる処理を追加する(comドメインとか向け？)
             with open(template_path, 'r') as file:
                 template = file.read().rstrip()
                 file.close()
 
-            parser = ttp.ttp(res, template, log_level="ERROR")
-            # parser = ttp.ttp(res, template, log_level="DEBUG")
+            # parser = ttp.ttp(res, template, log_level="ERROR")
+            parser = ttp.ttp(res, template, log_level="DEBUG")
             parser.parse()
             result = parser.result(structure='flat_list')
 
-            if len(result) > 0:
+            # import sys
+            # print("{0}: {1}".format(t, result), file=sys.stderr)
+            # print(len(result))
+
+            if any(result):
                 break
 
-        return result
+        return result[0]
