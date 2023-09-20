@@ -36,7 +36,7 @@ ag:
 ai:
   server: whois.nic.ai
   template:
-    - cctld/ai.tpl
+    - common_2.tpl
 
 ## al
 al:
@@ -168,11 +168,11 @@ bt:
 bv:
 
 ## bw
-# NOTE: レスポンスが返ってこないため一旦スキップ(2023/09/18 11::07)
 bw:
   server: whois.nic.net.bw
+  trace_whois: False
   template:
-    - cctld/bw.tpl
+    - common_2.tpl
 
 ## by
 by:

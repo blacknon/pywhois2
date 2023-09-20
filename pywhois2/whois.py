@@ -82,12 +82,13 @@ class Whois:
 
         # tldごとのデータを取得
         server = self.DATA.get('server')
+        trace_whois = self.DATA.get('trace_whois')
         templates = self.DATA.get('template')
 
         while True:
             res = self.__get_data(server, templates)
 
-            if 'registrar_whois_server' in res:
+            if 'registrar_whois_server' in res and trace_whois:
                 if res['registrar_whois_server'] == server:
                     result = res
                     break

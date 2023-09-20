@@ -68,8 +68,8 @@ def get_data_files():
 
 
 name = 'pywhois2'
-version = '0.1.1'
-release = '0.1.1'
+version = '0.1.2'
+release = '0.1.2'
 
 if __name__ == "__main__":
     setuptools.setup(
