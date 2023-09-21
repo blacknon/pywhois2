@@ -414,7 +414,7 @@ ge:
 gf:
   server: whois.mediaserv.net
   template:
-    - cctld/gf.tpl
+    - java_whois_server.tpl
 
 ## gg
 # WHOIS lookup
@@ -821,7 +821,7 @@ mp:
 mq:
   server: whois.mediaserv.net
   template:
-    - cctld/mq.tpl
+    - java_whois_server.tpl
 
 ## mr
 mr:
@@ -1177,7 +1177,7 @@ tf:
     - afnic.tpl
 
 ## tg
-# NOTE: Java Whois Server
+# NOTE: Java Whois Server 0.4.1.3
 tg:
   server: whois.nic.tg
   template:

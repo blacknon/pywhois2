@@ -173,8 +173,6 @@ $ ttp -d /tmp/example.jp.txt -t ./pywhois2/templates/cctld/jp.tpl -o raw
 
 ## Unsupported ccTLD domains
 
-- ge
-- gf
 - gg
 - hk
 - hu
@@ -192,7 +190,6 @@ $ ttp -d /tmp/example.jp.txt -t ./pywhois2/templates/cctld/jp.tpl -o raw
 - lv
 - md
 - mo
-- mq
 - mx
 - nc
 - nl

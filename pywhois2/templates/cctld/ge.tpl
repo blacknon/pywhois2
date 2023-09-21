@@ -6,10 +6,56 @@
 ## Macro
 ## =======================================================
 
+<macro>
+def standardize_status(data):
+    from stringcase import pascalcase, snakecase
+    if 'status' in data:
+        if type(data['status']) == str:
+            extract_data = data['status']
+            del data['status']
+            data['status'] = {}
+
+            for d in extract_data.split(","):
+                data['status'][snakecase(d.lstrip())] = True
+
+    return data
+
+def str2datetime(data):
+    import datetime
+    import pytz
+    from pytz import country_timezones
+
+    # 登録年月日
+    if 'created' in data:
+        if type(data['created']) == str:
+            data['created'] = datetime.datetime.strptime(
+                data['created'],
+                '%Y-%m-%d'
+            ).replace(tzinfo=pytz.timezone(country_timezones['ge'][0]))
+
+    # 有効期限
+    if 'expiration' in data:
+        if type(data['expiration']) == str:
+            data['expiration'] = datetime.datetime.strptime(
+                data['expiration'],
+                '%Y-%m-%d'
+            ).replace(tzinfo=pytz.timezone(country_timezones['ge'][0]))
+
+    # 最終更新
+    if 'updated' in data:
+        if type(data['updated']) == str:
+            data['updated'] = datetime.datetime.strptime(
+                data['updated'],
+                '%Y-%m-%d'
+            ).replace(tzinfo=pytz.timezone(country_timezones['ge'][0]))
+
+    return data
+</macro>
+
 ## Template
 ## =======================================================
 
-<group>
+<group macro="standardize_status, str2datetime">
    Domain Name: {{ domain_name | lower | ORPHRASE }}
    Creation Date: {{ created }}
    Registry Expiry Date: {{ expiration }}
