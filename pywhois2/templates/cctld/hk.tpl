@@ -48,10 +48,9 @@ def unpack(data):
     data = organization2parent('admin', 'admin', data)
     data = organization2parent('tech', 'tech', data)
     data = name_servers2parent(data)
+    data = str2datetime(data)
 
     return data
-
-
 
 def organization2parent(organization_type , organization_type_name, data):
     if organization_type in data:
@@ -81,7 +80,30 @@ def name_servers2parent(data):
 
     return data
 
+def str2datetime(data):
+    import datetime
+    import pytz
+    from pytz import country_timezones
 
+    # 登録年月日
+    if 'registrant_created' in data:
+        if type(data['registrant_created']) == str:
+            data['created'] = datetime.datetime.strptime(
+                data['registrant_created'],
+                '%d-%m-%Y'
+            ).replace(tzinfo=pytz.timezone(country_timezones['hk'][0]))
+            del data['registrant_created']
+
+    # 有効期限
+    if 'registrant_expiration' in data:
+        if type(data['registrant_expiration']) == str:
+            data['expiration'] = datetime.datetime.strptime(
+                data['registrant_expiration'],
+                '%d-%m-%Y'
+            ).replace(tzinfo=pytz.timezone(country_timezones['hk'][0]))
+            del data['registrant_expiration']
+
+    return data
 </macro>
 
 
