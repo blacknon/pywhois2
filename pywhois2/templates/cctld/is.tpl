@@ -135,8 +135,6 @@ def str2datetime(data):
             ).replace(tzinfo=pytz.timezone(country_timezones['is'][0]))
 
     return data
-
-
 </macro>
 
 
