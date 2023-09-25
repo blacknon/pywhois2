@@ -37,6 +37,20 @@ def str2datetime(data):
             ).replace(tzinfo=pytz.timezone(country_timezones['id'][0]))
 
     return data
+
+def standardize_status(data):
+    from stringcase import pascalcase, snakecase
+    if 'status' in data:
+        if type(data['status']) == list:
+            extract_data = data['status']
+            del data['status']
+            data['status'] = {}
+
+            for d in extract_data:
+                data['status'][snakecase(d.lstrip())] = True
+
+    return data
+
 </macro>
 
 
@@ -46,7 +60,7 @@ def str2datetime(data):
 ID ccTLD whois server
 Please see 'whois -h whois.id help' for usage.
 
-<group macro="str2datetime">
+<group macro="str2datetime, standardize_status">
 Domain ID: {{ domain_id }}
 Domain Name: {{ domain_name }}
 Created On: {{ created | ORPHRASE }}
