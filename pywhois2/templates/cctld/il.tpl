@@ -48,6 +48,7 @@ def unpack(data):
 def lookup(data):
     admin_id = ''
     tech_id = ''
+    zone_id = ''
 
     if 'admin_id' in data:
         admin_id = data['admin_id']
