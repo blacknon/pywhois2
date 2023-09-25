@@ -173,7 +173,6 @@ $ ttp -d /tmp/example.jp.txt -t ./pywhois2/templates/cctld/jp.tpl -o raw
 
 ## Unsupported ccTLD domains
 
-- nc
 - nl
 - no
 - nu
