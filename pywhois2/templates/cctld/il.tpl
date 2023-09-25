@@ -181,7 +181,7 @@ changed:      {{ changed_lines | _line_ | to_list | joinmatches }}
 
 <group name="{{ nic_hdl }}" macro="info_sep, str2datetime">
 person:       {{ name | ORPHRASE }}
-address      {{  info | ORPHRASE | to_list | joinmatches }}
+address      {{ info | ORPHRASE | to_list | joinmatches }}
 phone:        {{ phone | ORPHRASE }}
 fax-no:       {{ fax | ORPHRASE }}
 e-mail:       {{ email | ORPHRASE }}
