@@ -49,7 +49,20 @@ def unpack(data):
     data = organization2parent('tech', 'tech', data)
     data = name_servers2parent(data)
     data = str2datetime(data)
+    data = registrar_contact_update(data)
 
+    return data
+
+def registrar_contact_update(data):
+    if 'registrar_contact' in data:
+        rc = data['registrar_contact'].split(' ')
+        if len(rc) > 2:
+            data['registrar_email'] = rc[1]
+            data['registrar_phone'] = " ".join(rc).split(":")[-1]
+        else:
+            data['registrar_email'] = rc[1]
+
+        del data['registrar_contact']
     return data
 
 def organization2parent(organization_type , organization_type_name, data):
