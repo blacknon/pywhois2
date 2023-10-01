@@ -909,7 +909,7 @@ nl:
 
 ## no
 # NOTE: Record maintained by: SIDN BV
-no:
+.no:
   server: whois.norid.no
   template:
     - cctld/no.tpl
@@ -969,6 +969,7 @@ pk:
 ## pl
 pl:
   server: whois.dns.pl
+  strip: True
   template:
     - cctld/pl.tpl
 
