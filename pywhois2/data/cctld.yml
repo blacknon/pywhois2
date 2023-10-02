@@ -1219,10 +1219,9 @@ tn:
 
 ## to
 # NOTE: whoisd V1.1
+# NOTE: 中身なさすぎなのでとりあえず対応しない
 to:
   server: whois.tonic.to
-  template:
-    - cctld/to.tpl
 
 ## tp
 tp:

@@ -173,23 +173,6 @@ $ ttp -d /tmp/example.jp.txt -t ./pywhois2/templates/cctld/jp.tpl -o raw
 
 ## Unsupported ccTLD domains
 
-- om
-- pf
-- pk
-- pl
-- qa
-- ro
-- rs
-- ru
-- sa
-- se
-- sg
-- si
-- sk
-- sm
-- sn
-- st
-- sy
 - tc
 - tg
 - th
@@ -202,4 +185,3 @@ $ ttp -d /tmp/example.jp.txt -t ./pywhois2/templates/cctld/jp.tpl -o raw
 - ug
 - uk
 - uz
-- ye

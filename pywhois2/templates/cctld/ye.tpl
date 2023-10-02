@@ -8,3 +8,10 @@
 
 ## Template
 ## =======================================================
+
+<group>
+Domain Name: {{ domain_name }}
+Registrar Name: {{ registrar_name | ORPHRASE }}
+Registrant Organization: {{registrant_organization | ORPHRASE }}
+Name Server: {{ name_servers | lower | ORPHRASE | to_list | joinmatches }}
+</group>
