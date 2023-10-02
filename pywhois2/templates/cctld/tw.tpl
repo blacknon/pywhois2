@@ -30,7 +30,6 @@ def delete_empty_line(data):
 
     return data
 
-
 def unpack(data):
     while True:
         if type(data) == list:
@@ -54,7 +53,21 @@ def unpack(data):
     data = registrant_parse(data)
     data = admin_parse(data)
     data = tech_parse(data)
+    data = standardize_status(data)
     data = str2datetime(data)
+
+    return data
+
+def standardize_status(data):
+    from stringcase import pascalcase, snakecase
+    if 'status' in data:
+        if type(data['status']) == str:
+            extract_data = data['status']
+            del data['status']
+            data['status'] = {}
+
+            for d in extract_data.split(","):
+                data['status'][snakecase(d.lstrip())] = True
 
     return data
 

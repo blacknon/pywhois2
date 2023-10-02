@@ -170,18 +170,3 @@ $ whois google.jp | awk '/^# whois.jprs.jp/,/FAX番号/{print}' > /tmp/example.j
 $ ttp -d /tmp/example.jp.txt -t ./pywhois2/templates/cctld/jp.tpl -o raw
 [{'contact_zip_code': '94043', 'contact_email': 'dns-admin@google.com', 'contact_name': 'Google LLC', 'contact_name_local': 'Google LLC', 'updated': datetime.datetime(2023, 6, 1, 1, 5, 7, tzinfo=datetime.timezone(datetime.timedelta(seconds=32400))), 'expiration': datetime.datetime(2024, 5, 31, 0, 0, tzinfo=datetime.timezone(datetime.timedelta(seconds=32400))), 'created': datetime.datetime(2005, 5, 30, 0, 0, tzinfo=datetime.timezone(datetime.timedelta(seconds=32400))), 'registrant_name': 'Google LLC', 'registrant_name_local': 'Google LLC', 'domain_name': 'google.jp', 'name_servers': ['ns1.google.com', 'ns2.google.com', 'ns3.google.com', 'ns4.google.com'], 'status': {'ok': True, 'hold': False, 'to_be_suspended': False, 'suspended': False}, 'contact_address': 'Mountain View, 1600 Amphitheatre Parkway, CA', 'contact_fax': '16502530001', 'contact_phone': '16502530000', 'contact_address_local': 'Mountain View 1600 Amphitheatre Parkway CA'}]
 ```
-
-## Unsupported ccTLD domains
-
-- tc
-- tg
-- th
-- tm
-- tn
-- to
-- tr
-- tw
-- ua
-- ug
-- uk
-- uz
