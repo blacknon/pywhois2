@@ -86,6 +86,16 @@ class Whois:
         strip = self.DATA.get('strip')
         templates = self.DATA.get('template')
 
+        # serverの中身が無い場合はErrorで返す
+        if server is None:
+            self.MESSAGE.print_text(
+                "Not found tld.",
+                header=Color.RED + '[ERROR]' + Color.END,
+                separator=": ",
+                mode="error",
+            )
+            return
+
         self.MESSAGE.print_text(
             server,
             header=Color.CYAN + '[whois server]' + Color.END,

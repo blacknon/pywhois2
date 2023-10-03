@@ -10,7 +10,6 @@ python whois parser command and library, that use [template text parser(ttp)](ht
 
 But, currently under development, the status is as follows.
 
-- Some domains are not supported
 - Time and time zone information may be in text format
 - May contain unnecessary data
 
