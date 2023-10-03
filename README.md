@@ -10,7 +10,6 @@ python whois parser command and library, that use [template text parser(ttp)](ht
 
 But, currently under development, the status is as follows.
 
-- Some domains are not supported
 - Time and time zone information may be in text format
 - May contain unnecessary data
 
@@ -170,65 +169,3 @@ $ whois google.jp | awk '/^# whois.jprs.jp/,/FAX番号/{print}' > /tmp/example.j
 $ ttp -d /tmp/example.jp.txt -t ./pywhois2/templates/cctld/jp.tpl -o raw
 [{'contact_zip_code': '94043', 'contact_email': 'dns-admin@google.com', 'contact_name': 'Google LLC', 'contact_name_local': 'Google LLC', 'updated': datetime.datetime(2023, 6, 1, 1, 5, 7, tzinfo=datetime.timezone(datetime.timedelta(seconds=32400))), 'expiration': datetime.datetime(2024, 5, 31, 0, 0, tzinfo=datetime.timezone(datetime.timedelta(seconds=32400))), 'created': datetime.datetime(2005, 5, 30, 0, 0, tzinfo=datetime.timezone(datetime.timedelta(seconds=32400))), 'registrant_name': 'Google LLC', 'registrant_name_local': 'Google LLC', 'domain_name': 'google.jp', 'name_servers': ['ns1.google.com', 'ns2.google.com', 'ns3.google.com', 'ns4.google.com'], 'status': {'ok': True, 'hold': False, 'to_be_suspended': False, 'suspended': False}, 'contact_address': 'Mountain View, 1600 Amphitheatre Parkway, CA', 'contact_fax': '16502530001', 'contact_phone': '16502530000', 'contact_address_local': 'Mountain View 1600 Amphitheatre Parkway CA'}]
 ```
-
-## Unsupported ccTLD domains
-
-- bw
-- ee
-- eu
-- fi
-- ge
-- gf
-- gg
-- hk
-- hu
-- id
-- il
-- im
-- ir
-- is
-- it
-- je
-- kg
-- kz
-- lt
-- lu
-- lv
-- md
-- mo
-- mq
-- mx
-- nc
-- nl
-- no
-- nu
-- om
-- pf
-- pk
-- pl
-- qa
-- ro
-- rs
-- ru
-- sa
-- se
-- sg
-- si
-- sk
-- sm
-- sn
-- st
-- sy
-- tc
-- tg
-- th
-- tm
-- tn
-- to
-- tr
-- tw
-- ua
-- ug
-- uk
-- uz
-- ye

@@ -120,8 +120,6 @@ registrar............: {{ registrar_name | ORPHRASE }}
 www..................: {{ registrar_url | ORPHRASE }}
 </group>
 
-Copyright (c) Ålands Landskapsregering
-
 </group>
 
 

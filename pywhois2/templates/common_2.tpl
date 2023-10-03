@@ -30,14 +30,14 @@ def str2datetime(data):
 
 <group macro="str2datetime">
 Domain Name: {{ domain_name | lower | ORPHRASE }}
-
 Registry Domain ID: {{ registry_domain_id | lower }}
 Registry WHOIS Server: {{ registrar_whois_server | lower }}
+Updated Date: {{ updated | ORPHRASE }}
 Creation Date: {{ created | ORPHRASE }}
+Registry Expiry Date: {{ expiration | ORPHRASE }}
 Registrar: {{ registrar_name | ORPHRASE }}
 Registrar Abuse Contact Email: {{ registrar_email }}
 Registrar Abuse Contact Phone: {{ registrar_phone }}
-
 Registry RegistrantID: {{ registrant_id | ORPHRASE }}
 RegistrantName: {{ registrant_name | ORPHRASE }}
 RegistrantOrganization: {{ registrant_organization | ORPHRASE }}
@@ -49,7 +49,6 @@ RegistrantCountry: {{ registrant_country | ORPHRASE }}
 RegistrantPhone: {{ registrant_phone | ORPHRASE }}
 RegistrantFax: {{ registrant_fax | ORPHRASE }}
 RegistrantEmail: {{ registrant_email | ORPHRASE }}
-
 Registry AdminID: {{ admin_id | ORPHRASE }}
 AdminName: {{ admin_name | ORPHRASE }}
 AdminOrganization: {{ admin_organization | ORPHRASE }}
@@ -61,7 +60,6 @@ AdminCountry: {{ admin_country | ORPHRASE }}
 AdminPhone: {{ admin_phone | ORPHRASE }}
 AdminFax: {{ admin_fax | ORPHRASE }}
 AdminEmail: {{ admin_email | ORPHRASE }}
-
 Registry TechID: {{ tech_id | ORPHRASE }}
 TechName: {{ tech_name | ORPHRASE }}
 TechOrganization: {{ tech_organization | ORPHRASE }}
@@ -73,7 +71,6 @@ TechCountry: {{ tech_country | ORPHRASE }}
 TechPhone: {{ tech_phone | ORPHRASE }}
 TechFax: {{ tech_fax | ORPHRASE }}
 TechEmail: {{ tech_email | ORPHRASE }}
-
 Registry BillingID: {{ billing_id | ORPHRASE }}
 BillingName: {{ billing_name | ORPHRASE }}
 BillingOrganization: {{ billing_organization | ORPHRASE }}
@@ -85,8 +82,6 @@ BillingCountry: {{ billing_country | ORPHRASE }}
 BillingPhone: {{ billing_phone | ORPHRASE }}
 BillingFax: {{ billing_fax | ORPHRASE }}
 BillingEmail: {{ billing_email | ORPHRASE }}
-
 Name Server: {{ name_servers | ORPHRASE | to_list | joinmatches }}
-
 DNSSEC: {{ dnssec | ORPHRASE }}
 </group>

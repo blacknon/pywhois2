@@ -82,12 +82,52 @@ class Whois:
 
         # tldごとのデータを取得
         server = self.DATA.get('server')
+        trace_whois = self.DATA.get('trace_whois')
+        strip = self.DATA.get('strip')
         templates = self.DATA.get('template')
 
-        while True:
-            res = self.__get_data(server, templates)
+        # serverの中身が無い場合はErrorで返す
+        if server is None:
+            self.MESSAGE.print_text(
+                "Not found tld.",
+                header=Color.RED + '[ERROR]' + Color.END,
+                separator=": ",
+                mode="error",
+            )
+            return
 
-            if 'registrar_whois_server' in res:
+        self.MESSAGE.print_text(
+            server,
+            header=Color.CYAN + '[whois server]' + Color.END,
+            separator=": ",
+            mode="debug",
+        )
+
+        self.MESSAGE.print_text(
+            str(trace_whois),
+            header=Color.CYAN + '[is trace whois]' + Color.END,
+            separator=": ",
+            mode="debug",
+        )
+
+        self.MESSAGE.print_text(
+            str(strip),
+            header=Color.CYAN + '[strip]' + Color.END,
+            separator=": ",
+            mode="debug",
+        )
+
+        self.MESSAGE.print_text(
+            ", ".join(templates),
+            header=Color.CYAN + '[template file paths]' + Color.END,
+            separator=": ",
+            mode="debug",
+        )
+
+        while True:
+            res = self.__get_data(server, templates, is_strip=strip)
+
+            if 'registrar_whois_server' in res and trace_whois:
                 if res['registrar_whois_server'] == server:
                     result = res
                     break
@@ -102,7 +142,7 @@ class Whois:
 
         return result
 
-    def __get_data(self, server: str, templates: list):
+    def __get_data(self, server: str, templates: list, is_strip=False):
         """
 
         Args:
@@ -136,6 +176,23 @@ class Whois:
             separator=": ",
             mode="debug",
         )
+
+        # whoisの不要な改行を削除
+        if is_strip:
+            new_res_line = []
+            for line in res.splitlines():
+                new_line = line
+                new_line = new_line.strip('\r')
+                new_line = new_line.strip('\n')
+                new_res_line.append(new_line)
+            res = "\n".join(new_res_line)
+
+            self.MESSAGE.print_text(
+                res,
+                header=Color.WHITE + '[new whois response]' + Color.END,
+                separator=": ",
+                mode="debug",
+            )
 
         for t in templates:
             template_path = os.path.join(TEMPLATE_DIR, t)

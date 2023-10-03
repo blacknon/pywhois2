@@ -6,6 +6,7 @@
 # common settings
 common:
   server: whois.iana.org
+  trace_whois: True
   template:
     - common_iana.tpl
     - common_relay.tpl

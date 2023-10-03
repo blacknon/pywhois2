@@ -307,6 +307,13 @@ def load_data_yaml(target_key: str, yaml_path_list: list = []):
             res = obj.get(k)
             break
 
+    # `.no`など、先頭にdotがついているものも対象とさせる(ただし優先度は低くする)
+    if len(res) == 0:
+        for k in key_candidate:
+            if ".{0}".format(k) in obj:
+                res = obj.get(".{0}".format(k))
+                break
+
     if len(res) == 0:
         res = common_data
 

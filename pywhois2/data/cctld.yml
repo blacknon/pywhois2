@@ -36,7 +36,7 @@ ag:
 ai:
   server: whois.nic.ai
   template:
-    - cctld/ai.tpl
+    - common_2.tpl
 
 ## al
 al:
@@ -168,11 +168,11 @@ bt:
 bv:
 
 ## bw
-# NOTE: レスポンスが返ってこないため一旦スキップ(2023/09/18 11::07)
 bw:
   server: whois.nic.net.bw
+  trace_whois: False
   template:
-    - cctld/bw.tpl
+    - common_2.tpl
 
 ## by
 by:
@@ -414,7 +414,7 @@ ge:
 gf:
   server: whois.mediaserv.net
   template:
-    - cctld/gf.tpl
+    - java_whois_server.tpl
 
 ## gg
 # WHOIS lookup
@@ -821,7 +821,7 @@ mp:
 mq:
   server: whois.mediaserv.net
   template:
-    - cctld/mq.tpl
+    - java_whois_server.tpl
 
 ## mr
 mr:
@@ -909,7 +909,7 @@ nl:
 
 ## no
 # NOTE: Record maintained by: SIDN BV
-no:
+.no:
   server: whois.norid.no
   template:
     - cctld/no.tpl
@@ -969,6 +969,7 @@ pk:
 ## pl
 pl:
   server: whois.dns.pl
+  strip: True
   template:
     - cctld/pl.tpl
 
@@ -1177,7 +1178,7 @@ tf:
     - afnic.tpl
 
 ## tg
-# NOTE: Java Whois Server
+# NOTE: Java Whois Server 0.4.1.3
 tg:
   server: whois.nic.tg
   template:
@@ -1218,10 +1219,9 @@ tn:
 
 ## to
 # NOTE: whoisd V1.1
+# NOTE: 中身なさすぎなのでとりあえず対応しない
 to:
   server: whois.tonic.to
-  template:
-    - cctld/to.tpl
 
 ## tp
 tp:

@@ -126,7 +126,7 @@ Registrar Abuse Contact Phone: {{ registrar_phone }}
 
 Reseller: {{ reseller_name | ORPHRASE }}
 Reseller Street Address: {{ reseller_address | ORPHRASE | joinmatches(", ") }}
-Reseller Other Address Info: {{ reseller_address | ORPHRASE | joinmatches(" ") }}
+Reseller Other Address Info: {{ reseller_address | ORPHRASE | joinmatches(", ") }}
 Reseller Country: {{ reseller_company | ORPHRASE }}
 Reseller Phone: {{ reseller_phone | ORPHRASE }}
 Reseller Fax: {{ reseller_fax | ORPHRASE  }}
@@ -153,9 +153,9 @@ Registrant Email: {{ registrant_email | ORPHRASE }}
 Registry Admin ID: {{ admin_id | ORPHRASE }}
 Admin Name: {{ admin_name | ORPHRASE }}
 Admin Organization: {{ admin_organization | ORPHRASE }}
-Admin Street: {{ admin_address | ORPHRASE | joinmatches(" ") }}
-Admin City: {{ admin_address | ORPHRASE | joinmatches(" ") }}
-Admin State/Province: {{ admin_address | ORPHRASE | joinmatches(" ") }}
+Admin Street: {{ admin_address | ORPHRASE | joinmatches(", ") }}
+Admin City: {{ admin_address | ORPHRASE | joinmatches(", ") }}
+Admin State/Province: {{ admin_address | ORPHRASE | joinmatches(", ") }}
 Admin Postal Code: {{ admin_zip_code | ORPHRASE }}
 Admin Country: {{ admin_country | ORPHRASE }}
 Admin Phone: {{ admin_phone | ORPHRASE }}
@@ -167,9 +167,9 @@ Admin Email: {{ admin_email | ORPHRASE }}
 Registry Tech ID: {{ tech_id | ORPHRASE }}
 Tech Name: {{ tech_name | ORPHRASE }}
 Tech Organization: {{ tech_organization | ORPHRASE }}
-Tech Street: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-Tech City: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-Tech State/Province: {{ tech_address | ORPHRASE | joinmatches(" ") }}
+Tech Street: {{ tech_address | ORPHRASE | joinmatches(", ") }}
+Tech City: {{ tech_address | ORPHRASE | joinmatches(", ") }}
+Tech State/Province: {{ tech_address | ORPHRASE | joinmatches(", ") }}
 Tech Postal Code: {{ tech_zip_code | ORPHRASE }}
 Tech Country: {{ tech_country | ORPHRASE }}
 Tech Phone: {{ tech_phone | ORPHRASE }}
