@@ -1,47 +1,62 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Copyright (c) 2023 Blacknon. All rights reserved.
-# Use of this source code is governed by an MIT license
-# that can be found in the LICENSE file.
-# =======================================================
-
 import json
-
 import argparse
 from argparse import RawTextHelpFormatter
+from typing import Optional, Sequence
 
-from pkg_resources import get_distribution
-
-# from .whois_request import whois_request
-from .whois import Whois
+from ._version import __version__
 from .common import json_serial
 
-# version (setup.pyから取得してくる)
-__version__ = get_distribution('pydork').version
+
+__all__ = ["Whois", "__version__", "main"]
 
 
-def main():
-    # parserの作成
-    help_text = 'whois parser command.'
+def build_parser() -> argparse.ArgumentParser:
+    help_text = "WHOIS parser command."
     parser = argparse.ArgumentParser(
         description=help_text,
         formatter_class=RawTextHelpFormatter,
     )
-
-    # TODO: 複数取得可能にする
     parser.add_argument(
-        "target", action="store", type=str, help=""
+        "target",
+        action="store",
+        type=str,
+        help="Domain, host, or IP address to query.",
     )
-    # TODO: 出力フォーマットを指定可能にする
+    parser.add_argument(
+        "--pretty",
+        action="store_true",
+        help="Pretty-print JSON output.",
+    )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"%(prog)s {__version__}",
+    )
+    return parser
 
-    # args
-    args = parser.parse_args()
 
+def main(argv: Optional[Sequence[str]] = None) -> int:
+    from .whois import Whois
+
+    parser = build_parser()
+    args = parser.parse_args(argv)
     whois = Whois(args.target)
     result = whois.get()
+    dump_kwargs = {"default": json_serial, "ensure_ascii": False}
+    if args.pretty:
+        dump_kwargs["indent"] = 2
 
-    print(json.dumps(result, default=json_serial))
+    print(json.dumps(result, **dump_kwargs))
+    return 0
 
 
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    raise SystemExit(main())
+
+
+def __getattr__(name: str):
+    if name == "Whois":
+        from .whois import Whois
+
+        return Whois
+    raise AttributeError(name)

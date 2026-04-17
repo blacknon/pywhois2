@@ -1,42 +1,29 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Copyright (c) 2023 Blacknon. All rights reserved.
-# Use of this source code is governed by an MIT license
-# that can be found in the LICENSE file.
-# =======================================================
-
 import socket
 import socks
-# import sys
 
 
-# NOTE: classでやる意味なくね？？？と思ったのでfunctionにしちゃう
-def whois_request(query: str, whois_host: str):
-    """whois_request
-    Args:
-        query (str): _description_
-        whois_host (str): _description_
+def build_whois_query(query: str, whois_host: str) -> bytes:
+    normalized_query = query
 
-    Returns:
-        response (str): _description_
-    """
-    response = b''
+    # JPRS documents "/e" as the way to suppress Japanese output for
+    # command-based lookups. Keep this narrow to the known WHOIS host.
+    if whois_host.rstrip(".").lower() == "whois.jprs.jp" and not query.endswith("/e"):
+        normalized_query = f"{query}/e"
 
-    # print(whois_host, file=sys.stderr)  # debug
-    s = socks.socksocket(socket.AF_INET)
-    s.connect((whois_host, 43))
+    return normalized_query.encode("utf-8") + b"\r\n"
 
-    s.send(bytes(query, 'utf-8') + b"\r\n")
 
-    # recv returns bytes
-    while True:
-        d = s.recv(4096)
-        response += d
-        if not d:
-            break
+def whois_request(query: str, whois_host: str, port: int = 43) -> str:
+    response = bytearray()
 
-    s.close()
+    with socks.socksocket(socket.AF_INET) as sock:
+        sock.connect((whois_host, port))
+        sock.sendall(build_whois_query(query, whois_host))
 
-    response = response.decode('utf-8', 'replace')
+        while True:
+            chunk = sock.recv(4096)
+            if not chunk:
+                break
+            response.extend(chunk)
 
-    return response
+    return response.decode("utf-8", "replace")

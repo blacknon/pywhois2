@@ -1,102 +1,105 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# Copyright (c) 2023 Blacknon. All rights reserved.
-# Use of this source code is governed by an MIT license
-# that can be found in the LICENSE file.
-# =======================================================
-
 import ipaddress
-import yaml
-
+from pathlib import Path
+from typing import Any, Dict
 from urllib.parse import urlparse
 from datetime import date, datetime
 
+import yaml
 
-def is_ipaddress(host: str):
-    """_summary_
 
-    Args:
-        host (str): _description_
+class _StringKeySafeLoader(yaml.SafeLoader):
+    pass
 
-    Returns:
-        _type_: _description_
-    """
+
+for first_letter, resolvers in list(_StringKeySafeLoader.yaml_implicit_resolvers.items()):
+    _StringKeySafeLoader.yaml_implicit_resolvers[first_letter] = [
+        resolver for resolver in resolvers
+        if resolver[0] != "tag:yaml.org,2002:bool"
+    ]
+
+
+def is_ipaddress(host: str) -> bool:
     try:
         ipaddress.ip_address(host)
         return True
-    except Exception:
+    except ValueError:
         return False
 
 
-def load_data_yaml(yaml_path: str, target_key: str):
-    """
+def build_key_candidates(target_key: str) -> list[str]:
+    if not target_key:
+        return []
 
-    Args:
-        path (str): _description_
-    """
-    result = {}
+    key_elements = [element for element in target_key.split(".") if element]
+    candidates: list[str] = []
+    for index in range(len(key_elements)):
+        candidates.append(".".join(key_elements[index:]))
+    return candidates
 
-    # target_key to  list
-    key_candidate = []
-    key_elements = target_key.split(".")
-    joined_key = ""
-    for i in reversed(range(len(key_elements) * -1, 0)):
-        if joined_key == "":
-            joined_key = key_elements[i]
+
+def load_yaml_mapping(yaml_path: str) -> Dict[str, Any]:
+    yaml_file = Path(yaml_path)
+    with yaml_file.open(encoding="utf-8") as file:
+        data = yaml.load(file, Loader=_StringKeySafeLoader) or {}
+
+    if not isinstance(data, dict):
+        raise TypeError(f"Expected mapping data in {yaml_file}, got {type(data)}")
+
+    return data
+
+
+def load_data_yaml(yaml_path: str, target_key: str) -> Dict[str, Any]:
+    obj = load_yaml_mapping(yaml_path)
+    common_data = obj.get("common", {})
+    resolved_data: Dict[str, Any] = {}
+
+    for key in build_key_candidates(target_key):
+        candidate = obj.get(key)
+        if candidate:
+            resolved_data = candidate
+            break
+
+    return {**common_data, **resolved_data}
+
+
+def resolve_template_paths(
+    templates: list[str] | None,
+    template_dir: Path,
+    fallback_templates: tuple[str, ...],
+) -> tuple[list[Path], list[str]]:
+    configured_templates = list(templates or [])
+    resolved_paths: list[Path] = []
+    missing_templates: list[str] = []
+
+    for template_name in configured_templates:
+        template_path = template_dir / template_name
+        if template_path.exists():
+            if template_path not in resolved_paths:
+                resolved_paths.append(template_path)
         else:
-            joined_key = "{0}.{1}".format(key_elements[i], joined_key)
-        key_candidate.append(joined_key)
+            missing_templates.append(template_name)
 
-    # tld候補のリストを逆順にする
-    key_candidate.reverse()
+    if not configured_templates or missing_templates:
+        for fallback_name in fallback_templates:
+            fallback_path = template_dir / fallback_name
+            if fallback_path.exists() and fallback_path not in resolved_paths:
+                resolved_paths.append(fallback_path)
 
-    with open(yaml_path) as file:
-        # load data
-        obj = yaml.safe_load(file)
-
-        # get common
-        common_data = obj.get('common')
-
-        # get key loops
-        res = {}
-        for k in key_candidate:
-            if k in obj:
-                res = obj.get(k)
-                break
-
-        if len(res) == 0:
-            res = common_data
-
-        # server, templateがないdataについてはcommonの内容に上書きさせる
-        result = dict(common_data, **res)
-
-        return result
+    return resolved_paths, missing_templates
 
 
-def extract_domain(text: str):
-    result = ""
-    is_url = False
-
+def extract_domain(text: str) -> str:
     try:
-        r = urlparse(text)
-        is_url = all([r.scheme, r.netloc])
-    except Exception:
-        is_url = False
+        parsed = urlparse(text)
+    except ValueError:
+        return text.rstrip("/")
 
-    if is_url:
-        parsed_url = urlparse(text)
-        result = parsed_url.netloc
-    else:
-        result = text
-        result.rstrip("/")
-
-    return result
+    if parsed.scheme and parsed.netloc:
+        return parsed.netloc.rstrip("/")
+    return text.rstrip("/")
 
 
-def json_serial(obj):
-    # 日付型の場合には、文字列に変換します
+def json_serial(obj: Any) -> str:
     if isinstance(obj, (datetime, date)):
         return obj.strftime("%Y/%m/%d %H:%M:%S %z")
-        # return obj.isoformat()
-    # 上記以外はサポート対象外.
-    raise TypeError("Type %s not serializable" % type(obj))
+    raise TypeError(f"Type {type(obj)} not serializable")

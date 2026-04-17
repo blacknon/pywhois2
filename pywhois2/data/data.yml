@@ -41,6 +41,9 @@ ac:
 
 ## ad
 ad:
+  server: whois.nic.ad
+  template:
+    - ad.tpl
 
 ## ae
 ae:
@@ -68,6 +71,10 @@ ai:
 
 ## al
 al:
+  # Registration information is published by AKEP at https://akep.al/e-aplikime-domain/
+  server: akep.al
+  template:
+    - al.tpl
 
 ## am
 # NOTE: AM TLD whois server #1
@@ -78,12 +85,23 @@ am:
 
 ## an
 an:
+  # Historical Netherlands Antilles TLD. IANA marks .an as not present in the
+  # root zone after transitional retirement, so no active WHOIS server is set.
 
 ## ao
 ao:
+  # Inferred from the official DNS.AO WHOIS portal at https://dns.ao/ao/whois/
+  server: dns.ao
+  template:
+    - ao.tpl
 
 ## aq
 aq:
+  # Inferred from the Antarctica Network Information Centre contact domain
+  # published in the IANA delegation record for .aq.
+  server: icenic.aq
+  template:
+    - aq.tpl
 
 ## ar
 ar:
@@ -123,15 +141,30 @@ ax:
 
 ## az
 az:
+  # Registration information is published by IANA at http://www.whois.az/
+  server: whois.az
+  template:
+    - az.tpl
 
 ## ba
 ba:
+  # Inferred from the official .ba registry portal and WHOIS service at https://www.nic.ba/
+  server: nic.ba
+  template:
+    - ba.tpl
 
 ## bb
 bb:
+  server: whois.telecoms.gov.bb
+  template:
+    - bb.tpl
 
 ## bd
 bd:
+  # Inferred from the official BTCL .bd domain portal at https://bdia.btcl.com.bd/
+  server: bdia.btcl.com.bd
+  template:
+    - bd.tpl
 
 ## be
 # NOTE: .be Whois Server 6.1
@@ -142,6 +175,9 @@ be:
 
 ## bf
 bf:
+  server: whois.registre.bf
+  template:
+    - bf.tpl
 
 ## bg
 bg:
@@ -151,6 +187,9 @@ bg:
 
 ## bh
 bh:
+  server: whois.nic.bh
+  template:
+    - bh.tpl
 
 ## bi
 bi:
@@ -160,9 +199,14 @@ bi:
 
 ## bl
 bl:
+  # Saint Barthelemy. IANA marks .bl as not assigned and not present in the
+  # root zone, so no WHOIS server is set.
 
 ## bm
 bm:
+  server: whois.nic.bm
+  template:
+    - bm.tpl
 
 ## bn
 # NOTE: BNNIC WHOIS Server
@@ -176,9 +220,13 @@ bn:
 # NOTE: not working from japan.
 bo:
   server: whois.nic.bo
+  template:
+    - common.tpl
 
 ## bq
 bq:
+  # Caribbean Netherlands. IANA marks .bq as not present in the root zone at
+  # this time, so no WHOIS server is set.
 
 ## br
 br:
@@ -188,12 +236,25 @@ br:
 
 ## bs
 bs:
+  # Registration information is published by BSNIC at http://www.register.bs
+  server: register.bs
+  template:
+    - bs.tpl
 
 ## bt
 bt:
+  # Inferred from the official .bt registry site at https://www.nic.bt/
+  server: nic.bt
+  template:
+    - bt.tpl
 
 ## bv
 bv:
+  # Registration information is published by IANA at
+  # https://www.norid.no/en/omnorid/toppdomenet-bv/
+  server: norid.no
+  template:
+    - bv.tpl
 
 ## bw
 bw:
@@ -209,6 +270,10 @@ by:
 
 ## bz
 bz:
+  # Inferred from the official BelizeNIC WHOIS page at https://manage.belizenic.bz/whois
+  server: manage.belizenic.bz
+  template:
+    - bz.tpl
 
 ## ca
 ca:
@@ -230,19 +295,31 @@ cc:
 
 ## cd
 cd:
+  # Inferred from the official .cd WHOIS service at https://whois.nic.cd/
+  server: whois.nic.cd
+  template:
+    - cd.tpl
 
 ## cf
 # NOTE: not working from japan.
 cf:
   server: whois.dot.cf
+  template:
+    - common.tpl
 
 ## cg
 cg:
+  # Registration information is published by IANA at https://www.dnsafrica.net
+  server: dnsafrica.net
+  template:
+    - cg.tpl
 
 ## ch
 # NOTE: not working from japan.
 ch:
   server: whois.nic.ch
+  template:
+    - common.tpl
 
 ## ci
 ci:
@@ -252,6 +329,10 @@ ci:
 
 ## ck
 ck:
+  # Registration information is published by IANA at http://www.vodafone.co.ck
+  server: vodafone.co.ck
+  template:
+    - ck.tpl
 
 ## cl
 # NOTE: NIC Chile Whois server
@@ -262,6 +343,10 @@ cl:
 
 ## cm
 cm:
+  # Inferred from the official .cm WHOIS service at https://nic.cm/whoiscm/
+  server: nic.cm
+  template:
+    - cm.tpl
 
 ## cn
 cn:
@@ -285,12 +370,36 @@ cr:
 
 ## cu
 cu:
+  # Registration information is published by IANA at http://www.nic.cu
+  server: nic.cu
+  template:
+    - cu.tpl
+  # Registration information is published by IANA at http://www.nic.cu
+  server: nic.cu
+  template:
+    - cu.tpl
 
 ## cv
 cv:
+  server: whois.nic.cv
+  template:
+    - cv.tpl
+  server: whois.nic.cv
+  template:
+    - cv.tpl
 
 ## cw
 cw:
+  # Inferred from the official .cw registry information URL published by IANA:
+  # http://www.uoc.cw/cw-registry
+  server: uoc.cw
+  template:
+    - cw.tpl
+  # Inferred from the official .cw registry information URL published by IANA:
+  # http://www.uoc.cw/cw-registry
+  server: uoc.cw
+  template:
+    - cw.tpl
 
 ## cx
 cx:
@@ -300,6 +409,14 @@ cx:
 
 ## cy
 cy:
+  # Registration information is published by IANA at http://www.nic.cy
+  server: nic.cy
+  template:
+    - cy.tpl
+  # Registration information is published by IANA at http://www.nic.cy
+  server: nic.cy
+  template:
+    - cy.tpl
 
 ## cz
 # NOTE: Whoisd Server Version: 3.12.2
@@ -316,6 +433,10 @@ de:
 
 ## dj
 dj:
+  # Registration information is published by IANA at http://www.nic.dj
+  server: nic.dj
+  template:
+    - dj.tpl
 
 ## dk
 dk:
@@ -339,11 +460,15 @@ do:
 # NOTE: not working from japan.
 dz:
   server: whois.nic.dz
+  template:
+    - common.tpl
 
 ## ec
 # NOTE: not working from japan.
 ec:
   server: whois.nic.ec
+  template:
+    - common.tpl
 
 ## ee
 ee:
@@ -353,20 +478,36 @@ ee:
 
 ## eg
 eg:
+  # Registration information is published by IANA at http://www.egregistry.eg/
+  server: egregistry.eg
+  template:
+    - eg.tpl
 
 ## eh
 eh:
+  # Western Sahara. IANA marks .eh as not assigned and not present in the root
+  # zone, so no WHOIS server is set.
 
 ## er
 er:
+  # Inferred from the EriTel operational domains published in the IANA delegation record.
+  server: tse.com.er
+  template:
+    - er.tpl
 
 ## es
 # NOTE: not working from japan.
 es:
   server: whois.nic.es
+  template:
+    - common.tpl
 
 ## et
 et:
+  # Registration information is published by IANA at http://www.ethiotelecom.et
+  server: ethiotelecom.et
+  template:
+    - et.tpl
 
 ## eu
 eu:
@@ -394,6 +535,10 @@ fj:
 
 ## fk
 fk:
+  # Registration information is published by IANA at http://www.sure.co.fk
+  server: sure.co.fk
+  template:
+    - fk.tpl
 
 ## fm
 fm:
@@ -416,6 +561,14 @@ fr:
 
 ## ga
 ga:
+  # Inferred from NIC.GA official contact information published by IANA.
+  server: nic.ga
+  template:
+    - ga.tpl
+  # Inferred from NIC.GA official contact information published by IANA.
+  server: nic.ga
+  template:
+    - ga.tpl
 
 ## gal
 gal:
@@ -451,6 +604,12 @@ gg:
 
 ## gh
 gh:
+  server: whois.nic.gh
+  template:
+    - gh.tpl
+  server: whois.nic.gh
+  template:
+    - gh.tpl
 
 ## gi
 gi:
@@ -466,22 +625,38 @@ gl:
 
 ## gm
 gm:
+  # Registration information is published by IANA at http://www.nic.gm
+  server: nic.gm
+  template:
+    - gm.tpl
 
 ## gn
 gn:
+  server: whois.ande.gov.gn
+  template:
+    - gn.tpl
 
 ## gp
 # NOTE: not working from japan.
 gp:
   server: whois.nic.gp
+  template:
+    - common.tpl
 
 ## gq
 # NOTE: not working from japan.
 gq:
   server: whois.dominio.gq
+  template:
+    - common.tpl
 
 ## gr
 gr:
+  # Inferred from the official .gr / .ελ registry WHOIS service at
+  # https://grweb.ics.forth.gr/public/whois?lang=en
+  server: grweb.ics.forth.gr
+  template:
+    - gr.tpl
 
 ## gs
 gs:
@@ -491,17 +666,31 @@ gs:
 
 ## gt
 gt:
+  # Registration information is published by IANA at http://www.gt
+  server: www.gt
+  template:
+    - gt.tpl
 
 ## gu
 gu:
+  # Registration information is published by IANA at https://give.uog.edu/shop/
+  server: give.uog.edu
+  template:
+    - gu.tpl
 
 ## gw
 gw:
+  # Inferred from the DNS.PT registration information endpoint published by IANA.
+  server: dns.pt
+  template:
+    - gw.tpl
 
 ## gy
 # NOTE: not working from japan.
 gy:
   server: whois.registry.gy
+  template:
+    - common.tpl
 
 ## hk
 hk:
@@ -513,6 +702,8 @@ hk:
 # NOTE: not working from japan.
 hm:
   server: whois.registry.hm
+  template:
+    - common.tpl
 
 ## hn
 hn:
@@ -579,6 +770,8 @@ io:
 # NOTE: not working from japan.
 iq:
   server: whois.cmc.iq
+  template:
+    - common.tpl
 
 ## ir
 # NOTE: IRNIC Whois server v1.6.2
@@ -609,9 +802,23 @@ je:
 
 ## jm
 jm:
+  # Inferred from the University of the West Indies technical contact domain ns.jm
+  # published in the IANA delegation record for .jm.
+  server: ns.jm
+  template:
+    - jm.tpl
+  # Inferred from the University of the West Indies technical contact domain ns.jm
+  # published in the IANA delegation record for .jm.
+  server: ns.jm
+  template:
+    - jm.tpl
 
 ## jo
 jo:
+  # Inferred from the official .JO registry portal at https://www.dns.jo/FirstPageen.aspx
+  server: dns.jo
+  template:
+    - jo.tpl
 
 ## jp
 jp:
@@ -678,14 +885,28 @@ kg:
 
 ## kh
 kh:
+  # Registration information is published by IANA at http://www.trc.gov.kh
+  server: trc.gov.kh
+  template:
+    - kh.tpl
+  # Registration information is published by IANA at http://www.trc.gov.kh
+  server: trc.gov.kh
+  template:
+    - kh.tpl
 
 ## ki
 # NOTE: not working from japan.
 ki:
   server: whois.nic.ki
+  template:
+    - common.tpl
 
 ## km
 km:
+  # Registration information is published by IANA at http://www.domaine.km/
+  server: domaine.km
+  template:
+    - km.tpl
 
 ## kn
 kn:
@@ -695,6 +916,10 @@ kn:
 
 ## kp
 kp:
+  # Registration information is published by IANA at http://www.star.co.kp
+  server: star.co.kp
+  template:
+    - kp.tpl
 
 ## kr
 kr:
@@ -704,6 +929,10 @@ kr:
 
 ## kw
 kw:
+  # The official CITRA NIC site publishes WHOIS policy documents under nic.kw.
+  server: nic.kw
+  template:
+    - kw.tpl
 
 ## ky
 ky:
@@ -731,17 +960,36 @@ lb:
 
 ## lc
 lc:
+  # Inferred from the official NIC.LC WHOIS portal at https://www.nic.lc/whois.htm
+  server: nic.lc
+  template:
+    - lc.tpl
 
 ## li
 # NOTE: not working from japan.
 li:
   server: whois.nic.li
+  template:
+    - common.tpl
 
 ## lk
 lk:
+  # Inferred from the official LK Domain Registry search endpoint
+  # at https://register.domains.lk/domains-search
+  server: register.domains.lk
+  template:
+    - lk.tpl
 
 ## lr
 lr:
+  # Registration information is published by IANA at http://psg.com/dns/lr
+  server: psg.com
+  template:
+    - lr.tpl
+  # Registration information is published by IANA at http://psg.com/dns/lr
+  server: psg.com
+  template:
+    - lr.tpl
 
 ## ls
 # NOTE: Whoisd Server Version: 3.10.2
@@ -782,6 +1030,9 @@ ma:
 
 ## mc
 mc:
+  server: whois.nic.mc
+  template:
+    - mc.tpl
 
 ## md
 md:
@@ -797,6 +1048,8 @@ me:
 
 ## mf
 mf:
+  # Saint Martin (French part). IANA marks .mf as not assigned and not present
+  # in the root zone, so no WHOIS server is set.
 
 ## mg
 mg:
@@ -806,6 +1059,10 @@ mg:
 
 ## mh
 mh:
+  # Registration information is published by IANA at http://www.nic.net.mh/
+  server: nic.net.mh
+  template:
+    - mh.tpl
 
 ## mk
 # NOTE: Whoisd Server Version: 3.9.0
@@ -818,6 +1075,8 @@ mk:
 # NOTE: not working from japan.
 ml:
   server: whois.nic.ml
+  template:
+    - common.tpl
 
 ## mm
 mm:
@@ -841,6 +1100,14 @@ mo:
 
 ## mp
 mp:
+  # Registration information is published by IANA at https://get.mp/
+  server: get.mp
+  template:
+    - mp.tpl
+  # Registration information is published by IANA at https://get.mp/
+  server: get.mp
+  template:
+    - mp.tpl
 
 ## mq
 # NOTE: Java Whois Server
@@ -859,9 +1126,19 @@ mr:
 # NOTE: not working from japan.
 ms:
   server: whois.nic.ms
+  template:
+    - common.tpl
 
 ## mt
 mt:
+  # Registration information is published by IANA at https://www.nic.org.mt/
+  server: nic.org.mt
+  template:
+    - mt.tpl
+  # Registration information is published by IANA at https://www.nic.org.mt/
+  server: nic.org.mt
+  template:
+    - mt.tpl
 
 ## mu
 mu:
@@ -871,6 +1148,14 @@ mu:
 
 ## mv
 mv:
+  # Inferred from the .mv operator's official domain and nameserver naming in IANA.
+  server: ns.mv
+  template:
+    - mv.tpl
+  # Inferred from the .mv operator's official domain and nameserver naming in IANA.
+  server: ns.mv
+  template:
+    - mv.tpl
 
 ## mw
 # NOTE: Whoisd Server
@@ -889,6 +1174,8 @@ mx:
 # NOTE: not working from japan.
 my:
   server: whois.mynic.my
+  template:
+    - common.tpl
 
 ## mz
 mz:
@@ -911,6 +1198,10 @@ nc:
 
 ## ne
 ne:
+  # Registration information is published by IANA at http://www.intnet.ne
+  server: intnet.ne
+  template:
+    - ne.tpl
 
 ## nf
 nf:
@@ -926,6 +1217,14 @@ ng:
 
 ## ni
 ni:
+  # Registration information is published by IANA at http://www.nic.ni
+  server: nic.ni
+  template:
+    - ni.tpl
+  # Registration information is published by IANA at http://www.nic.ni
+  server: nic.ni
+  template:
+    - ni.tpl
 
 ## nl
 nl:
@@ -942,9 +1241,25 @@ no:
 
 ## np
 np:
+  # Registration information is published by IANA at http://www.mos.com.np
+  server: mos.com.np
+  template:
+    - np.tpl
+  # Registration information is published by IANA at http://www.mos.com.np
+  server: mos.com.np
+  template:
+    - np.tpl
 
 ## nr
 nr:
+  # Registration information is published by IANA at http://www.cenpac.net.nr
+  server: cenpac.net.nr
+  template:
+    - nr.tpl
+  # Registration information is published by IANA at http://www.cenpac.net.nr
+  server: cenpac.net.nr
+  template:
+    - nr.tpl
 
 ## nu
 # NOTE: The Swedish Internet Foundation.
@@ -967,6 +1282,10 @@ om:
 
 ## pa
 pa:
+  # Inferred from the official NIC Panama WHOIS and registration portal at https://nic.pa/es
+  server: nic.pa
+  template:
+    - pa.tpl
 
 ## pe
 pe:
@@ -982,9 +1301,16 @@ pf:
 
 ## pg
 pg:
+  server: whois.nic.pg
+  template:
+    - pg.tpl
 
 ## ph
 ph:
+  # Inferred from the official dotPH WHOIS service at https://whois.dot.ph/
+  server: whois.dot.ph
+  template:
+    - ph.tpl
 
 ## pk
 pk:
@@ -1007,6 +1333,14 @@ pm:
 
 ## pn
 pn:
+  # Registration information is published by IANA at https://nic.pn
+  server: nic.pn
+  template:
+    - pn.tpl
+  # Registration information is published by IANA at https://nic.pn
+  server: nic.pn
+  template:
+    - pn.tpl
 
 ## pr
 pr:
@@ -1016,11 +1350,18 @@ pr:
 
 ## ps
 ps:
+  # Inferred from the IANA delegation record for the Arabic IDN .xn--ygbi2ammx,
+  # which is designated for the same country code (PS) and registry operator.
+  server: whois.pnina.ps
+  template:
+    - ps.tpl
 
 ## pt
 # NOTE: not working from japan.
 pt:
   server: whois.dns.pt
+  template:
+    - common.tpl
 
 ## pw
 pw:
@@ -1030,6 +1371,10 @@ pw:
 
 ## py
 py:
+  # Inferred from the official NIC.PY availability / data query portal at https://www.nic.py/
+  server: nic.py
+  template:
+    - py.tpl
 
 ## qa
 qa:
@@ -1090,6 +1435,9 @@ sc:
 
 ## sd
 sd:
+  server: whois.nic.sd
+  template:
+    - sd.tpl
 
 ## se
 # NOTE: The Swedish Internet Foundation
@@ -1119,6 +1467,16 @@ si:
 
 ## sj
 sj:
+  # Registration information is published by IANA at
+  # https://www.norid.no/en/omnorid/toppdomenet-sj/
+  server: norid.no
+  template:
+    - sj.tpl
+  # Registration information is published by IANA at
+  # https://www.norid.no/en/omnorid/toppdomenet-sj/
+  server: norid.no
+  template:
+    - sj.tpl
 
 ## sk
 sk:
@@ -1128,6 +1486,10 @@ sk:
 
 ## sl
 sl:
+  # Inferred from the official .sl WHOIS page at https://www.nic.sl/domain/html/whois
+  server: nic.sl
+  template:
+    - sl.tpl
 
 ## sm
 sm:
@@ -1149,6 +1511,9 @@ so:
 
 ## sr
 sr:
+  server: whois.sr
+  template:
+    - sr.tpl
 
 ## ss
 ss:
@@ -1165,6 +1530,14 @@ st:
 
 ## sv
 sv:
+  # Registration information is published by IANA at http://www.svnet.sv
+  server: svnet.sv
+  template:
+    - sv.tpl
+  # Registration information is published by IANA at http://www.svnet.sv
+  server: svnet.sv
+  template:
+    - sv.tpl
 
 
 ## sx
@@ -1181,6 +1554,10 @@ sy:
 
 ## sz
 sz:
+  # Registration information is published by IANA at http://www.sispa.org.sz/
+  server: sispa.org.sz
+  template:
+    - sz.tpl
 
 
 ## tc
@@ -1218,11 +1595,17 @@ th:
 
 ## tj
 tj:
+  # Registration information is published by IANA at http://www.nic.tj
+  server: nic.tj
+  template:
+    - tj.tpl
 
 ## tk
 # NOTE: not working from japan.
 tk:
   server: whois.dot.tk
+  template:
+    - common.tpl
 
 ## tl
 tl:
@@ -1251,6 +1634,8 @@ to:
 
 ## tp
 tp:
+  # Historical Portuguese Timor TLD. IANA records .tp as removed from the root
+  # zone, so no active WHOIS server is set.
 
 ## tr
 tr:
@@ -1260,6 +1645,10 @@ tr:
 
 ## tt
 tt:
+  # Registration information is published by IANA at http://www.nic.tt
+  server: nic.tt
+  template:
+    - tt.tpl
 
 ## tv
 tv:
@@ -1308,6 +1697,8 @@ us:
 # NOTE: not working from japan.
 uy:
   server: whois.nic.org.uy
+  template:
+    - common.tpl
 
 ## uz
 # NOTE: The Whois Server (ver. 1.0) of ccTLD.UZ
@@ -1318,6 +1709,16 @@ uz:
 
 ## va
 va:
+  # Inferred from the Vatican Internet Service Provider technical contact domain
+  # dnsop@net.va published in the IANA delegation record.
+  server: net.va
+  template:
+    - va.tpl
+  # Inferred from the Vatican Internet Service Provider technical contact domain
+  # dnsop@net.va published in the IANA delegation record.
+  server: net.va
+  template:
+    - va.tpl
 
 ## vc
 vc:
@@ -1340,9 +1741,23 @@ vg:
 
 ## vi
 vi:
+  server: virgil.nic.vi
+  template:
+    - vi.tpl
+  server: virgil.nic.vi
+  template:
+    - vi.tpl
 
 ## vn
 vn:
+  # Registration information is published by IANA at https://www.vnnic.vn/
+  server: vnnic.vn
+  template:
+    - vn.tpl
+  # Registration information is published by IANA at https://www.vnnic.vn/
+  server: vnnic.vn
+  template:
+    - vn.tpl
 
 ## vu
 vu:
@@ -1361,6 +1776,8 @@ wf:
 # NOTE: not working from japan.
 ws:
   server: whois.website.ws
+  template:
+    - common.tpl
 
 ## ye
 ye:
@@ -1377,6 +1794,9 @@ yt:
 
 ## za
 za:
+  server: whois.registry.net.za
+  template:
+    - za.tpl
 
 ## zm
 zm:
@@ -1386,3 +1806,13 @@ zm:
 
 ## zw
 zw:
+  # Inferred from the TelOne technical contact domain and authoritative nameservers
+  # published in the IANA delegation record for .zw.
+  server: telone.co.zw
+  template:
+    - zw.tpl
+  # Inferred from the TelOne technical contact domain and authoritative nameservers
+  # published in the IANA delegation record for .zw.
+  server: telone.co.zw
+  template:
+    - zw.tpl
