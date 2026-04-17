@@ -4,24 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pywhois2"
-version = "0.1.0"
+version = "0.2.0"
 description = "WHOIS lookup and parsing library with CLI support"
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.8"
 license = "MIT"
 license-files = ["LICENSE"]
-authors = [
-  { name = "blacknon", email = "blacknon@orebibou.com" },
-]
-maintainers = [
-  { name = "blacknon", email = "blacknon@orebibou.com" },
-]
-dependencies = [
-  "PyYAML",
-  "PySocks",
-  "ttp",
-  "tld",
-]
+authors = [{ name = "blacknon", email = "blacknon@orebibou.com" }]
+maintainers = [{ name = "blacknon", email = "blacknon@orebibou.com" }]
+dependencies = ["PyYAML", "PySocks", "ttp", "tld"]
 classifiers = [
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.8",
