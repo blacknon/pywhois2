@@ -12,7 +12,7 @@ TEMPLATE_DIR = ROOT_DIR / "pywhois2" / "templates"
 
 class PackageTest(unittest.TestCase):
     def test_version_is_available_without_optional_runtime_imports(self):
-        self.assertEqual(pywhois2.__version__, "0.1.0")
+        self.assertEqual(pywhois2.__version__, "0.2.0")
 
     def test_whois_attribute_is_lazy(self):
         self.assertTrue(callable(pywhois2.__getattr__))
