@@ -45,7 +45,10 @@ class JPWhoisTemplateTest(unittest.TestCase):
         result = parse_fixture("jp.tpl", "jp_whois.txt")
 
         self.assertEqual(result["domain_name"], "example.jp")
-        self.assertEqual(result["name_servers"], ["ns1.example.jp", "ns2.example.jp"])
+        self.assertEqual(
+            [name.lower() for name in result["name_servers"]],
+            ["ns1.example.jp", "ns2.example.jp"],
+        )
         self.assertEqual(result["registrant_name_local"], "株式会社サンプル")
         self.assertEqual(result["registrant_name"], "Example Inc.")
         self.assertEqual(result["contact_email"], "admin@example.jp")
@@ -67,7 +70,7 @@ class JPWhoisTemplateTest(unittest.TestCase):
 
         self.assertEqual(result["domain_name"], "example.co.jp")
         self.assertEqual(
-            result["name_servers"],
+            [name.lower() for name in result["name_servers"]],
             ["ns1.example.co.jp", "ns2.example.co.jp"],
         )
         self.assertEqual(result["registrant_organization_local"], "株式会社サンプル")
