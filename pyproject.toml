@@ -12,7 +12,7 @@ license = "MIT"
 license-files = ["LICENSE"]
 authors = [{ name = "blacknon", email = "blacknon@orebibou.com" }]
 maintainers = [{ name = "blacknon", email = "blacknon@orebibou.com" }]
-dependencies = ["PyYAML", "PySocks", "ttp", "tld"]
+dependencies = ["PyYAML", "PySocks", "ttp", "tld", "pytz", "stringcase"]
 classifiers = [
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.8",

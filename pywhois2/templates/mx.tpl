@@ -7,133 +7,166 @@
 ## =======================================================
 
 <macro>
-def reseller_address2parent(data):
-    if 'reseller_address' in data:
-        extract_data = data['reseller_address']
-        if type(extract_data) == dict:
-            del data['reseller_address']
-            data['reseller_address'] = extract_data.get('reseller_address')
+def unpack(data):
+    while True:
+        if type(data) == list:
+            data = data[0]
+        else:
+            break
+
+    update_data = {}
+    for d in data:
+        if type(data[d]) == list:
+            if type(data[d][0]) == dict:
+                data[d] = data[d][0]
+
+        elif type(data[d]) == dict:
+            if not data[d]:
+                continue
+        update_data[d] = data[d]
+    data = update_data
+
+    data = organization2parent('registrant', 'registrant', data)
+    data = organization2parent('administrative contact', 'admin', data)
+    data = organization2parent('technical contact', 'tech', data)
+    data = organization2parent('billing contact', 'billing', data)
+    data = name_servers2parent(data)
+    data = str2datetime(data)
+
     return data
 
-def registrant_address2parent(data):
-    if 'registrant_address' in data:
-        extract_data = data['registrant_address']
-        if type(extract_data) == dict:
-            del data['registrant_address']
-            data['registrant_address'] = extract_data.get('registrant_address')
+def organization2parent(organization_type , organization_type_name, data):
+    if organization_type in data:
+        if type(data[organization_type]) == dict:
+            extract_data = data[organization_type]
+            del data[organization_type]
+
+            for d in extract_data:
+                data["{0}_{1}".format(organization_type_name,d)] = extract_data[d]
     return data
 
-def admin_address2parent(data):
-    if 'admin_address' in data:
-        extract_data = data['admin_address']
-        if type(extract_data) == dict:
-            del data['admin_address']
-            data['admin_address'] = extract_data.get('admin_address')
+def name_servers2parent(data):
+    if 'name_servers' in data:
+        extract_data = data['name_servers']['name_servers']
+        if type(extract_data) == list:
+            del data['name_servers']
+            data['name_servers'] = extract_data
+
     return data
 
-def tech_address2parent(data):
-    if 'tech_address' in data:
-        extract_data = data['tech_address']
-        if type(extract_data) == dict:
-            del data['tech_address']
-            data['tech_address'] = extract_data.get('tech_address')
+def str2datetime(data):
+    import datetime
+    import pytz
+    from pytz import country_timezones
+
+    # 登録年月日
+    if 'created' in data:
+        if type(data['created']) == str:
+            data['created'] = datetime.datetime.strptime(
+                data['created'].replace('+0:00', '+00:00'),
+                '%Y-%m-%d'
+            ).replace(tzinfo=pytz.timezone(country_timezones['mx'][0]))
+
+    # 有効期限
+    if 'expiration' in data:
+        if type(data['expiration']) == str:
+            data['expiration'] = datetime.datetime.strptime(
+                data['expiration'].replace('+0:00', '+00:00'),
+                '%Y-%m-%d'
+            ).replace(tzinfo=pytz.timezone(country_timezones['mx'][0]))
+
+    # 最終更新
+    if 'updated' in data:
+        if type(data['updated']) == str:
+            data['updated'] = datetime.datetime.strptime(
+                data['updated'].replace('+0:00', '+00:00'),
+                '%Y-%m-%d'
+            ).replace(tzinfo=pytz.timezone(country_timezones['mx'][0]))
+
     return data
+
 </macro>
-
 
 ## Template
 ## =======================================================
 
-<group macro="reseller_address2parent, registrant_address2parent, admin_address2parent, tech_address2parent">
-Domain Name: {{ domain_name | lower | ORPHRASE }}
+<group>
+Domain Name:       {{ domain_name }}
 
-Registry Domain ID: {{ registry_domain_id | lower }}
-Registrar WHOIS Server: {{ registrar_whois_server | lower }}
-Registrar URL: {{ registrar_whois_url | lower }}
+Created On:        {{ created | ORPHRASE }}
+Expiration Date:   {{ expiration | ORPHRASE }}
+Last Updated On:   {{ updated | ORPHRASE }}
+Registrar:         {{ registrar_name | ORPHRASE }}
+URL:               {{ registrar_url | ORPHRASE }}
+Whois TCP URI:     {{ registrar_whois_uri | ORPHRASE }}
+Whois Web URL:     {{ registrar_whois_url | ORPHRASE }}
 
-Updated Date: {{ updated | ORPHRASE }}
-Creation Date: {{ creation | ORPHRASE }}
-Registrar Registration Expiration Date: {{ expiration | ORPHRASE }}
-
-Registrar: {{ registrar_name | ORPHRASE }}
-Registrar IANA ID: {{ registrar_id }}
-Registrar Abuse Contact Email: {{ registrar_email }}
-Registrar Abuse Contact Phone: {{ registrar_phone }}
-
-Reseller: {{ reseller_name | ORPHRASE }}
-<group name="reseller_address">
-Reseller Street Address: {{ reseller_address | ORPHRASE | joinmatches(" ") }}
-Reseller Other Address Info: {{ reseller_address | ORPHRASE | joinmatches(" ") }}
+<group name="{{ group_type }}">
+{{ group_type | ORPHRASE | lower }}:
+   Name:           {{ name | ORPHRASE }}
+   City:           {{ address | ORPHRASE | joinmatches(', ') }}
+   State:          {{ address | ORPHRASE | joinmatches(', ') }}
+   Country:        {{ country | ORPHRASE }}
 </group>
-Reseller Country: {{ reseller_company | ORPHRASE | joinmatches(" ") }}
-Reseller Phone: {{ reseller_phone | ORPHRASE | joinmatches(" ") }}
-Reseller Fax: {{ reseller_fax | ORPHRASE | joinmatches(" ") }}
-Reseller Customer Service Email: {{ reseller_email | ORPHRASE | joinmatches(" ") }}
 
-Domain Status: {{ domain_status | ORPHRASE | joinmatches("\n") }}
-
-Registry Registrant ID: {{ registrant_id | ORPHRASE }}
-Registrant Name: {{ registrant_name | ORPHRASE }}
-Registrant Organization: {{ registrant_organization | ORPHRASE }}
-<group name="registrant_address">
-Registrant Street: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
-Registrant City: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
-Registrant State/Province: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
+<group name="name_servers">
+Name Servers:{{ _start_ }}
+   DNS:            {{ name_servers | lower | ORPHRASE | to_list | joinmatches }}
+{{ _end_ }}
 </group>
-Registrant Postal Code: {{ registrant_zip_code | ORPHRASE }}
-Registrant Country: {{ registrant_country | ORPHRASE }}
-Registrant Phone: {{ registrant_phone | ORPHRASE }}
-Registrant Phone Ext: {{ registrant_phone_ext | ORPHRASE }}
-Registrant Fax: {{ registrant_fax | ORPHRASE }}
-Registrant Fax Ext: {{ registrant_fax_ext | ORPHRASE }}
-Registrant Email: {{ registrant_email | ORPHRASE }}
 
-Registry Admin ID: {{ admin_id | ORPHRASE }}
-Admin Name: {{ admin_name | ORPHRASE }}
-Admin Organization: {{ admin_organization | ORPHRASE }}
-<group name="admin_address">
-Admin Street: {{ admin_address | ORPHRASE | joinmatches(" ") }}
-Admin City: {{ admin_address | ORPHRASE | joinmatches(" ") }}
-Admin State/Province: {{ admin_address | ORPHRASE | joinmatches(" ") }}
+DNSSEC DS Records:
 </group>
-Admin Postal Code: {{ admin_zip_code | ORPHRASE }}
-Admin Country: {{ admin_country | ORPHRASE }}
-Admin Phone: {{ admin_phone | ORPHRASE }}
-Admin Phone Ext: {{ admin_phone_ext | ORPHRASE }}
-Admin Fax: {{ admin_fax | ORPHRASE }}
-Admin Fax Ext: {{ admin_fax_ext | ORPHRASE }}
-Admin Email: {{ admin_email | ORPHRASE }}
 
-Registry Tech ID: {{ tech_id | ORPHRASE }}
-Tech Name: {{ tech_name | ORPHRASE }}
-Tech Organization: {{ tech_organization | ORPHRASE }}
-<group name="tech_address">
-Tech Street: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-Tech City: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-Tech State/Province: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-</group>
-Tech Postal Code: {{ tech_zip_code | ORPHRASE }}
-Tech Country: {{ tech_country | ORPHRASE }}
-Tech Phone: {{ tech_phone | ORPHRASE }}
-Tech Phone Ext: {{ tech_phone_ext | ORPHRASE }}
-Tech Fax: {{ tech_fax | ORPHRASE }}
-Tech Fax Ext: {{ tech_fax_ext | ORPHRASE }}
-Tech Email: {{ tech_email | ORPHRASE }}
+% NOTICE: The expiration date displayed in this record is the date the
+% registrar's sponsorship of the domain name registration in the registry is
+% currently set to expire. This date does not necessarily reflect the
+% expiration date of the domain name registrant's agreement with the sponsoring
+% registrar. Users may consult the sponsoring registrar's Whois database to
+% view the registrar's reported date of expiration for this registration.
 
-Registry Billing ID: {{ billing_id | ORPHRASE }}
-Billing Name: {{ billing_name | ORPHRASE }}
-Billing Organization: {{ billing_organization | ORPHRASE }}
-<group name="billing_address">
-Billing Street: {{ billing_address | ORPHRASE | joinmatches(" ") }}
-Billing City: {{ billing_address | ORPHRASE | joinmatches(" ") }}
-Billing State/Province: {{ billing_address | ORPHRASE | joinmatches(" ") }}
-</group>
-Billing Postal Code: {{ billing_zip_code | ORPHRASE }}
-Billing Country: {{ billing_country | ORPHRASE }}
-Billing Phone: {{ billing_phone | ORPHRASE }}
-Billing Email:  {{ billing_email | ORPHRASE }}
+% The requested information ("Information") is provided only for the delegation
+% of domain names and the operation of the DNS administered by NIC Mexico.
 
-Name Server: {{ name_servers | ORPHRASE | to_list | joinmatches }}
-DNSSEC: {{ dnssec | ORPHRASE }}
-URL of the ICANN WHOIS Data Problem Reporting System: http://wdprs.internic.net/
-</group>
+% It is absolutely prohibited to use the Information for other purposes,
+% including sending not requested emails for advertising or promoting products
+% and services purposes (SPAM) without the authorization of the owners of the
+% Information and NIC Mexico.
+
+% The database generated from the delegation system is protected by the
+% intellectual property laws and all international treaties on the matter.
+
+% If you need more information on the records displayed here, please contact us
+% by email at ayuda@nic.mx .
+
+% If you want notify the receipt of SPAM or unauthorized access, please send a
+% email to abuse@nic.mx .
+
+% NOTA: La fecha de expiracion mostrada en esta consulta es la fecha que el
+% registrar tiene contratada para el nombre de dominio en el registry. Esta
+% fecha no necesariamente refleja la fecha de expiracion del nombre de dominio
+% que el registrante tiene contratada con el registrar. Puede consultar la base
+% de datos de Whois del registrar para ver la fecha de expiracion reportada por
+% el registrar para este nombre de dominio.
+
+% La informacion que ha solicitado se provee exclusivamente para fines
+% relacionados con la delegacion de nombres de dominio y la operacion del DNS
+% administrado por NIC Mexico.
+
+% Queda absolutamente prohibido su uso para otros propositos, incluyendo el
+% envio de Correos Electronicos no solicitados con fines publicitarios o de
+% promocion de productos y servicios (SPAM) sin mediar la autorizacion de los
+% afectados y de NIC Mexico.
+
+% La base de datos generada a partir del sistema de delegacion, esta protegida
+% por las leyes de Propiedad Intelectual y todos los tratados internacionales
+% sobre la materia.
+
+% Si necesita mayor informacion sobre los registros aqui mostrados, favor de
+% comunicarse a ayuda@nic.mx.
+
+% Si desea notificar sobre correo no solicitado o accesos no autorizados, favor
+% de enviar su mensaje a abuse@nic.mx.
+
+
+<output macro="unpack" />

@@ -7,36 +7,31 @@
 ## =======================================================
 
 <macro>
-def reseller_address2parent(data):
-    if 'reseller_address' in data:
-        extract_data = data['reseller_address']
-        if type(extract_data) == dict:
-            del data['reseller_address']
-            data['reseller_address'] = extract_data.get('reseller_address')
+def dedupe_list_fields(data):
+    for key in ('name_servers',):
+        if key in data and isinstance(data[key], list):
+            deduped = []
+            for item in data[key]:
+                if item not in deduped:
+                    deduped.append(item)
+            data[key] = deduped
     return data
 
-def registrant_address2parent(data):
-    if 'registrant_address' in data:
-        extract_data = data['registrant_address']
-        if type(extract_data) == dict:
-            del data['registrant_address']
-            data['registrant_address'] = extract_data.get('registrant_address')
+def dnssec2only_english(data):
+    if 'dnssec' in data and isinstance(data['dnssec'], list):
+        data['dnssec'] = data['dnssec'][-1]
     return data
 
-def admin_address2parent(data):
-    if 'admin_address' in data:
-        extract_data = data['admin_address']
-        if type(extract_data) == dict:
-            del data['admin_address']
-            data['admin_address'] = extract_data.get('admin_address')
-    return data
+def str2datetime(data):
+    import datetime
 
-def tech_address2parent(data):
-    if 'tech_address' in data:
-        extract_data = data['tech_address']
-        if type(extract_data) == dict:
-            del data['tech_address']
-            data['tech_address'] = extract_data.get('tech_address')
+    tz = datetime.timezone(datetime.timedelta(hours=9))
+    for key in ('creation', 'expiration', 'updated'):
+        if key in data and isinstance(data[key], str):
+            data[key] = datetime.datetime.strptime(
+                data[key],
+                '%Y. %m. %d.'
+            ).replace(tzinfo=tz)
     return data
 </macro>
 
@@ -44,96 +39,39 @@ def tech_address2parent(data):
 ## Template
 ## =======================================================
 
-<group macro="reseller_address2parent, registrant_address2parent, admin_address2parent, tech_address2parent">
-Domain Name: {{ domain_name | lower | ORPHRASE }}
+<group macro="str2datetime, dnssec2only_english, dedupe_list_fields">
+등록인                      : {{ registrant_name_local | ORPHRASE }}
+등록인 주소                 : {{ registrant_address_local | ORPHRASE }}
+등록인 우편번호             : {{ registrant_zip_code | ORPHRASE }}
+책임자                      : {{ admin_name_local | ORPHRASE }}
+책임자 전자우편             : {{ admin_email | ORPHRASE }}
+책임자 전화번호             : {{ admin_phone | ORPHRASE }}
+등록일                      : {{ creation | ORPHRASE }}
+최근 정보 변경일            : {{ updated | ORPHRASE }}
+사용 종료일                 : {{ expiration | ORPHRASE }}
+정보공개여부                : {{ publish_status | ORPHRASE }}
+등록대행자                  : {{ registrar_name_local | ORPHRASE }}
+DNSSEC                      : {{ dnssec | ORPHRASE | to_list | joinmatches }}
 
-Registry Domain ID: {{ registry_domain_id | lower }}
-Registrar WHOIS Server: {{ registrar_whois_server | lower }}
-Registrar URL: {{ registrar_whois_url | lower }}
+   호스트이름               : {{ name_servers | ORPHRASE | to_list | joinmatches }}
 
-Updated Date: {{ updated | ORPHRASE }}
-Creation Date: {{ creation | ORPHRASE }}
-Registrar Registration Expiration Date: {{ expiration | ORPHRASE }}
+# ENGLISH
 
-Registrar: {{ registrar_name | ORPHRASE }}
-Registrar IANA ID: {{ registrar_id }}
-Registrar Abuse Contact Email: {{ registrar_email }}
-Registrar Abuse Contact Phone: {{ registrar_phone }}
+Domain Name                 : {{ domain_name }}
+Registrant                  : {{ registrant_name | ORPHRASE }}
+Registrant Address          : {{ registrant_address | ORPHRASE }}
+Registrant Zip Code         : {{ registrant_zip_code | ORPHRASE }}
+Administrative Contact(AC)  : {{ admin_name | ORPHRASE }}
+AC E-Mail                   : {{ admin_email | ORPHRASE }}
+AC Phone Number             : {{ admin_phone | ORPHRASE }}
+Registered Date             : {{ creation | ORPHRASE }}
+Last Updated Date           : {{ updated | ORPHRASE }}
+Expiration Date             : {{ expiration | ORPHRASE }}
+Publishes                   : {{ publish_status | ORPHRASE }}
+Authorized Agency           : {{ registrar_name | ORPHRASE }}
+DNSSEC                      : {{ dnssec | ORPHRASE | to_list | joinmatches }}
 
-Reseller: {{ reseller_name | ORPHRASE }}
-<group name="reseller_address">
-Reseller Street Address: {{ reseller_address | ORPHRASE | joinmatches(" ") }}
-Reseller Other Address Info: {{ reseller_address | ORPHRASE | joinmatches(" ") }}
-</group>
-Reseller Country: {{ reseller_company | ORPHRASE | joinmatches(" ") }}
-Reseller Phone: {{ reseller_phone | ORPHRASE | joinmatches(" ") }}
-Reseller Fax: {{ reseller_fax | ORPHRASE | joinmatches(" ") }}
-Reseller Customer Service Email: {{ reseller_email | ORPHRASE | joinmatches(" ") }}
+   Host Name                : {{ name_servers | ORPHRASE | to_list | joinmatches }}
 
-Domain Status: {{ domain_status | ORPHRASE | joinmatches("\n") }}
-
-Registry Registrant ID: {{ registrant_id | ORPHRASE }}
-Registrant Name: {{ registrant_name | ORPHRASE }}
-Registrant Organization: {{ registrant_organization | ORPHRASE }}
-<group name="registrant_address">
-Registrant Street: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
-Registrant City: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
-Registrant State/Province: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
-</group>
-Registrant Postal Code: {{ registrant_zip_code | ORPHRASE }}
-Registrant Country: {{ registrant_country | ORPHRASE }}
-Registrant Phone: {{ registrant_phone | ORPHRASE }}
-Registrant Phone Ext: {{ registrant_phone_ext | ORPHRASE }}
-Registrant Fax: {{ registrant_fax | ORPHRASE }}
-Registrant Fax Ext: {{ registrant_fax_ext | ORPHRASE }}
-Registrant Email: {{ registrant_email | ORPHRASE }}
-
-Registry Admin ID: {{ admin_id | ORPHRASE }}
-Admin Name: {{ admin_name | ORPHRASE }}
-Admin Organization: {{ admin_organization | ORPHRASE }}
-<group name="admin_address">
-Admin Street: {{ admin_address | ORPHRASE | joinmatches(" ") }}
-Admin City: {{ admin_address | ORPHRASE | joinmatches(" ") }}
-Admin State/Province: {{ admin_address | ORPHRASE | joinmatches(" ") }}
-</group>
-Admin Postal Code: {{ admin_zip_code | ORPHRASE }}
-Admin Country: {{ admin_country | ORPHRASE }}
-Admin Phone: {{ admin_phone | ORPHRASE }}
-Admin Phone Ext: {{ admin_phone_ext | ORPHRASE }}
-Admin Fax: {{ admin_fax | ORPHRASE }}
-Admin Fax Ext: {{ admin_fax_ext | ORPHRASE }}
-Admin Email: {{ admin_email | ORPHRASE }}
-
-Registry Tech ID: {{ tech_id | ORPHRASE }}
-Tech Name: {{ tech_name | ORPHRASE }}
-Tech Organization: {{ tech_organization | ORPHRASE }}
-<group name="tech_address">
-Tech Street: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-Tech City: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-Tech State/Province: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-</group>
-Tech Postal Code: {{ tech_zip_code | ORPHRASE }}
-Tech Country: {{ tech_country | ORPHRASE }}
-Tech Phone: {{ tech_phone | ORPHRASE }}
-Tech Phone Ext: {{ tech_phone_ext | ORPHRASE }}
-Tech Fax: {{ tech_fax | ORPHRASE }}
-Tech Fax Ext: {{ tech_fax_ext | ORPHRASE }}
-Tech Email: {{ tech_email | ORPHRASE }}
-
-Registry Billing ID: {{ billing_id | ORPHRASE }}
-Billing Name: {{ billing_name | ORPHRASE }}
-Billing Organization: {{ billing_organization | ORPHRASE }}
-<group name="billing_address">
-Billing Street: {{ billing_address | ORPHRASE | joinmatches(" ") }}
-Billing City: {{ billing_address | ORPHRASE | joinmatches(" ") }}
-Billing State/Province: {{ billing_address | ORPHRASE | joinmatches(" ") }}
-</group>
-Billing Postal Code: {{ billing_zip_code | ORPHRASE }}
-Billing Country: {{ billing_country | ORPHRASE }}
-Billing Phone: {{ billing_phone | ORPHRASE }}
-Billing Email:  {{ billing_email | ORPHRASE }}
-
-Name Server: {{ name_servers | ORPHRASE | to_list | joinmatches }}
-DNSSEC: {{ dnssec | ORPHRASE }}
-URL of the ICANN WHOIS Data Problem Reporting System: http://wdprs.internic.net/
+- KISA/KRNIC WHOIS Service -
 </group>

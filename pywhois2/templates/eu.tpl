@@ -7,133 +7,151 @@
 ## =======================================================
 
 <macro>
-def reseller_address2parent(data):
-    if 'reseller_address' in data:
-        extract_data = data['reseller_address']
-        if type(extract_data) == dict:
-            del data['reseller_address']
-            data['reseller_address'] = extract_data.get('reseller_address')
+def unpack(data):
+    while True:
+        if type(data) == list:
+            data = data[0]
+        else:
+            break
+
+    update_data = {}
+    for d in data:
+        if type(data[d]) == list:
+            if type(data[d][0]) == dict:
+                data[d] = data[d][0]
+
+        elif type(data[d]) == dict:
+            if not data[d]:
+                continue
+        update_data[d] = data[d]
+    data = update_data
+
+    data = organization2parent('registrant', 'registrant', data)
+    data = organization2parent('on_site', 'on_site', data)
+    data = organization2parent('tech', 'tech', data)
+    data = organization2parent('registrar', 'registrar', data)
+    data = name_servers2parent(data)
+
     return data
 
-def registrant_address2parent(data):
-    if 'registrant_address' in data:
-        extract_data = data['registrant_address']
-        if type(extract_data) == dict:
-            del data['registrant_address']
-            data['registrant_address'] = extract_data.get('registrant_address')
+def organization2parent(organization_type , organization_type_name, data):
+    if organization_type in data:
+        if type(data[organization_type]) == dict:
+            extract_data = data[organization_type]
+            del data[organization_type]
+
+            for d in extract_data:
+                data["{0}_{1}".format(organization_type_name,d)] = extract_data[d]
     return data
 
-def admin_address2parent(data):
-    if 'admin_address' in data:
-        extract_data = data['admin_address']
+def name_servers2parent(data):
+    if 'name_servers' in data:
+        extract_data = data['name_servers']
         if type(extract_data) == dict:
-            del data['admin_address']
-            data['admin_address'] = extract_data.get('admin_address')
+            del data['name_servers']
+            data['name_servers'] = []
+
+            for d in extract_data['name_servers']:
+                data['name_servers'].append(d.split(" ")[0])
+
+            data['name_servers'] = list(set(data['name_servers']))
     return data
 
-def tech_address2parent(data):
-    if 'tech_address' in data:
-        extract_data = data['tech_address']
-        if type(extract_data) == dict:
-            del data['tech_address']
-            data['tech_address'] = extract_data.get('tech_address')
-    return data
 </macro>
+
 
 
 ## Template
 ## =======================================================
 
-<group macro="reseller_address2parent, registrant_address2parent, admin_address2parent, tech_address2parent">
-Domain Name: {{ domain_name | lower | ORPHRASE }}
+% The WHOIS service offered by EURid and the access to the records
+% in the EURid WHOIS database are provided for information purposes
+% only. It allows persons to check whether a specific domain name
+% is still available or not and to obtain information related to
+% the registration records of existing domain names.
+%
+% EURid cannot, under any circumstances, be held liable in case the
+% stored information would prove to be wrong, incomplete or not
+% accurate in any sense.
+%
+% By submitting a query you agree not to use the information made
+% available to:
+%
+% - allow, enable or otherwise support the transmission of unsolicited,
+%   commercial advertising or other solicitations whether via email or
+%   otherwise;
+% - target advertising in any possible way;
+%
+% - to cause nuisance in any possible way to the registrants by sending
+%   (whether by automated, electronic processes capable of enabling
+%   high volumes or other possible means) messages to them.
+%
+% Without prejudice to the above, it is explicitly forbidden to extract,
+% copy and/or use or re-utilise in any form and by any means
+% (electronically or not) the whole or a quantitatively or qualitatively
+% substantial part of the contents of the WHOIS database without prior
+% and explicit permission by EURid, nor in any attempt hereof, to apply
+% automated, electronic processes to EURid (or its systems).
+%
+% You agree that any reproduction and/or transmission of data for
+% commercial purposes will always be considered as the extraction of a
+% substantial part of the content of the WHOIS database.
+%
+% By submitting the query you agree to abide by this policy and accept
+% that EURid can take measures to limit the use of its WHOIS services
+% in order to protect the privacy of its registrants or the integrity
+% of the database.
+%
+% The EURid WHOIS service on port 43 (textual whois) never
+% discloses any information concerning the registrant.
+% Registrant and on-site contact information can be obtained through use of the
+% webbased WHOIS service available from the EURid website www.eurid.eu
+%
+% WHOIS google.eu
 
-Registry Domain ID: {{ registry_domain_id | lower }}
-Registrar WHOIS Server: {{ registrar_whois_server | lower }}
-Registrar URL: {{ registrar_whois_url | lower }}
+<group>
+Domain: {{ domain_name }}
+Script: LATIN
 
-Updated Date: {{ updated | ORPHRASE }}
-Creation Date: {{ creation | ORPHRASE }}
-Registrar Registration Expiration Date: {{ expiration | ORPHRASE }}
-
-Registrar: {{ registrar_name | ORPHRASE }}
-Registrar IANA ID: {{ registrar_id }}
-Registrar Abuse Contact Email: {{ registrar_email }}
-Registrar Abuse Contact Phone: {{ registrar_phone }}
-
-Reseller: {{ reseller_name | ORPHRASE }}
-<group name="reseller_address">
-Reseller Street Address: {{ reseller_address | ORPHRASE | joinmatches(" ") }}
-Reseller Other Address Info: {{ reseller_address | ORPHRASE | joinmatches(" ") }}
+<group name="registrant">
+Registrant:{{ _start_ }}
+        Organisation: {{ organization | ORPHRASE }}
+        Language: {{ lang }}
+        Email: {{ email }}
+{{ _end_ }}
 </group>
-Reseller Country: {{ reseller_company | ORPHRASE | joinmatches(" ") }}
-Reseller Phone: {{ reseller_phone | ORPHRASE | joinmatches(" ") }}
-Reseller Fax: {{ reseller_fax | ORPHRASE | joinmatches(" ") }}
-Reseller Customer Service Email: {{ reseller_email | ORPHRASE | joinmatches(" ") }}
 
-Domain Status: {{ domain_status | ORPHRASE | joinmatches("\n") }}
-
-Registry Registrant ID: {{ registrant_id | ORPHRASE }}
-Registrant Name: {{ registrant_name | ORPHRASE }}
-Registrant Organization: {{ registrant_organization | ORPHRASE }}
-<group name="registrant_address">
-Registrant Street: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
-Registrant City: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
-Registrant State/Province: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
+<group name="on_site">
+On-site(s):{{ _start_ }}
+        Organisation: {{ organization | ORPHRASE }}
+        Language: {{ lang }}
+        Email: {{ email }}
+{{ _end_ }}
 </group>
-Registrant Postal Code: {{ registrant_zip_code | ORPHRASE }}
-Registrant Country: {{ registrant_country | ORPHRASE }}
-Registrant Phone: {{ registrant_phone | ORPHRASE }}
-Registrant Phone Ext: {{ registrant_phone_ext | ORPHRASE }}
-Registrant Fax: {{ registrant_fax | ORPHRASE }}
-Registrant Fax Ext: {{ registrant_fax_ext | ORPHRASE }}
-Registrant Email: {{ registrant_email | ORPHRASE }}
 
-Registry Admin ID: {{ admin_id | ORPHRASE }}
-Admin Name: {{ admin_name | ORPHRASE }}
-Admin Organization: {{ admin_organization | ORPHRASE }}
-<group name="admin_address">
-Admin Street: {{ admin_address | ORPHRASE | joinmatches(" ") }}
-Admin City: {{ admin_address | ORPHRASE | joinmatches(" ") }}
-Admin State/Province: {{ admin_address | ORPHRASE | joinmatches(" ") }}
+<group name="tech">
+Technical:{{ _start_ }}
+        Organisation: {{ organization | ORPHRASE }}
+        Language: {{ lang }}
+        Email: {{ email }}
+{{ _end_ }}
 </group>
-Admin Postal Code: {{ admin_zip_code | ORPHRASE }}
-Admin Country: {{ admin_country | ORPHRASE }}
-Admin Phone: {{ admin_phone | ORPHRASE }}
-Admin Phone Ext: {{ admin_phone_ext | ORPHRASE }}
-Admin Fax: {{ admin_fax | ORPHRASE }}
-Admin Fax Ext: {{ admin_fax_ext | ORPHRASE }}
-Admin Email: {{ admin_email | ORPHRASE }}
 
-Registry Tech ID: {{ tech_id | ORPHRASE }}
-Tech Name: {{ tech_name | ORPHRASE }}
-Tech Organization: {{ tech_organization | ORPHRASE }}
-<group name="tech_address">
-Tech Street: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-Tech City: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-Tech State/Province: {{ tech_address | ORPHRASE | joinmatches(" ") }}
+<group name="registrar">
+Registrar:{{ _start_ }}
+        Name: {{ name | ORPHRASE }}
+        Website: {{ url }}
+{{ _end_ }}
 </group>
-Tech Postal Code: {{ tech_zip_code | ORPHRASE }}
-Tech Country: {{ tech_country | ORPHRASE }}
-Tech Phone: {{ tech_phone | ORPHRASE }}
-Tech Phone Ext: {{ tech_phone_ext | ORPHRASE }}
-Tech Fax: {{ tech_fax | ORPHRASE }}
-Tech Fax Ext: {{ tech_fax_ext | ORPHRASE }}
-Tech Email: {{ tech_email | ORPHRASE }}
 
-Registry Billing ID: {{ billing_id | ORPHRASE }}
-Billing Name: {{ billing_name | ORPHRASE }}
-Billing Organization: {{ billing_organization | ORPHRASE }}
-<group name="billing_address">
-Billing Street: {{ billing_address | ORPHRASE | joinmatches(" ") }}
-Billing City: {{ billing_address | ORPHRASE | joinmatches(" ") }}
-Billing State/Province: {{ billing_address | ORPHRASE | joinmatches(" ") }}
+<group name="name_servers">
+Name servers:{{ _start_ }}
+        {{ name_servers | strip(' ') | ORPHRASE | to_list | joinmatches }}
+{{ _end_ }}
 </group>
-Billing Postal Code: {{ billing_zip_code | ORPHRASE }}
-Billing Country: {{ billing_country | ORPHRASE }}
-Billing Phone: {{ billing_phone | ORPHRASE }}
-Billing Email:  {{ billing_email | ORPHRASE }}
 
-Name Server: {{ name_servers | ORPHRASE | to_list | joinmatches }}
-DNSSEC: {{ dnssec | ORPHRASE }}
-URL of the ICANN WHOIS Data Problem Reporting System: http://wdprs.internic.net/
+Please visit www.eurid.eu for more info.
 </group>
+
+
+<output macro="unpack" />

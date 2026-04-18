@@ -7,133 +7,185 @@
 ## =======================================================
 
 <macro>
-def reseller_address2parent(data):
-    if 'reseller_address' in data:
-        extract_data = data['reseller_address']
-        if type(extract_data) == dict:
-            del data['reseller_address']
-            data['reseller_address'] = extract_data.get('reseller_address')
+def delete_empty_line(data):
+    new_data = []
+    group_header_line = [
+        '   Registrant:',
+        '   Administrative Contact:',
+        '   Technical Contact:',
+    ]
+
+    before_line = ''
+    for line in data.splitlines():
+        if line in group_header_line:
+            new_data.append('')
+
+        if not before_line in group_header_line:
+            new_data.append(line)
+        else:
+            if line != '      ':
+                new_data.append(line)
+        before_line = line
+    data = "\n".join(new_data)
+
     return data
 
-def registrant_address2parent(data):
-    if 'registrant_address' in data:
-        extract_data = data['registrant_address']
-        if type(extract_data) == dict:
-            del data['registrant_address']
-            data['registrant_address'] = extract_data.get('registrant_address')
+def unpack(data):
+    while True:
+        if type(data) == list:
+            data = data[0]
+        else:
+            break
+
+    update_data = {}
+    for d in data:
+        if type(data[d]) == list:
+            if type(data[d][0]) == dict:
+                data[d] = data[d][0]
+
+        elif type(data[d]) == dict:
+            if not data[d]:
+                continue
+        update_data[d] = data[d]
+    data = update_data
+
+    data = name_servers2parent(data)
+    data = registrant_parse(data)
+    data = admin_parse(data)
+    data = tech_parse(data)
+    data = standardize_status(data)
+    data = str2datetime(data)
+
     return data
 
-def admin_address2parent(data):
-    if 'admin_address' in data:
-        extract_data = data['admin_address']
-        if type(extract_data) == dict:
-            del data['admin_address']
-            data['admin_address'] = extract_data.get('admin_address')
+def standardize_status(data):
+    from stringcase import pascalcase, snakecase
+    if 'status' in data:
+        if type(data['status']) == str:
+            extract_data = data['status']
+            del data['status']
+            data['status'] = {}
+
+            for d in extract_data.split(","):
+                data['status'][snakecase(d.lstrip())] = True
+
     return data
 
-def tech_address2parent(data):
-    if 'tech_address' in data:
-        extract_data = data['tech_address']
-        if type(extract_data) == dict:
-            del data['tech_address']
-            data['tech_address'] = extract_data.get('tech_address')
+def registrant_parse(data):
+    if 'registrant' in data:
+        extract_data = data['registrant']
+        del data['registrant']
+        data['registrant_name'] = extract_data['line'][0]
+        data['registrant_email'] = extract_data['line'][1]
+        data['registrant_country'] = extract_data['line'][2]
+    return data
+
+def admin_parse(data):
+    if 'admin' in data:
+        extract_data = data['admin']
+        del data['admin']
+
+        if len(extract_data['line']) > 1:
+            data['admin_name'] = extract_data['line'][1]
+    return data
+
+def tech_parse(data):
+    if 'tech' in data:
+        extract_data = data['tech']
+        del data['tech']
+
+        if len(extract_data['line']) > 1:
+            data['tech_name'] = extract_data['line'][1]
+    return data
+
+
+def name_servers2parent(data):
+    if 'name_servers' in data:
+        extract_data = data['name_servers']['name_servers']
+        if type(extract_data) == list:
+            del data['name_servers']
+            data['name_servers'] = extract_data
+
+    return data
+
+def str2datetime(data):
+    import datetime
+    import pytz
+    from pytz import country_timezones
+
+    # 登録年月日
+    if 'created' in data:
+        if type(data['created']) == str:
+            data['created'] = datetime.datetime.strptime(
+                data['created'].replace("UTC+8", "+08:00"),
+                '%Y-%m-%d %H:%M:%S (%z)'
+            ).replace(tzinfo=pytz.timezone(country_timezones['tw'][0]))
+
+    # 有効期限
+    if 'expiration' in data:
+        if type(data['expiration']) == str:
+            data['expiration'] = datetime.datetime.strptime(
+                data['expiration'].replace("UTC+8", "+08:00"),
+                '%Y-%m-%d %H:%M:%S (%z)'
+            ).replace(tzinfo=pytz.timezone(country_timezones['tw'][0]))
+
+    # 最終更新
+    if 'updated' in data:
+        if type(data['updated']) == str:
+            data['updated'] = datetime.datetime.strptime(
+                data['updated'].replace("UTC+8", "+08:00"),
+                '%Y-%m-%d %H:%M:%S (%z)'
+            ).replace(tzinfo=pytz.timezone(country_timezones['tw'][0]))
+
     return data
 </macro>
+
+
 
 
 ## Template
 ## =======================================================
 
-<group macro="reseller_address2parent, registrant_address2parent, admin_address2parent, tech_address2parent">
-Domain Name: {{ domain_name | lower | ORPHRASE }}
+<input macro="delete_empty_line" />
 
-Registry Domain ID: {{ registry_domain_id | lower }}
-Registrar WHOIS Server: {{ registrar_whois_server | lower }}
-Registrar URL: {{ registrar_whois_url | lower }}
+<group>
+Domain Name: {{ domain_name | ORPHRASE }}
+   Domain Status: {{ status | ORPHRASE }}
 
-Updated Date: {{ updated | ORPHRASE }}
-Creation Date: {{ creation | ORPHRASE }}
-Registrar Registration Expiration Date: {{ expiration | ORPHRASE }}
-
-Registrar: {{ registrar_name | ORPHRASE }}
-Registrar IANA ID: {{ registrar_id }}
-Registrar Abuse Contact Email: {{ registrar_email }}
-Registrar Abuse Contact Phone: {{ registrar_phone }}
-
-Reseller: {{ reseller_name | ORPHRASE }}
-<group name="reseller_address">
-Reseller Street Address: {{ reseller_address | ORPHRASE | joinmatches(" ") }}
-Reseller Other Address Info: {{ reseller_address | ORPHRASE | joinmatches(" ") }}
+<group name="registrant">
+   Registrant:{{ _start_ }}
+      {{ line | _line_ | to_list | joinmatches }}
+{{ _end_ }}
 </group>
-Reseller Country: {{ reseller_company | ORPHRASE | joinmatches(" ") }}
-Reseller Phone: {{ reseller_phone | ORPHRASE | joinmatches(" ") }}
-Reseller Fax: {{ reseller_fax | ORPHRASE | joinmatches(" ") }}
-Reseller Customer Service Email: {{ reseller_email | ORPHRASE | joinmatches(" ") }}
 
-Domain Status: {{ domain_status | ORPHRASE | joinmatches("\n") }}
-
-Registry Registrant ID: {{ registrant_id | ORPHRASE }}
-Registrant Name: {{ registrant_name | ORPHRASE }}
-Registrant Organization: {{ registrant_organization | ORPHRASE }}
-<group name="registrant_address">
-Registrant Street: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
-Registrant City: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
-Registrant State/Province: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
+<group name="admin">
+   Administrative Contact:{{ _start_ }}
+      {{ line | _line_ | to_list | joinmatches }}
+{{ _end_ }}
 </group>
-Registrant Postal Code: {{ registrant_zip_code | ORPHRASE }}
-Registrant Country: {{ registrant_country | ORPHRASE }}
-Registrant Phone: {{ registrant_phone | ORPHRASE }}
-Registrant Phone Ext: {{ registrant_phone_ext | ORPHRASE }}
-Registrant Fax: {{ registrant_fax | ORPHRASE }}
-Registrant Fax Ext: {{ registrant_fax_ext | ORPHRASE }}
-Registrant Email: {{ registrant_email | ORPHRASE }}
 
-Registry Admin ID: {{ admin_id | ORPHRASE }}
-Admin Name: {{ admin_name | ORPHRASE }}
-Admin Organization: {{ admin_organization | ORPHRASE }}
-<group name="admin_address">
-Admin Street: {{ admin_address | ORPHRASE | joinmatches(" ") }}
-Admin City: {{ admin_address | ORPHRASE | joinmatches(" ") }}
-Admin State/Province: {{ admin_address | ORPHRASE | joinmatches(" ") }}
+<group name="tech">
+   Technical Contact:{{ _start_ }}
+      {{ line | _line_ | to_list | joinmatches }}
+{{ _end_ }}
 </group>
-Admin Postal Code: {{ admin_zip_code | ORPHRASE }}
-Admin Country: {{ admin_country | ORPHRASE }}
-Admin Phone: {{ admin_phone | ORPHRASE }}
-Admin Phone Ext: {{ admin_phone_ext | ORPHRASE }}
-Admin Fax: {{ admin_fax | ORPHRASE }}
-Admin Fax Ext: {{ admin_fax_ext | ORPHRASE }}
-Admin Email: {{ admin_email | ORPHRASE }}
 
-Registry Tech ID: {{ tech_id | ORPHRASE }}
-Tech Name: {{ tech_name | ORPHRASE }}
-Tech Organization: {{ tech_organization | ORPHRASE }}
-<group name="tech_address">
-Tech Street: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-Tech City: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-Tech State/Province: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-</group>
-Tech Postal Code: {{ tech_zip_code | ORPHRASE }}
-Tech Country: {{ tech_country | ORPHRASE }}
-Tech Phone: {{ tech_phone | ORPHRASE }}
-Tech Phone Ext: {{ tech_phone_ext | ORPHRASE }}
-Tech Fax: {{ tech_fax | ORPHRASE }}
-Tech Fax Ext: {{ tech_fax_ext | ORPHRASE }}
-Tech Email: {{ tech_email | ORPHRASE }}
+   Record expires on {{ expiration | ORPHRASE }}
+   Record created on {{ created | ORPHRASE }}
 
-Registry Billing ID: {{ billing_id | ORPHRASE }}
-Billing Name: {{ billing_name | ORPHRASE }}
-Billing Organization: {{ billing_organization | ORPHRASE }}
-<group name="billing_address">
-Billing Street: {{ billing_address | ORPHRASE | joinmatches(" ") }}
-Billing City: {{ billing_address | ORPHRASE | joinmatches(" ") }}
-Billing State/Province: {{ billing_address | ORPHRASE | joinmatches(" ") }}
+<group name="name_servers">
+   Domain servers in listed order:{{ _start_ }}
+      {{ name_servers | lower | to_list | joinmatches }}
+{{ _end_ }}
 </group>
-Billing Postal Code: {{ billing_zip_code | ORPHRASE }}
-Billing Country: {{ billing_country | ORPHRASE }}
-Billing Phone: {{ billing_phone | ORPHRASE }}
-Billing Email:  {{ billing_email | ORPHRASE }}
 
-Name Server: {{ name_servers | ORPHRASE | to_list | joinmatches }}
-DNSSEC: {{ dnssec | ORPHRASE }}
-URL of the ICANN WHOIS Data Problem Reporting System: http://wdprs.internic.net/
+Registration Service Provider: {{ registrar_name | ORPHRASE }}
+Registration Service URL: {{ registrar_url | ORPHRASE }}
+
+Provided by Registry Services, LLC. Registry Gateway Services
+
+%%% end %%% {{ ignore }} %%% end %%%
 </group>
+
+
+<output macro="unpack" />

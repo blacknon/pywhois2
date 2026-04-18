@@ -7,133 +7,192 @@
 ## =======================================================
 
 <macro>
-def reseller_address2parent(data):
-    if 'reseller_address' in data:
-        extract_data = data['reseller_address']
-        if type(extract_data) == dict:
-            del data['reseller_address']
-            data['reseller_address'] = extract_data.get('reseller_address')
+def unpack(data):
+    while True:
+        if type(data) == list:
+            data = data[0]
+        else:
+            break
+
+    update_data = {}
+    for d in data:
+        if type(data[d]) == list:
+            if type(data[d][0]) == dict:
+                data[d] = data[d][0]
+
+        elif type(data[d]) == dict:
+            if not data[d]:
+                continue
+        update_data[d] = data[d]
+    data = update_data
+
+    if 'organization' in data:
+        data['registrant_organization'] = data['organization']
+        del data['organization']
+
+    if 'address' in data:
+        data['registrant_address'] = data['address']
+        del data['address']
+
+    if 'changed_lines' in data:
+        data['created'] = data['changed_lines'][0].split(' ')[-2]
+        data['updated'] = data['changed_lines'][-1].split(' ')[-2]
+
+        del data['changed_lines']
+
+    data = lookup(data)
+    data = str2datetime(data)
+
     return data
 
-def registrant_address2parent(data):
-    if 'registrant_address' in data:
-        extract_data = data['registrant_address']
-        if type(extract_data) == dict:
-            del data['registrant_address']
-            data['registrant_address'] = extract_data.get('registrant_address')
+def lookup(data):
+    admin_id = ''
+    tech_id = ''
+    zone_id = ''
+
+    if 'admin_id' in data:
+        admin_id = data['admin_id']
+        if admin_id in data:
+            extract_data = data[data['admin_id']]
+            del data['admin_id']
+
+            for d in extract_data:
+                data['admin_{0}'.format(d)] = extract_data[d]
+
+    if 'tech_id' in data:
+        tech_id = data['tech_id']
+        if tech_id in data:
+            extract_data = data[tech_id]
+            del data['tech_id']
+
+            for d in extract_data:
+                data['tech_{0}'.format(d)] = extract_data[d]
+
+    if 'zone_id' in data:
+        zone_id = data['zone_id']
+        if zone_id in data:
+            extract_data = data[zone_id]
+            del data['zone_id']
+
+            for d in extract_data:
+                data['zone_{0}'.format(d)] = extract_data[d]
+
+    if admin_id != '':
+        if admin_id in data:
+            del data[admin_id]
+
+    if tech_id != '':
+        if tech_id in data:
+            del data[tech_id]
+
+    if zone_id != '':
+        if zone_id in data:
+            del data[zone_id]
+
     return data
 
-def admin_address2parent(data):
-    if 'admin_address' in data:
-        extract_data = data['admin_address']
-        if type(extract_data) == dict:
-            del data['admin_address']
-            data['admin_address'] = extract_data.get('admin_address')
+def info_sep(data):
+    if 'info' in data:
+        data['organization'] = data['info'][0]
+        data['address'] = ", ".join(data['info'][1:])
+
+        del data['info']
+
     return data
 
-def tech_address2parent(data):
-    if 'tech_address' in data:
-        extract_data = data['tech_address']
-        if type(extract_data) == dict:
-            del data['tech_address']
-            data['tech_address'] = extract_data.get('tech_address')
+def str2datetime(data):
+    import datetime
+    import pytz
+    from pytz import country_timezones
+
+    # 登録年月日
+    if 'created' in data:
+        if type(data['created']) == str:
+            if len(data['created']) == 8:
+                data['created'] = datetime.datetime.strptime(
+                    data['created'],
+                    '%Y%m%d'
+                ).replace(tzinfo=pytz.timezone(country_timezones['hk'][0]))
+            else:
+                del data['created']
+
+    # 有効期限
+    if 'expiration' in data:
+        if type(data['expiration']) == str:
+            if len(data['expiration']) == 10:
+                data['expiration'] = datetime.datetime.strptime(
+                    data['expiration'],
+                    '%d-%m-%Y'
+                ).replace(tzinfo=pytz.timezone(country_timezones['hk'][0]))
+            else:
+                del data['expiration']
+
+    # 最終更新
+    if 'updated' in data:
+        if type(data['updated']) == str:
+            if len(data['updated']) == 8:
+                data['updated'] = datetime.datetime.strptime(
+                    data['updated'],
+                    '%Y%m%d'
+                ).replace(tzinfo=pytz.timezone(country_timezones['hk'][0]))
+            else:
+                del data['updated']
+
     return data
+
 </macro>
 
 
 ## Template
 ## =======================================================
 
-<group macro="reseller_address2parent, registrant_address2parent, admin_address2parent, tech_address2parent">
-Domain Name: {{ domain_name | lower | ORPHRASE }}
+% The data in the WHOIS database of the .il registry is provided
+% by ISOC-IL for information purposes, and to assist persons in
+% obtaining information about or related to a domain name
+% registration record. ISOC-IL does not guarantee its accuracy.
+% By submitting a WHOIS query, you agree that you will use this
+% Data only for lawful purposes and that, under no circumstances
+% will you use this Data to: (1) allow, enable, or otherwise
+% support the transmission of mass unsolicited, commercial
+% advertising or solicitations via e-mail (spam);
+% or  (2) enable high volume, automated, electronic processes that
+% apply to ISOC-IL (or its systems).
+% ISOC-IL reserves the right to modify these terms at any time.
+% By submitting this query, you agree to abide by this policy.
 
-Registry Domain ID: {{ registry_domain_id | lower }}
-Registrar WHOIS Server: {{ registrar_whois_server | lower }}
-Registrar URL: {{ registrar_whois_url | lower }}
+<group macro="info_sep">
+query:        {{ ignore }}
 
-Updated Date: {{ updated | ORPHRASE }}
-Creation Date: {{ creation | ORPHRASE }}
-Registrar Registration Expiration Date: {{ expiration | ORPHRASE }}
+reg-name:     {{ ignore }}
+domain:       {{ domain_name }}
 
-Registrar: {{ registrar_name | ORPHRASE }}
-Registrar IANA ID: {{ registrar_id }}
-Registrar Abuse Contact Email: {{ registrar_email }}
-Registrar Abuse Contact Phone: {{ registrar_phone }}
+descr:        {{ info | ORPHRASE | to_list | joinmatches }}
+phone:        {{ registrar_phone | ORPHRASE }}
+fax-no:       {{ registrar_fax | ORPHRASE }}
+e-mail:       {{ registrar_email | ORPHRASE }}
+admin-c:      {{ admin_id }}
+tech-c:       {{ tech_id }}
+zone-c:       {{ zone_id }}
+nserver:      {{ name_servers | lower | ORPHRASE | to_list | joinmatches }}
+validity:     {{ expiration | ORPHRASE }}
+DNSSEC:       {{ dnssec }}
+status:       {{ status | ORPHRASE }}
+changed:      {{ changed_lines | _line_ | to_list | joinmatches }}
 
-Reseller: {{ reseller_name | ORPHRASE }}
-<group name="reseller_address">
-Reseller Street Address: {{ reseller_address | ORPHRASE | joinmatches(" ") }}
-Reseller Other Address Info: {{ reseller_address | ORPHRASE | joinmatches(" ") }}
+<group name="{{ nic_hdl }}" macro="info_sep, str2datetime">
+person:       {{ name | ORPHRASE }}
+address      {{ info | ORPHRASE | to_list | joinmatches }}
+phone:        {{ phone | ORPHRASE }}
+fax-no:       {{ fax | ORPHRASE }}
+e-mail:       {{ email | ORPHRASE }}
+nic-hdl:      {{ nic_hdl }}
+changed:      Managing Registrar {{ updated | ORPHRASE }}
 </group>
-Reseller Country: {{ reseller_company | ORPHRASE | joinmatches(" ") }}
-Reseller Phone: {{ reseller_phone | ORPHRASE | joinmatches(" ") }}
-Reseller Fax: {{ reseller_fax | ORPHRASE | joinmatches(" ") }}
-Reseller Customer Service Email: {{ reseller_email | ORPHRASE | joinmatches(" ") }}
-
-Domain Status: {{ domain_status | ORPHRASE | joinmatches("\n") }}
-
-Registry Registrant ID: {{ registrant_id | ORPHRASE }}
-Registrant Name: {{ registrant_name | ORPHRASE }}
-Registrant Organization: {{ registrant_organization | ORPHRASE }}
-<group name="registrant_address">
-Registrant Street: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
-Registrant City: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
-Registrant State/Province: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
 </group>
-Registrant Postal Code: {{ registrant_zip_code | ORPHRASE }}
-Registrant Country: {{ registrant_country | ORPHRASE }}
-Registrant Phone: {{ registrant_phone | ORPHRASE }}
-Registrant Phone Ext: {{ registrant_phone_ext | ORPHRASE }}
-Registrant Fax: {{ registrant_fax | ORPHRASE }}
-Registrant Fax Ext: {{ registrant_fax_ext | ORPHRASE }}
-Registrant Email: {{ registrant_email | ORPHRASE }}
 
-Registry Admin ID: {{ admin_id | ORPHRASE }}
-Admin Name: {{ admin_name | ORPHRASE }}
-Admin Organization: {{ admin_organization | ORPHRASE }}
-<group name="admin_address">
-Admin Street: {{ admin_address | ORPHRASE | joinmatches(" ") }}
-Admin City: {{ admin_address | ORPHRASE | joinmatches(" ") }}
-Admin State/Province: {{ admin_address | ORPHRASE | joinmatches(" ") }}
-</group>
-Admin Postal Code: {{ admin_zip_code | ORPHRASE }}
-Admin Country: {{ admin_country | ORPHRASE }}
-Admin Phone: {{ admin_phone | ORPHRASE }}
-Admin Phone Ext: {{ admin_phone_ext | ORPHRASE }}
-Admin Fax: {{ admin_fax | ORPHRASE }}
-Admin Fax Ext: {{ admin_fax_ext | ORPHRASE }}
-Admin Email: {{ admin_email | ORPHRASE }}
+registrar name: Domain The Net Technologies Ltd
+registrar info: https://www.domainthenet.com
 
-Registry Tech ID: {{ tech_id | ORPHRASE }}
-Tech Name: {{ tech_name | ORPHRASE }}
-Tech Organization: {{ tech_organization | ORPHRASE }}
-<group name="tech_address">
-Tech Street: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-Tech City: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-Tech State/Province: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-</group>
-Tech Postal Code: {{ tech_zip_code | ORPHRASE }}
-Tech Country: {{ tech_country | ORPHRASE }}
-Tech Phone: {{ tech_phone | ORPHRASE }}
-Tech Phone Ext: {{ tech_phone_ext | ORPHRASE }}
-Tech Fax: {{ tech_fax | ORPHRASE }}
-Tech Fax Ext: {{ tech_fax_ext | ORPHRASE }}
-Tech Email: {{ tech_email | ORPHRASE }}
+% Rights to the data above are restricted by copyright.
 
-Registry Billing ID: {{ billing_id | ORPHRASE }}
-Billing Name: {{ billing_name | ORPHRASE }}
-Billing Organization: {{ billing_organization | ORPHRASE }}
-<group name="billing_address">
-Billing Street: {{ billing_address | ORPHRASE | joinmatches(" ") }}
-Billing City: {{ billing_address | ORPHRASE | joinmatches(" ") }}
-Billing State/Province: {{ billing_address | ORPHRASE | joinmatches(" ") }}
-</group>
-Billing Postal Code: {{ billing_zip_code | ORPHRASE }}
-Billing Country: {{ billing_country | ORPHRASE }}
-Billing Phone: {{ billing_phone | ORPHRASE }}
-Billing Email:  {{ billing_email | ORPHRASE }}
-
-Name Server: {{ name_servers | ORPHRASE | to_list | joinmatches }}
-DNSSEC: {{ dnssec | ORPHRASE }}
-URL of the ICANN WHOIS Data Problem Reporting System: http://wdprs.internic.net/
-</group>
+<output macro="unpack" />

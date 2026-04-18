@@ -3,14 +3,33 @@
 ## that can be found in the LICENSE file.
 ## =======================================================
 
+## Macro
+## =======================================================
+
+<macro>
+from stringcase import pascalcase, snakecase
+def standardize_status(data):
+    if 'status' in data:
+        if type(data['status']) == list:
+            extract_data = data['status']
+            del data['status']
+            data['status'] = {}
+
+            for d in extract_data:
+                data['status'][snakecase(d.lstrip())] = True
+
+    return data
+
+</macro>
+
 ## Template
 ## =======================================================
 
-<group>
+<group macro="standardize_status">
 Domain Name:                     {{ domain_name }}
 Registrar ID:                    {{ registrar_id | ORPHRASE }}
 Registrar Name:                  {{ registrar_name | ORPHRASE }}
-Status:                          {{ domain_status | ORPHRASE | joinmatches("\n") }}
+Status:                          {{ status | ORPHRASE | to_list | joinmatches }}
 
 Registrant Contact ID:           {{ registrant_id | ORPHRASE }}
 Registrant Contact Name:         {{ registrant_name | ORPHRASE }}

@@ -7,133 +7,144 @@
 ## =======================================================
 
 <macro>
-def reseller_address2parent(data):
-    if 'reseller_address' in data:
-        extract_data = data['reseller_address']
-        if type(extract_data) == dict:
-            del data['reseller_address']
-            data['reseller_address'] = extract_data.get('reseller_address')
+def domain_name2parent(data):
+    if 'domain_name' in data:
+        extract_data = data['domain_name']['domain_name']
+        if type(extract_data) == str:
+            del data['domain_name']
+            data['domain_name'] = extract_data
+
     return data
 
-def registrant_address2parent(data):
-    if 'registrant_address' in data:
-        extract_data = data['registrant_address']
-        if type(extract_data) == dict:
-            del data['registrant_address']
-            data['registrant_address'] = extract_data.get('registrant_address')
+def status2parent(data):
+    from stringcase import pascalcase, snakecase
+    if 'status' in data:
+        extract_data = data['status']['status']
+        if type(extract_data) == list:
+            del data['status']['status']
+
+            data['status'] = {}
+            for d in extract_data:
+                key = snakecase(d.lstrip().lower())
+                if key == "active":
+                    key = 'ok'
+                data['status'][key] = True
+
     return data
 
-def admin_address2parent(data):
-    if 'admin_address' in data:
-        extract_data = data['admin_address']
+def registrant_name2parent(data):
+    if 'registrant_name' in data:
+        extract_data = data['registrant_name']
         if type(extract_data) == dict:
-            del data['admin_address']
-            data['admin_address'] = extract_data.get('admin_address')
+            del data['registrant_name']
+            data['registrant_name'] = extract_data['registrant_name']
     return data
 
-def tech_address2parent(data):
-    if 'tech_address' in data:
-        extract_data = data['tech_address']
+def registrar_name2parent(data):
+    if 'registrar_name' in data:
+        extract_data = data['registrar_name']
         if type(extract_data) == dict:
-            del data['tech_address']
-            data['tech_address'] = extract_data.get('tech_address')
+            del data['registrar_name']
+            data['registrar_name'] = extract_data['registrar_name']
+            data['registrar_url'] = extract_data['registrar_url']
+
     return data
+
+def name_servers2parent(data):
+    if 'name_servers' in data:
+        extract_data = data['name_servers']['name_servers']
+        if type(extract_data) == list:
+            del data['name_servers']
+            data['name_servers'] = extract_data
+
+    return data
+
+def created_parse(data):
+    import datetime
+    import pytz
+    from pytz import country_timezones
+
+    if 'created' in data:
+        extract_data = data['created']['created']
+        del data['created']
+
+        extract_data_split = extract_data.split(" ")
+        day = extract_data_split[0][:2]
+        extract_data_split[0] = day
+        extract_data = " ".join(extract_data_split)
+
+        data['created'] = datetime.datetime.strptime(
+            "{0}{1}".format(extract_data,"000"),
+            '%d %B %Y at %H:%M:%S.%f'
+        ).replace(tzinfo=pytz.timezone(country_timezones['je'][0]))
+
+    return data
+
 </macro>
 
 
 ## Template
 ## =======================================================
 
-<group macro="reseller_address2parent, registrant_address2parent, admin_address2parent, tech_address2parent">
-Domain Name: {{ domain_name | lower | ORPHRASE }}
+<group macro="domain_name2parent, status2parent, registrant_name2parent, registrar_name2parent, name_servers2parent, created_parse" del="__ignore_whois__, __ignore_year__, __ignore_date__">
+%%% start %%% {{ __ignore_whois__ }} %%% start %%%
 
-Registry Domain ID: {{ registry_domain_id | lower }}
-Registrar WHOIS Server: {{ registrar_whois_server | lower }}
-Registrar URL: {{ registrar_whois_url | lower }}
-
-Updated Date: {{ updated | ORPHRASE }}
-Creation Date: {{ creation | ORPHRASE }}
-Registrar Registration Expiration Date: {{ expiration | ORPHRASE }}
-
-Registrar: {{ registrar_name | ORPHRASE }}
-Registrar IANA ID: {{ registrar_id }}
-Registrar Abuse Contact Email: {{ registrar_email }}
-Registrar Abuse Contact Phone: {{ registrar_phone }}
-
-Reseller: {{ reseller_name | ORPHRASE }}
-<group name="reseller_address">
-Reseller Street Address: {{ reseller_address | ORPHRASE | joinmatches(" ") }}
-Reseller Other Address Info: {{ reseller_address | ORPHRASE | joinmatches(" ") }}
+<group name="domain_name">
+Domain:{{ _start_ }}
+     {{ domain_name | strip(' ') | ORPHRASE }}
 </group>
-Reseller Country: {{ reseller_company | ORPHRASE | joinmatches(" ") }}
-Reseller Phone: {{ reseller_phone | ORPHRASE | joinmatches(" ") }}
-Reseller Fax: {{ reseller_fax | ORPHRASE | joinmatches(" ") }}
-Reseller Customer Service Email: {{ reseller_email | ORPHRASE | joinmatches(" ") }}
 
-Domain Status: {{ domain_status | ORPHRASE | joinmatches("\n") }}
-
-Registry Registrant ID: {{ registrant_id | ORPHRASE }}
-Registrant Name: {{ registrant_name | ORPHRASE }}
-Registrant Organization: {{ registrant_organization | ORPHRASE }}
-<group name="registrant_address">
-Registrant Street: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
-Registrant City: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
-Registrant State/Province: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
+<group name="status">
+Domain Status:{{ _start_ }}
+     {{ status | strip(' ') | ORPHRASE | to_list | joinmatches }}
 </group>
-Registrant Postal Code: {{ registrant_zip_code | ORPHRASE }}
-Registrant Country: {{ registrant_country | ORPHRASE }}
-Registrant Phone: {{ registrant_phone | ORPHRASE }}
-Registrant Phone Ext: {{ registrant_phone_ext | ORPHRASE }}
-Registrant Fax: {{ registrant_fax | ORPHRASE }}
-Registrant Fax Ext: {{ registrant_fax_ext | ORPHRASE }}
-Registrant Email: {{ registrant_email | ORPHRASE }}
 
-Registry Admin ID: {{ admin_id | ORPHRASE }}
-Admin Name: {{ admin_name | ORPHRASE }}
-Admin Organization: {{ admin_organization | ORPHRASE }}
-<group name="admin_address">
-Admin Street: {{ admin_address | ORPHRASE | joinmatches(" ") }}
-Admin City: {{ admin_address | ORPHRASE | joinmatches(" ") }}
-Admin State/Province: {{ admin_address | ORPHRASE | joinmatches(" ") }}
+<group name="registrant_name">
+Registrant:{{ _start_ }}
+     {{ registrant_name | ORPHRASE }}
 </group>
-Admin Postal Code: {{ admin_zip_code | ORPHRASE }}
-Admin Country: {{ admin_country | ORPHRASE }}
-Admin Phone: {{ admin_phone | ORPHRASE }}
-Admin Phone Ext: {{ admin_phone_ext | ORPHRASE }}
-Admin Fax: {{ admin_fax | ORPHRASE }}
-Admin Fax Ext: {{ admin_fax_ext | ORPHRASE }}
-Admin Email: {{ admin_email | ORPHRASE }}
 
-Registry Tech ID: {{ tech_id | ORPHRASE }}
-Tech Name: {{ tech_name | ORPHRASE }}
-Tech Organization: {{ tech_organization | ORPHRASE }}
-<group name="tech_address">
-Tech Street: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-Tech City: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-Tech State/Province: {{ tech_address | ORPHRASE | joinmatches(" ") }}
+<group name="registrar_name">
+Registrar:{{ _start_ }}
+     {{ registrar_name | ORPHRASE }} ({{ registrar_url }})
 </group>
-Tech Postal Code: {{ tech_zip_code | ORPHRASE }}
-Tech Country: {{ tech_country | ORPHRASE }}
-Tech Phone: {{ tech_phone | ORPHRASE }}
-Tech Phone Ext: {{ tech_phone_ext | ORPHRASE }}
-Tech Fax: {{ tech_fax | ORPHRASE }}
-Tech Fax Ext: {{ tech_fax_ext | ORPHRASE }}
-Tech Email: {{ tech_email | ORPHRASE }}
 
-Registry Billing ID: {{ billing_id | ORPHRASE }}
-Billing Name: {{ billing_name | ORPHRASE }}
-Billing Organization: {{ billing_organization | ORPHRASE }}
-<group name="billing_address">
-Billing Street: {{ billing_address | ORPHRASE | joinmatches(" ") }}
-Billing City: {{ billing_address | ORPHRASE | joinmatches(" ") }}
-Billing State/Province: {{ billing_address | ORPHRASE | joinmatches(" ") }}
+<group name="created">
+Relevant dates:{{ _start_ }}
+     Registered on {{ created | ORPHRASE }}
 </group>
-Billing Postal Code: {{ billing_zip_code | ORPHRASE }}
-Billing Country: {{ billing_country | ORPHRASE }}
-Billing Phone: {{ billing_phone | ORPHRASE }}
-Billing Email:  {{ billing_email | ORPHRASE }}
 
-Name Server: {{ name_servers | ORPHRASE | to_list | joinmatches }}
-DNSSEC: {{ dnssec | ORPHRASE }}
-URL of the ICANN WHOIS Data Problem Reporting System: http://wdprs.internic.net/
+<group name="registration_status_group">
+Registration status:{{ _start_ }}
+     {{ registration_status | ORPHRASE }}
+</group>
+
+<group name="name_servers">
+Name servers:{{ _start_ }}
+     {{ name_servers | ORPHRASE | to_list | joinmatches }}
+</group>
+
+
+WHOIS lookup made on {{ __ignore_date__ }}
+This WHOIS information is provided for free by CIDR, operator of
+the backend registry for domain names ending in GG, JE, and AS.
+
+Copyright (c) and database right AS Domain Registry 1997 - {{ __ignore_year__ }}.
+
+You may not access this WHOIS server or use any data from it except
+as permitted by our Terms and Conditions which are published
+at http://www.channelisles.net/legal/whoisterms
+
+They include restrictions and prohibitions on
+
+- using or re-using the data for advertising;
+- using or re-using the service for commercial purposes without a licence;
+- repackaging, recompilation, redistribution or reuse;
+- obscuring, removing or hiding any or all of this notice;
+- exceeding query rate or volume limits.
+
+The data is provided on an 'as-is' basis and may lag behind the
+register. Access may be withdrawn or restricted at any time.
+
+%%% end %%% {{ __ignore_whois__ }} %%% end %%%
 </group>

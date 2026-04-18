@@ -44,50 +44,61 @@ class JPWhoisTemplateTest(unittest.TestCase):
     def test_jp_template_parses_generic_jp_response(self):
         result = parse_fixture("jp.tpl", "jp_whois.txt")
 
-        self.assertEqual(result["domain_name"], "example.jp")
+        self.assertEqual(result["domain_name"], "jprs.jp")
         self.assertEqual(
             [name.lower() for name in result["name_servers"]],
-            ["ns1.example.jp", "ns2.example.jp"],
+            ["ns1.jprs.jp", "ns2.jprs.jp", "ns3.jprs.jp", "ns4.jprs.jp"],
         )
-        self.assertEqual(result["registrant_name_local"], "株式会社サンプル")
-        self.assertEqual(result["registrant_name"], "Example Inc.")
-        self.assertEqual(result["contact_email"], "admin@example.jp")
+        self.assertEqual(result["registrant_name"], "Japan Registry Services Co.,Ltd.")
+        self.assertEqual(result["contact_name"], "Japan Registry Services Co.,Ltd.")
+        self.assertEqual(result["contact_email"], "email@jprs.co.jp")
+        self.assertEqual(result["status_text"], "Active")
+        self.assertTrue(result["status"]["ok"])
         self.assertEqual(
             result["creation"],
-            datetime.datetime(2024, 1, 2, 0, 0, tzinfo=datetime.timezone(datetime.timedelta(hours=9))),
+            datetime.datetime(2001, 2, 2, 0, 0, tzinfo=datetime.timezone(datetime.timedelta(hours=9))),
         )
         self.assertEqual(
             result["expiration"],
-            datetime.datetime(2025, 1, 31, 0, 0, tzinfo=datetime.timezone(datetime.timedelta(hours=9))),
+            datetime.datetime(2027, 2, 28, 0, 0, tzinfo=datetime.timezone(datetime.timedelta(hours=9))),
         )
         self.assertEqual(
             result["updated"],
-            datetime.datetime(2024, 2, 3, 4, 5, 6, tzinfo=datetime.timezone(datetime.timedelta(hours=9))),
+            datetime.datetime(2026, 3, 1, 1, 5, 3, tzinfo=datetime.timezone(datetime.timedelta(hours=9))),
         )
 
     def test_xx_jp_template_parses_organizational_jp_response(self):
         result = parse_fixture("xx.jp.tpl", "co_jp_whois.txt")
 
-        self.assertEqual(result["domain_name"], "example.co.jp")
+        self.assertEqual(result["domain_name"], "jprs.co.jp")
         self.assertEqual(
             [name.lower() for name in result["name_servers"]],
-            ["ns1.example.co.jp", "ns2.example.co.jp"],
+            ["ns1.jprs.co.jp", "ns2.jprs.co.jp", "ns3.jprs.co.jp", "ns4.jprs.co.jp"],
         )
-        self.assertEqual(result["registrant_organization_local"], "株式会社サンプル")
-        self.assertEqual(result["registrant_organization"], "Example Corporation")
-        self.assertEqual(result["registrant_name"], "AA123JP")
-        self.assertEqual(result["tech_name"], "BB123JP")
-        self.assertEqual(result["admin_name"], "CC123JP")
-        self.assertEqual(result["contact_phone"], "+81.3.1234.5678")
+        self.assertEqual(result["registrant_organization"], "Japan Registry Services Co.,Ltd.")
+        self.assertEqual(result["registrant_name"], "SO42861JP")
+        self.assertEqual(result["tech_name"], "KI59866JP")
+        self.assertEqual(result["registrant_organization_type"], "Company")
+        self.assertEqual(result["status_text"], "Connected (2027/01/31)")
+        self.assertTrue(result["status"]["ok"])
+        self.assertTrue(result["status"]["connected"])
+        self.assertEqual(
+            result["connected"],
+            datetime.datetime(2001, 1, 24, 0, 0, tzinfo=datetime.timezone(datetime.timedelta(hours=9))),
+        )
+        self.assertEqual(
+            result["creation"],
+            datetime.datetime(2001, 1, 22, 0, 0, tzinfo=datetime.timezone(datetime.timedelta(hours=9))),
+        )
         self.assertEqual(
             result["updated"],
-            datetime.datetime(2024, 2, 3, 4, 5, 6, tzinfo=datetime.timezone(datetime.timedelta(hours=9))),
+            datetime.datetime(2026, 2, 1, 1, 2, 4, tzinfo=datetime.timezone(datetime.timedelta(hours=9))),
         )
 
-    def test_jprs_queries_request_english_output(self):
+    def test_jprs_queries_preserve_raw_target(self):
         self.assertEqual(
             build_whois_query("example.jp", "whois.jprs.jp"),
-            b"example.jp/e\r\n",
+            b"example.jp\r\n",
         )
         self.assertEqual(
             build_whois_query("example.co.jp/e", "whois.jprs.jp"),

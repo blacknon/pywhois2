@@ -7,50 +7,78 @@
 ## =======================================================
 
 <macro>
+def standardize_status(data):
+    if 'status' in data and isinstance(data['status'], str):
+        expiration = ' '.join(data['status'].split(" ")[:-1]) or data['status']
+        data['status_text'] = data['status']
+        data['status'] = {
+            "ok": False,
+            "registered": False,
+            "connected": False,
+            "user_reserved": False,
+            "advance_registered": False,
+            "renamed": False,
+            "to_be_deleted": False,
+            "deleted": False,
+            "negotiated": False,
+        }
+
+        if expiration == 'Registered':
+            data['status']['ok'] = True
+            data['status']['registered'] = True
+        elif expiration == 'Connected':
+            data['status']['ok'] = True
+            data['status']['connected'] = True
+        elif expiration == 'User-Reserved':
+            data['status']['user_reserved'] = True
+        elif expiration == 'Advance-Registered':
+            data['status']['advance_registered'] = True
+        elif expiration == 'Renamed':
+            data['status']['renamed'] = True
+        elif expiration == 'To be deleted':
+            data['status']['to_be_deleted'] = True
+        elif expiration == 'Deleted':
+            data['status']['deleted'] = True
+        elif expiration == 'Negotiated':
+            data['status']['negotiated'] = True
+
+    return data
+
 def contact_address2parent(data):
-    if 'contact_address' in data:
+    if 'contact_address' in data and isinstance(data['contact_address'], list):
         extract_data = data['contact_address']
         del data['contact_address']
         for d in extract_data:
-            for k in d.keys():
-                data[k] = d[k]
+            if isinstance(d, dict):
+                for k in d.keys():
+                    data[k] = d[k]
     return data
 
 def registrant_address2parent(data):
-    if 'registrant_address' in data:
+    if 'registrant_address' in data and isinstance(data['registrant_address'], list):
         extract_data = data['registrant_address']
         del data['registrant_address']
         for d in extract_data:
-            for k in d.keys():
-                data[k] = d[k]
+            if isinstance(d, dict):
+                for k in d.keys():
+                    data[k] = d[k]
     return data
 
 def str2datetime(data):
     import datetime
 
-    # 登録年月日
-    if 'creation' in data:
-        if type(data['creation']) == str:
-            data['creation'] = datetime.datetime.strptime(
-                "{0} {1}".format(data['creation'], "+0900"),
+    for key in ('creation', 'connected', 'expiration'):
+        if key in data and isinstance(data[key], str):
+            data[key] = datetime.datetime.strptime(
+                "{0} {1}".format(data[key], "+0900"),
                 '%Y/%m/%d %z'
             )
 
-    # 有効期限
-    if 'expiration' in data:
-        if type(data['expiration']) == str:
-            data['expiration'] = datetime.datetime.strptime(
-                "{0} {1}".format(data['expiration'], "+0900"),
-                '%Y/%m/%d %z'
-            )
-
-    # 最終更新
-    if 'updated' in data:
-        if type(data['updated']) == str:
-            data['updated'] = datetime.datetime.strptime(
-                data['updated'].replace("JST", "+0900"),
-                '%Y/%m/%d %H:%M:%S (%z)'
-            )
+    if 'updated' in data and isinstance(data['updated'], str):
+        data['updated'] = datetime.datetime.strptime(
+            data['updated'].replace("JST", "+0900"),
+            '%Y/%m/%d %H:%M:%S (%z)'
+        )
 
     return data
 </macro>
@@ -64,39 +92,46 @@ def str2datetime(data):
 [ use 'whois -h whois.jprs.jp help'. To suppress Japanese output, add'/e'     ]
 [ at the end of command, e.g. 'whois -h whois.jprs.jp xxx/e'.                 ]
 
-<group macro="contact_address2parent, registrant_address2parent, str2datetime">
+<group macro="standardize_status, contact_address2parent, registrant_address2parent, str2datetime">
 Domain Information: [ドメイン情報]
 a. [ドメイン名]                   {{ domain_name | lower }}
+a. [Domain Name]                {{ domain_name | lower }}
 b. [ねっとわーくさーびすめい]         {{ registrant_organization_local2 | ORPHRASE }}
 c. [ネットワークサービス名]          {{ registrant_organization_local | ORPHRASE }}
 d. [Network Service Name]       {{ registrant_organization | ORPHRASE }}
 e. [そしきめい]                    {{ registrant_organization_local2 | ORPHRASE }}
-f. [組織名]	                      {{ registrant_organization_local | ORPHRASE }}
+f. [組織名]                       {{ registrant_organization_local | ORPHRASE }}
 g. [Organization]               {{ registrant_organization | ORPHRASE }}
-h. [郵便番号]                     {{ registrant_zip_code }}
+h. [郵便番号]                     {{ registrant_zip_code | ORPHRASE }}
 <group name="registrant_address">
-i. [住所]                        {{ registrant_address_local | ORPHRASE  | joinmatches(" ") }}
-                                {{ registrant_address_local | strip(' ') | ORPHRASE  | joinmatches(" ") }}
+i. [住所]                        {{ registrant_address_local | ORPHRASE | joinmatches(" ") }}
+                                {{ registrant_address_local | strip(' ') | ORPHRASE | joinmatches(" ") }}
 </group>
 <group name="registrant_address">
-j. [Address]                    {{ registrant_address | ORPHRASE  | joinmatches(", ") }}
-                                {{ registrant_address | ORPHRASE  | joinmatches(", ") }}
+j. [Address]                    {{ registrant_address | ORPHRASE | joinmatches(", ") }}
+                                {{ registrant_address | strip(' ') | ORPHRASE | joinmatches(", ") }}
 </group>
 k. [組織種別]                     {{ registrant_organization_type_local | ORPHRASE }}
 l. [Organization Type]          {{ registrant_organization_type | ORPHRASE }}
-m. [登録担当者]                    {{ registrant_name }}
-n. [技術連絡担当者]                 {{ tech_name }}
-o. [サービス提供者名]               {{ admin_name }}
+m. [登録担当者]                    {{ registrant_name | ORPHRASE }}
+m. [Administrative Contact]     {{ registrant_name | ORPHRASE }}
+n. [技術連絡担当者]                 {{ tech_name | ORPHRASE }}
+n. [Technical Contact]          {{ tech_name | ORPHRASE }}
+o. [サービス提供者名]               {{ admin_name | ORPHRASE }}
 p. [ネームサーバ]                  {{ name_servers | ORPHRASE | to_list | joinmatches }}
-t. [代表法人名]                    {{ registrant_representative_corporation | ORPHRASE }}
-w. [代表者名]                     {{ registrant_representative | ORPHRASE }}
-u. [副代表法人名]                  {{ registrant_deputy_representative_corporation | ORPHRASE }}
-x. [副代表者名]                    {{ registrant_deputy_representative | ORPHRASE }}
-y. [通知アドレス]                  {{ registrant_email }}
+p. [Name Server]                {{ name_servers | ORPHRASE | to_list | joinmatches }}
+s. [署名鍵]                      {{ signing_key | ORPHRASE }}
+s. [Signing Key]                {{ signing_key | ORPHRASE }}
 [登録年月日]                      {{ creation | ORPHRASE }}
+[Registered Date]               {{ creation | ORPHRASE }}
+[接続年月日]                      {{ connected | ORPHRASE }}
+[Connected Date]                {{ connected | ORPHRASE }}
 [有効期限]                        {{ expiration | ORPHRASE }}
 [状態]                           {{ status | ORPHRASE }}
+[State]                         {{ status | ORPHRASE }}
+[Lock Status]                   {{ lock_status | ORPHRASE | to_list | joinmatches }}
 [最終更新]                        {{ updated | ORPHRASE }}
+[Last Update]                   {{ updated | ORPHRASE }}
 
 Contact Information: [公開連絡窓口]
 [名前]                           {{ contact_name_local | ORPHRASE }}
@@ -106,11 +141,11 @@ Contact Information: [公開連絡窓口]
 [郵便番号]                        {{ contact_zip_code | ORPHRASE }}
 <group name="contact_address">
 [住所]                           {{ contact_address_local | ORPHRASE | joinmatches(" ") }}
-                                {{ contact_address_local | strip(' ') | ORPHRASE  | joinmatches(" ") }}
+                                {{ contact_address_local | strip(' ') | ORPHRASE | joinmatches(" ") }}
 </group>
 <group name="contact_address">
 [Postal Address]                {{ contact_address | ORPHRASE | joinmatches(", ") }}
-                                {{ contact_address | strip(' ') | ORPHRASE  | joinmatches(", ") }}
+                                {{ contact_address | strip(' ') | ORPHRASE | joinmatches(", ") }}
 </group>
 [電話番号]                        {{ contact_phone | ORPHRASE }}
 [FAX番号]                        {{ contact_fax | ORPHRASE }}

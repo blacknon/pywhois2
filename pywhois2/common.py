@@ -1,4 +1,5 @@
 import ipaddress
+import re
 from pathlib import Path
 from typing import Any, Dict
 from urllib.parse import urlparse
@@ -103,3 +104,145 @@ def json_serial(obj: Any) -> str:
     if isinstance(obj, (datetime, date)):
         return obj.strftime("%Y/%m/%d %H:%M:%S %z")
     raise TypeError(f"Type {type(obj)} not serializable")
+
+
+def normalize_result_keys(data: Any) -> Any:
+    if isinstance(data, list):
+        return [normalize_result_keys(item) for item in data]
+
+    if not isinstance(data, dict):
+        return data
+
+    normalized = {key: normalize_result_keys(value) for key, value in data.items()}
+
+    if "created" in normalized and "creation" not in normalized:
+        normalized["creation"] = normalized["created"]
+    if "creation" in normalized and "created" not in normalized:
+        normalized["created"] = normalized["creation"]
+
+    if "domain_names" in normalized and "domain_name" not in normalized:
+        normalized["domain_name"] = normalized["domain_names"]
+
+    return normalized
+
+
+def parse_nominet_uk_response(text: str) -> Dict[str, Any]:
+    if "Domain name:" not in text or "Name servers:" not in text:
+        return {}
+
+    result: Dict[str, Any] = {}
+
+    def capture(pattern: str, flags: int = 0) -> str | None:
+        match = re.search(pattern, text, flags)
+        if not match:
+            return None
+        return match.group(1).strip()
+
+    domain_name = capture(r"^\s*Domain name:\s*\n\s+(.+)$", re.MULTILINE)
+    if domain_name:
+        result["domain_name"] = domain_name.lower()
+
+    registrant_name = capture(r"^\s*Registrant:\s*\n\s+(.+)$", re.MULTILINE)
+    if registrant_name:
+        result["registrant_name"] = registrant_name
+
+    registrant_type = capture(r"^\s*Registrant type:\s*\n\s+(.+)$", re.MULTILINE)
+    if registrant_type:
+        result["registrant_type"] = registrant_type
+
+    address_block = capture(
+        r"^\s*Registrant's address:\s*\n((?:\s+.+\n)+?)\n\s*Registrar:",
+        re.MULTILINE,
+    )
+    if address_block:
+        lines = [line.strip() for line in address_block.splitlines() if line.strip()]
+        if lines:
+            result["registrant_address"] = ", ".join(lines)
+
+    registrar_block = capture(r"^\s*Registrar:\s*\n((?:\s+.+\n)+?)\n\s*Relevant dates:", re.MULTILINE)
+    if registrar_block:
+        lines = [line.strip() for line in registrar_block.splitlines() if line.strip()]
+        if lines:
+            result["registrar_name"] = " ".join(lines[0].split())
+        for line in lines[1:]:
+            if line.startswith("URL:"):
+                result["registrar_url"] = line.removeprefix("URL:").strip()
+
+    dates_block = capture(r"^\s*Relevant dates:\s*\n((?:\s+.+\n)+?)\n\s*Registration status:", re.MULTILINE)
+    if dates_block:
+        for line in (line.strip() for line in dates_block.splitlines()):
+            if line.startswith("Registered on:"):
+                result["created"] = line.removeprefix("Registered on:").strip()
+            elif line.startswith("Expiry date:"):
+                result["expiration"] = line.removeprefix("Expiry date:").strip()
+            elif line.startswith("Last updated:"):
+                result["updated"] = line.removeprefix("Last updated:").strip()
+
+    status_text = capture(r"^\s*Registration status:\s*\n\s+(.+)$", re.MULTILINE)
+    if status_text:
+        result["status_text"] = status_text
+
+    nameserver_block = capture(r"^\s*Name servers:\s*\n((?:\s+.+\n)+?)\n\s*WHOIS lookup made", re.MULTILINE)
+    if nameserver_block:
+        name_servers = []
+        for line in nameserver_block.splitlines():
+            stripped = line.strip()
+            if not stripped:
+                continue
+            host = stripped.split()[0].rstrip(".").lower()
+            if host:
+                name_servers.append(host)
+        if name_servers:
+            result["name_servers"] = name_servers
+
+    return result
+
+
+def parse_jprs_no_match_response(text: str, target: str) -> Dict[str, Any]:
+    if "No match!!" not in text:
+        return {}
+
+    result: Dict[str, Any] = {
+        "domain_name": target.lower(),
+        "status_text": "No match!!",
+        "available": True,
+    }
+
+    if "JPRS WHOIS" in text:
+        result["parser_note"] = "JPRS no-match response"
+
+    return result
+
+
+def parse_generic_no_match_response(text: str, target: str) -> Dict[str, Any]:
+    patterns = (
+        "No match for ",
+        "Domain not found.",
+        "The requested domain was not found in the Registry or Registrar",
+        "The queried object does not exist: no matching objects found",
+        "NOT FOUND",
+        "No entries found",
+        "No Data Found",
+    )
+
+    status_text = None
+    for line in text.splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if any(pattern in stripped for pattern in patterns):
+            status_text = stripped
+            break
+
+    if status_text is None and "登録されていません" in text:
+        status_text = "Domain is not registered."
+
+    if status_text is None:
+        return {}
+
+    return {
+        "domain_name": target.lower(),
+        "status_text": status_text,
+        "available": True,
+        "parser_note": "Generic no-match response",
+    }

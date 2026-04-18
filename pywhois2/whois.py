@@ -5,7 +5,16 @@ import ttp
 from tld import get_tld
 
 from .whois_request import whois_request
-from .common import extract_domain, is_ipaddress, load_data_yaml, resolve_template_paths
+from .common import (
+    extract_domain,
+    is_ipaddress,
+    load_data_yaml,
+    parse_generic_no_match_response,
+    normalize_result_keys,
+    parse_jprs_no_match_response,
+    parse_nominet_uk_response,
+    resolve_template_paths,
+)
 
 
 PACKAGE_DIR = Path(__file__).resolve().parent
@@ -71,6 +80,15 @@ class Whois:
                 f"(configured={templates}, missing={missing_templates}, target={self.target}, server={server})"
             )
 
+        if server == "whois.jprs.jp":
+            fallback = parse_jprs_no_match_response(res, self.target)
+            if fallback:
+                return normalize_result_keys(fallback)
+
+        generic_fallback = parse_generic_no_match_response(res, self.target)
+        if generic_fallback:
+            return normalize_result_keys(generic_fallback)
+
         for template_path in template_paths:
             template = template_path.read_text(encoding="utf-8").rstrip()
             parser = ttp.ttp(res, template, log_level="DEBUG" if self.is_debug else "ERROR")
@@ -86,4 +104,9 @@ class Whois:
                 f"resolved={[path.name for path in template_paths]}, missing={missing_templates}"
             )
 
-        return result[0]
+        normalized_result = normalize_result_keys(result[0])
+        if server == "whois.nic.uk" and not normalized_result.get("domain_name"):
+            fallback = parse_nominet_uk_response(res)
+            if fallback:
+                return normalize_result_keys(fallback)
+        return normalized_result

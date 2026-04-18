@@ -1,0 +1,5 @@
+The queried object does not exist: no matching objects found
+>>> Last update of Whois database: 2026-04-18T02:16:48.251Z <<<
+Condicions d'ús
+
+The data in this record is provided by Andorra Telecom.

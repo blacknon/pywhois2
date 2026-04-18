@@ -7,36 +7,133 @@
 ## =======================================================
 
 <macro>
-def reseller_address2parent(data):
-    if 'reseller_address' in data:
-        extract_data = data['reseller_address']
-        if type(extract_data) == dict:
-            del data['reseller_address']
-            data['reseller_address'] = extract_data.get('reseller_address')
+def unpack(data):
+    while True:
+        if type(data) == list:
+            data = data[0]
+        else:
+            break
+
+    update_data = {}
+    for d in data:
+        if type(data[d]) == list:
+            if type(data[d][0]) == dict:
+                data[d] = data[d][0]
+
+        elif type(data[d]) == dict:
+            if not data[d]:
+                continue
+        update_data[d] = data[d]
+    data = update_data
+
+    data = lookup(data)
+
     return data
 
-def registrant_address2parent(data):
-    if 'registrant_address' in data:
-        extract_data = data['registrant_address']
-        if type(extract_data) == dict:
-            del data['registrant_address']
-            data['registrant_address'] = extract_data.get('registrant_address')
+def lookup(data):
+    registrant_id = ''
+    admin_id = ''
+    tech_id = ''
+    zone_id = ''
+    billing_id = ''
+
+    if 'registrant_id' in data:
+        registrant_id = data['registrant_id']
+        if registrant_id in data:
+            extract_data = data[registrant_id]
+            del data['registrant_id']
+
+            for d in extract_data:
+                data['registrant_{0}'.format(d)] = extract_data[d]
+
+    if 'admin_id' in data:
+        admin_id = data['admin_id']
+        if admin_id in data:
+            extract_data = data[data['admin_id']]
+            del data['admin_id']
+
+            for d in extract_data:
+                data['admin_{0}'.format(d)] = extract_data[d]
+
+    if 'tech_id' in data:
+        tech_id = data['tech_id']
+        if tech_id in data:
+            extract_data = data[tech_id]
+            del data['tech_id']
+
+            for d in extract_data:
+                data['tech_{0}'.format(d)] = extract_data[d]
+
+    if 'zone_id' in data:
+        zone_id = data['zone_id']
+        if zone_id in data:
+            extract_data = data[zone_id]
+            del data['zone_id']
+
+            for d in extract_data:
+                data['zone_{0}'.format(d)] = extract_data[d]
+
+    if 'billing_id' in data:
+        billing_id = data['billing_id']
+        if billing_id in data:
+            extract_data = data[billing_id]
+            del data['billing_id']
+
+            for d in extract_data:
+                data['billing_{0}'.format(d)] = extract_data[d]
+
+    if registrant_id != '':
+        if registrant_id in data:
+            del data[registrant_id]
+
+    if admin_id != '':
+        if admin_id in data:
+            del data[admin_id]
+
+    if tech_id != '':
+        if tech_id in data:
+            del data[tech_id]
+
+    if zone_id != '':
+        if zone_id in data:
+            del data[zone_id]
+
+    if billing_id != '':
+        if billing_id in data:
+            del data[billing_id]
+
     return data
 
-def admin_address2parent(data):
-    if 'admin_address' in data:
-        extract_data = data['admin_address']
-        if type(extract_data) == dict:
-            del data['admin_address']
-            data['admin_address'] = extract_data.get('admin_address')
-    return data
 
-def tech_address2parent(data):
-    if 'tech_address' in data:
-        extract_data = data['tech_address']
-        if type(extract_data) == dict:
-            del data['tech_address']
-            data['tech_address'] = extract_data.get('tech_address')
+def str2datetime(data):
+    import datetime
+    import pytz
+    from pytz import country_timezones
+
+    # 登録年月日
+    if 'created' in data:
+        if type(data['created']) == str:
+            data['created'] = datetime.datetime.strptime(
+                data['created'],
+                '%B %d %Y'
+            ).replace(tzinfo=pytz.timezone(country_timezones['is'][0]))
+
+    # 有効期限
+    if 'expiration' in data:
+        if type(data['expiration']) == str:
+            data['expiration'] = datetime.datetime.strptime(
+                data['expiration'],
+                '%B %d %Y'
+            ).replace(tzinfo=pytz.timezone(country_timezones['is'][0]))
+
+    # 最終更新
+    if 'updated' in data:
+        if type(data['updated']) == str:
+            data['updated'] = datetime.datetime.strptime(
+                data['updated'],
+                '%B %d %Y'
+            ).replace(tzinfo=pytz.timezone(country_timezones['is'][0]))
+
     return data
 </macro>
 
@@ -44,96 +141,47 @@ def tech_address2parent(data):
 ## Template
 ## =======================================================
 
-<group macro="reseller_address2parent, registrant_address2parent, admin_address2parent, tech_address2parent">
-Domain Name: {{ domain_name | lower | ORPHRASE }}
+% This is the ISNIC Whois server.
+%
+% Rights restricted by copyright.
+% See https://www.isnic.is/en/about/copyright
 
-Registry Domain ID: {{ registry_domain_id | lower }}
-Registrar WHOIS Server: {{ registrar_whois_server | lower }}
-Registrar URL: {{ registrar_whois_url | lower }}
+<group macro="str2datetime">
+domain:       {{ domain_name }}
+registrant:   {{ registrant_id }}
+admin-c:      {{ admin_id }}
+tech-c:       {{ tech_id }}
+zone-c:       {{ zone_id }}
+billing-c:    {{ billing_id }}
+nserver:      {{ name_servers | ORPHRASE | to_list | joinmatches }}
+dnssec:       {{ dnssec | ORPHRASE }}
+created:      {{ created | ORPHRASE }}
+expires:      {{ expiration | ORPHRASE }}
+source:       ISNIC
 
-Updated Date: {{ updated | ORPHRASE }}
-Creation Date: {{ creation | ORPHRASE }}
-Registrar Registration Expiration Date: {{ expiration | ORPHRASE }}
-
-Registrar: {{ registrar_name | ORPHRASE }}
-Registrar IANA ID: {{ registrar_id }}
-Registrar Abuse Contact Email: {{ registrar_email }}
-Registrar Abuse Contact Phone: {{ registrar_phone }}
-
-Reseller: {{ reseller_name | ORPHRASE }}
-<group name="reseller_address">
-Reseller Street Address: {{ reseller_address | ORPHRASE | joinmatches(" ") }}
-Reseller Other Address Info: {{ reseller_address | ORPHRASE | joinmatches(" ") }}
+<group name="{{ nic_hdl }}" macro="str2datetime">
+{{ _start_ }}
+role:         {{ organization | ORPHRASE }}
+nic-hdl:      {{ nic_hdl }}
+address:      {{ address | ORPHRASE | joinmatches(', ') }}
+phone:        {{ phone | ORPHRASE }}
+e-mail:       {{ email }}
+created:      {{ created | ORPHRASE }}
+created:      {{ created | _line_ }}
+source:       ISNIC{{ _end_ }}
 </group>
-Reseller Country: {{ reseller_company | ORPHRASE | joinmatches(" ") }}
-Reseller Phone: {{ reseller_phone | ORPHRASE | joinmatches(" ") }}
-Reseller Fax: {{ reseller_fax | ORPHRASE | joinmatches(" ") }}
-Reseller Customer Service Email: {{ reseller_email | ORPHRASE | joinmatches(" ") }}
 
-Domain Status: {{ domain_status | ORPHRASE | joinmatches("\n") }}
-
-Registry Registrant ID: {{ registrant_id | ORPHRASE }}
-Registrant Name: {{ registrant_name | ORPHRASE }}
-Registrant Organization: {{ registrant_organization | ORPHRASE }}
-<group name="registrant_address">
-Registrant Street: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
-Registrant City: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
-Registrant State/Province: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
+<group name="{{ nic_hdl }}" macro="str2datetime">
+{{ _start_ }}
+nic-hdl:      {{ nic_hdl }}
+address:      {{ address | ORPHRASE | joinmatches(', ') }}
+phone:        {{ phone | ORPHRASE }}
+e-mail:       {{ email }}
+created:      {{ created | _line_ }}
+source:       ISNIC{{ _end_ }}
 </group>
-Registrant Postal Code: {{ registrant_zip_code | ORPHRASE }}
-Registrant Country: {{ registrant_country | ORPHRASE }}
-Registrant Phone: {{ registrant_phone | ORPHRASE }}
-Registrant Phone Ext: {{ registrant_phone_ext | ORPHRASE }}
-Registrant Fax: {{ registrant_fax | ORPHRASE }}
-Registrant Fax Ext: {{ registrant_fax_ext | ORPHRASE }}
-Registrant Email: {{ registrant_email | ORPHRASE }}
 
-Registry Admin ID: {{ admin_id | ORPHRASE }}
-Admin Name: {{ admin_name | ORPHRASE }}
-Admin Organization: {{ admin_organization | ORPHRASE }}
-<group name="admin_address">
-Admin Street: {{ admin_address | ORPHRASE | joinmatches(" ") }}
-Admin City: {{ admin_address | ORPHRASE | joinmatches(" ") }}
-Admin State/Province: {{ admin_address | ORPHRASE | joinmatches(" ") }}
 </group>
-Admin Postal Code: {{ admin_zip_code | ORPHRASE }}
-Admin Country: {{ admin_country | ORPHRASE }}
-Admin Phone: {{ admin_phone | ORPHRASE }}
-Admin Phone Ext: {{ admin_phone_ext | ORPHRASE }}
-Admin Fax: {{ admin_fax | ORPHRASE }}
-Admin Fax Ext: {{ admin_fax_ext | ORPHRASE }}
-Admin Email: {{ admin_email | ORPHRASE }}
 
-Registry Tech ID: {{ tech_id | ORPHRASE }}
-Tech Name: {{ tech_name | ORPHRASE }}
-Tech Organization: {{ tech_organization | ORPHRASE }}
-<group name="tech_address">
-Tech Street: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-Tech City: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-Tech State/Province: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-</group>
-Tech Postal Code: {{ tech_zip_code | ORPHRASE }}
-Tech Country: {{ tech_country | ORPHRASE }}
-Tech Phone: {{ tech_phone | ORPHRASE }}
-Tech Phone Ext: {{ tech_phone_ext | ORPHRASE }}
-Tech Fax: {{ tech_fax | ORPHRASE }}
-Tech Fax Ext: {{ tech_fax_ext | ORPHRASE }}
-Tech Email: {{ tech_email | ORPHRASE }}
 
-Registry Billing ID: {{ billing_id | ORPHRASE }}
-Billing Name: {{ billing_name | ORPHRASE }}
-Billing Organization: {{ billing_organization | ORPHRASE }}
-<group name="billing_address">
-Billing Street: {{ billing_address | ORPHRASE | joinmatches(" ") }}
-Billing City: {{ billing_address | ORPHRASE | joinmatches(" ") }}
-Billing State/Province: {{ billing_address | ORPHRASE | joinmatches(" ") }}
-</group>
-Billing Postal Code: {{ billing_zip_code | ORPHRASE }}
-Billing Country: {{ billing_country | ORPHRASE }}
-Billing Phone: {{ billing_phone | ORPHRASE }}
-Billing Email:  {{ billing_email | ORPHRASE }}
-
-Name Server: {{ name_servers | ORPHRASE | to_list | joinmatches }}
-DNSSEC: {{ dnssec | ORPHRASE }}
-URL of the ICANN WHOIS Data Problem Reporting System: http://wdprs.internic.net/
-</group>
+<output macro="unpack" />

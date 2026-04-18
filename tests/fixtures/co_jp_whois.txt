@@ -1,26 +1,19 @@
 Domain Information: [ドメイン情報]
-a. [ドメイン名]                   EXAMPLE.CO.JP
-f. [組織名]                      株式会社サンプル
-g. [Organization]               Example Corporation
-m. [登録担当者]                    AA123JP
-n. [技術連絡担当者]                 BB123JP
-o. [サービス提供者名]               CC123JP
-p. [ネームサーバ]                  NS1.EXAMPLE.CO.JP
-p. [ネームサーバ]                  NS2.EXAMPLE.CO.JP
-[登録年月日]                      2024/01/02
-[有効期限]                        2025/01/31
-[状態]                           Connected (2025/01/31)
-[最終更新]                        2024/02/03 04:05:06 (JST)
-
-Contact Information: [公開連絡窓口]
-[名前]                           山田 太郎
-[Name]                          Taro Yamada
-[Email]                         contact@example.co.jp
-[Web Page]                      https://example.co.jp/contact
-[郵便番号]                        100-0001
-[住所]                           東京都千代田区千代田1-1
-                                皇居外苑
-[Postal Address]                1-1 Chiyoda
-                                Chiyoda-ku, Tokyo 100-0001
-[電話番号]                        +81.3.1234.5678
-[FAX番号]                        +81.3.1234.5679
+a. [ドメイン名]                 JPRS.CO.JP
+e. [そしきめい]                 かぶしきがいしゃにほんれじすとりさーびす
+f. [組織名]                     株式会社日本レジストリサービス
+g. [Organization]               Japan Registry Services Co.,Ltd.
+k. [組織種別]                   株式会社
+l. [Organization Type]          Company
+m. [登録担当者]                 SO42861JP
+n. [技術連絡担当者]             KI59866JP
+p. [ネームサーバ]               ns1.jprs.co.jp
+p. [ネームサーバ]               ns2.jprs.co.jp
+p. [ネームサーバ]               ns3.jprs.co.jp
+p. [ネームサーバ]               ns4.jprs.co.jp
+s. [署名鍵]                     
+[状態]                          Connected (2027/01/31)
+[Lock Status]                   AgentChangeLocked
+[登録年月日]                    2001/01/22
+[接続年月日]                    2001/01/24
+[最終更新]                      2026/02/01 01:02:04 (JST)

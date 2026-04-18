@@ -3,40 +3,109 @@
 ## that can be found in the LICENSE file.
 ## =======================================================
 
+## NOTE: Registrantはコマンドから取れないため取得しない
+
 ## Macro
 ## =======================================================
 
 <macro>
-def reseller_address2parent(data):
-    if 'reseller_address' in data:
-        extract_data = data['reseller_address']
-        if type(extract_data) == dict:
-            del data['reseller_address']
-            data['reseller_address'] = extract_data.get('reseller_address')
+def unpack(data):
+    while True:
+        if type(data) == list:
+            data = data[0]
+        else:
+            break
+
+    update_data = {}
+    for d in data:
+        if type(data[d]) == list:
+            if type(data[d][0]) == dict:
+                data[d] = data[d][0]
+        update_data[d] = data[d]
+    data = update_data
+
+    data = str2datetime(data)
+    data = standardize_status(data)
+    data = registrar2parent(data)
+    data = tech2parent(data)
+    data = dnssec2parent(data)
+    data = name_servers2parent(data)
+
     return data
 
-def registrant_address2parent(data):
-    if 'registrant_address' in data:
-        extract_data = data['registrant_address']
-        if type(extract_data) == dict:
-            del data['registrant_address']
-            data['registrant_address'] = extract_data.get('registrant_address')
+
+def standardize_status(data):
+    from stringcase import pascalcase, snakecase
+    if 'status' in data:
+        if type(data['status']['status']) == list:
+            extract_data = data['status']['status']
+            del data['status']
+            data['status'] = {}
+
+            for d in extract_data:
+                data['status'][snakecase(d.lstrip())] = True
+
     return data
 
-def admin_address2parent(data):
-    if 'admin_address' in data:
-        extract_data = data['admin_address']
-        if type(extract_data) == dict:
-            del data['admin_address']
-            data['admin_address'] = extract_data.get('admin_address')
+def str2datetime(data):
+    import datetime
+    import pytz
+    from pytz import country_timezones
+
+    # 登録年月日
+    if 'created' in data:
+        if type(data['created']) == str:
+            data['created'] = datetime.datetime.strptime(
+                data['created'],
+                '%a %b %d %Y'
+            ).replace(tzinfo=pytz.timezone(country_timezones['be'][0]))
+
     return data
 
-def tech_address2parent(data):
-    if 'tech_address' in data:
-        extract_data = data['tech_address']
+def name_servers2parent(data):
+    if 'name_servers' in data:
+        extract_data = data['name_servers']
         if type(extract_data) == dict:
-            del data['tech_address']
-            data['tech_address'] = extract_data.get('tech_address')
+            del data['name_servers']
+            data['name_servers'] = []
+
+            for d in extract_data['name_servers']:
+                data['name_servers'].append(d.split(" ")[0])
+
+            data['name_servers'] = list(set(data['name_servers']))
+    return data
+
+def registrar2parent(data):
+    if 'registrar_organization' in data:
+        extract_data = data['registrar_organization']
+        if type(extract_data) == dict:
+            del data['registrar_organization']
+
+            for d in extract_data:
+                data[d] = extract_data[d]
+
+    return data
+
+def tech2parent(data):
+    if 'tech_organization' in data:
+        extract_data = data['tech_organization']
+        if type(extract_data) == dict:
+            del data['tech_organization']
+
+            for d in extract_data:
+                data[d] = extract_data[d]
+
+    return data
+
+def dnssec2parent(data):
+    if 'dnssec' in data:
+        extract_data = data['dnssec']
+        if type(extract_data) == dict:
+            del data['dnssec']
+
+            for d in extract_data:
+                data[d] = extract_data[d]
+
     return data
 </macro>
 
@@ -44,96 +113,85 @@ def tech_address2parent(data):
 ## Template
 ## =======================================================
 
-<group macro="reseller_address2parent, registrant_address2parent, admin_address2parent, tech_address2parent">
-Domain Name: {{ domain_name | lower | ORPHRASE }}
+% .be Whois Server 6.1
+%
+% The WHOIS service offered by DNS Belgium and the access to the records in the DNS Belgium
+% WHOIS database are provided for information purposes only. It allows
+% persons to check whether a specific domain name is still available or not
+% and to obtain information related to the registration records of
+% existing domain names.
+%
+% DNS Belgium cannot, under any circumstances, be held liable where the stored
+% information would prove to be incomplete or inaccurate in any sense.
+%
+% By submitting a query you agree not to use the information made available
+% to:
+%   - allow, enable or otherwise support the transmission of unsolicited,
+%     commercial advertising or other solicitations whether via email or otherwise;
+%   - target advertising in any possible way;
+%   - to cause nuisance in any possible way to the domain name holders by sending
+%     messages to them (whether by automated, electronic processes capable of
+%     enabling high volumes or other possible means).
+%
+% Without prejudice to the above, it is explicitly forbidden to extract, copy
+% and/or use or re-utilise in any form and by any means (electronically or
+% not) the whole or a quantitatively or qualitatively substantial part
+% of the contents of the WHOIS database without prior and explicit permission
+% by DNS Belgium, nor in any attempt thereof, to apply automated, electronic
+% processes to DNS Belgium (or its systems).
+%
+% You agree that any reproduction and/or transmission of data for commercial
+% purposes will always be considered as the extraction of a substantial
+% part of the content of the WHOIS database.
+%
+% By submitting the query you agree to abide by this policy and accept that
+% DNS Belgium can take measures to limit the use of its whois services in order to
+% protect the privacy of its registrants or the integrity of the database.
+%
 
-Registry Domain ID: {{ registry_domain_id | lower }}
-Registrar WHOIS Server: {{ registrar_whois_server | lower }}
-Registrar URL: {{ registrar_whois_url | lower }}
+<group>
+Domain:	{{ domain_name }}
+Status:	NOT AVAILABLE
+Registered:	{{ created | ORPHRASE }}
 
-Updated Date: {{ updated | ORPHRASE }}
-Creation Date: {{ creation | ORPHRASE }}
-Registrar Registration Expiration Date: {{ expiration | ORPHRASE }}
+Registrant:
+	Not shown, please visit www.dnsbelgium.be for webbased whois.
 
-Registrar: {{ registrar_name | ORPHRASE }}
-Registrar IANA ID: {{ registrar_id }}
-Registrar Abuse Contact Email: {{ registrar_email }}
-Registrar Abuse Contact Phone: {{ registrar_phone }}
-
-Reseller: {{ reseller_name | ORPHRASE }}
-<group name="reseller_address">
-Reseller Street Address: {{ reseller_address | ORPHRASE | joinmatches(" ") }}
-Reseller Other Address Info: {{ reseller_address | ORPHRASE | joinmatches(" ") }}
+<group name="tech_organization">
+Registrar Technical Contacts:{{ _start_ }}
+	Organisation:   {{ tech_organization | ORPHRASE }}
+	Language:       {{ tech_language }}
+	Phone:  {{ tech_phone }}
+{{ _end_ }}
 </group>
-Reseller Country: {{ reseller_company | ORPHRASE | joinmatches(" ") }}
-Reseller Phone: {{ reseller_phone | ORPHRASE | joinmatches(" ") }}
-Reseller Fax: {{ reseller_fax | ORPHRASE | joinmatches(" ") }}
-Reseller Customer Service Email: {{ reseller_email | ORPHRASE | joinmatches(" ") }}
 
-Domain Status: {{ domain_status | ORPHRASE | joinmatches("\n") }}
-
-Registry Registrant ID: {{ registrant_id | ORPHRASE }}
-Registrant Name: {{ registrant_name | ORPHRASE }}
-Registrant Organization: {{ registrant_organization | ORPHRASE }}
-<group name="registrant_address">
-Registrant Street: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
-Registrant City: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
-Registrant State/Province: {{ registrant_address | ORPHRASE | joinmatches(" ") }}
+<group name="registrar_organization">
+Registrar:{{ _start_ }}
+	Name:	{{ registrar_organization | ORPHRASE }}
+	Website:	{{ registrar_url }}
 </group>
-Registrant Postal Code: {{ registrant_zip_code | ORPHRASE }}
-Registrant Country: {{ registrant_country | ORPHRASE }}
-Registrant Phone: {{ registrant_phone | ORPHRASE }}
-Registrant Phone Ext: {{ registrant_phone_ext | ORPHRASE }}
-Registrant Fax: {{ registrant_fax | ORPHRASE }}
-Registrant Fax Ext: {{ registrant_fax_ext | ORPHRASE }}
-Registrant Email: {{ registrant_email | ORPHRASE }}
 
-Registry Admin ID: {{ admin_id | ORPHRASE }}
-Admin Name: {{ admin_name | ORPHRASE }}
-Admin Organization: {{ admin_organization | ORPHRASE }}
-<group name="admin_address">
-Admin Street: {{ admin_address | ORPHRASE | joinmatches(" ") }}
-Admin City: {{ admin_address | ORPHRASE | joinmatches(" ") }}
-Admin State/Province: {{ admin_address | ORPHRASE | joinmatches(" ") }}
+<group name="name_servers">
+Nameservers:{{ _start_ }}
+	{{ name_servers | ORPHRASE | to_list | joinmatches }}
+{{ _end_ }}
 </group>
-Admin Postal Code: {{ admin_zip_code | ORPHRASE }}
-Admin Country: {{ admin_country | ORPHRASE }}
-Admin Phone: {{ admin_phone | ORPHRASE }}
-Admin Phone Ext: {{ admin_phone_ext | ORPHRASE }}
-Admin Fax: {{ admin_fax | ORPHRASE }}
-Admin Fax Ext: {{ admin_fax_ext | ORPHRASE }}
-Admin Email: {{ admin_email | ORPHRASE }}
 
-Registry Tech ID: {{ tech_id | ORPHRASE }}
-Tech Name: {{ tech_name | ORPHRASE }}
-Tech Organization: {{ tech_organization | ORPHRASE }}
-<group name="tech_address">
-Tech Street: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-Tech City: {{ tech_address | ORPHRASE | joinmatches(" ") }}
-Tech State/Province: {{ tech_address | ORPHRASE | joinmatches(" ") }}
+<group name="dnssec">
+Keys:{{ _start_ }}
+	{{ dnssec | ORPHRASE }}
+{{ _end_ }}
 </group>
-Tech Postal Code: {{ tech_zip_code | ORPHRASE }}
-Tech Country: {{ tech_country | ORPHRASE }}
-Tech Phone: {{ tech_phone | ORPHRASE }}
-Tech Phone Ext: {{ tech_phone_ext | ORPHRASE }}
-Tech Fax: {{ tech_fax | ORPHRASE }}
-Tech Fax Ext: {{ tech_fax_ext | ORPHRASE }}
-Tech Email: {{ tech_email | ORPHRASE }}
 
-Registry Billing ID: {{ billing_id | ORPHRASE }}
-Billing Name: {{ billing_name | ORPHRASE }}
-Billing Organization: {{ billing_organization | ORPHRASE }}
-<group name="billing_address">
-Billing Street: {{ billing_address | ORPHRASE | joinmatches(" ") }}
-Billing City: {{ billing_address | ORPHRASE | joinmatches(" ") }}
-Billing State/Province: {{ billing_address | ORPHRASE | joinmatches(" ") }}
+<group name="status">
+Flags:{{ _start_ }}
+	{{ status | ORPHRASE | to_list | joinmatches }}
+{{ _end_ }}
 </group>
-Billing Postal Code: {{ billing_zip_code | ORPHRASE }}
-Billing Country: {{ billing_country | ORPHRASE }}
-Billing Phone: {{ billing_phone | ORPHRASE }}
-Billing Email:  {{ billing_email | ORPHRASE }}
 
-Name Server: {{ name_servers | ORPHRASE | to_list | joinmatches }}
-DNSSEC: {{ dnssec | ORPHRASE }}
-URL of the ICANN WHOIS Data Problem Reporting System: http://wdprs.internic.net/
+Please visit www.dnsbelgium.be for more info.
+
 </group>
+
+
+<output macro="unpack" />
