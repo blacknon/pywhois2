@@ -1,0 +1,84 @@
+name: Create GitHub Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Branch or commit to tag
+        required: true
+        default: master
+        type: string
+      prerelease:
+        description: Mark the release as a prerelease
+        required: true
+        default: false
+        type: boolean
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+
+permissions: {}
+
+concurrency:
+  group: create-release-${{ github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout target ref
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.target }}
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.x"
+
+      - name: Read project version
+        id: meta
+        run: |
+          python - <<'PY'
+          import os
+          import pathlib
+          import tomllib
+
+          root = pathlib.Path(".")
+          with (root / "pyproject.toml").open("rb") as handle:
+              project = tomllib.load(handle)["project"]
+
+          version = project["version"]
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as handle:
+              handle.write(f"release_tag=v{version}\n")
+          PY
+
+      - name: Ensure release does not already exist
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "${{ steps.meta.outputs.release_tag }}" >/dev/null 2>&1; then
+            echo "Release ${{ steps.meta.outputs.release_tag }} already exists." >&2
+            exit 1
+          fi
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          prerelease_flag=""
+          if [ "${{ inputs.prerelease }}" = "true" ]; then
+            prerelease_flag="--prerelease"
+          fi
+
+          gh release create "${{ steps.meta.outputs.release_tag }}" \
+            --target "${{ inputs.target }}" \
+            --title "${{ steps.meta.outputs.release_tag }}" \
+            --generate-notes \
+            ${prerelease_flag}
