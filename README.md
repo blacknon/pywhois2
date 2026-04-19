@@ -57,6 +57,13 @@ Show the installed version:
 pywhois2 --version
 ```
 
+If the registry returns a clear no-match response, `pywhois2` returns JSON instead of raising an exception:
+
+```bash
+$ pywhois2 osrebibou123456789.com
+{"domain_name":"osrebibou123456789.com","status_text":"No match for \"OSREBIBOU123456789.COM\".","available":true,"parser_note":"Generic no-match response"}
+```
+
 Detailed example:
 
 ```bash
@@ -228,21 +235,3 @@ Build the Docker test image:
 ```bash
 docker build -t pywhois2-test .
 ```
-
-## Release
-
-PyPI publishing is handled by [publish.yml](./.github/workflows/publish.yml) with Trusted Publishing.
-This repository is already aligned with the existing `pypi` GitHub environment and PyPI publisher registration.
-
-Release flow:
-
-1. Update the version in `pyproject.toml` and `pywhois2/_version.py`
-2. Create a GitHub Release with a matching tag such as `v0.2.0`
-3. Let GitHub Actions build and publish the distributions
-
-Security notes:
-
-- Preferred path: use Trusted Publishing only
-- Do not store a long-lived `PYPI_TOKEN` in repository or organization secrets
-- If an emergency fallback token is ever needed, make it project-scoped to `pywhois2` only and store it as an environment secret on `pypi`
-- Protect the `pypi` GitHub environment with required reviewers and ref restrictions

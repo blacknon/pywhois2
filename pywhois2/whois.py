@@ -1,7 +1,6 @@
 from pathlib import Path
 from typing import Any
 
-import ttp
 from tld import get_tld
 
 from .whois_request import whois_request
@@ -85,9 +84,16 @@ class Whois:
             if fallback:
                 return normalize_result_keys(fallback)
 
+        if server == "whois.nic.uk":
+            fallback = parse_nominet_uk_response(res)
+            if fallback:
+                return normalize_result_keys(fallback)
+
         generic_fallback = parse_generic_no_match_response(res, self.target)
         if generic_fallback:
             return normalize_result_keys(generic_fallback)
+
+        import ttp
 
         for template_path in template_paths:
             template = template_path.read_text(encoding="utf-8").rstrip()
@@ -105,8 +111,4 @@ class Whois:
             )
 
         normalized_result = normalize_result_keys(result[0])
-        if server == "whois.nic.uk" and not normalized_result.get("domain_name"):
-            fallback = parse_nominet_uk_response(res)
-            if fallback:
-                return normalize_result_keys(fallback)
         return normalized_result
